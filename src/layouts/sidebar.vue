@@ -67,7 +67,7 @@ import { MenuOption, useMessage } from 'naive-ui'
 import { tabsViewStore } from '@/store/module/tabsViewStore'
 
 const msg = useMessage()
-const r = useRouter()
+const router = useRouter()
 const collapsed = ref<boolean>(false)
 const route = useRoute()
 const tabsView = tabsViewStore()
@@ -76,7 +76,7 @@ const currentKey = ref<string>(route.name as string)
 const expandedKeys = ref<string[]>([])
 const handleAlt = (key: string, item: MenuOption) => {
   currentKey.value = key
-  r.push({ name: key })
+  router.push({ name: key })
   tabsView.currentView = key
   if (tabsView.findTab(item)) {
     return

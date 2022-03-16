@@ -4,7 +4,13 @@ import { MenuOption } from 'naive-ui'
 export const tabsViewStore = defineStore('tabsView', {
   state: () => {
     return {
-      viewList: [],
+      viewList: [
+        { label: '测试', key: 'test' },
+        { label: '测试', key: 'test' },
+        { label: '测试', key: 'test' },
+        { label: '测试', key: 'test' },
+        { label: '测试', key: 'test' },
+      ],
       currentView: '',
     }
   },

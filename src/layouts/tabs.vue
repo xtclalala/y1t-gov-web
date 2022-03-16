@@ -2,8 +2,8 @@
 import { tabsViewStore } from '@/store/module/tabsViewStore'
 import { CloseCircleOutline } from '@vicons/ionicons5'
 import { useRouter, useRoute } from 'vue-router'
-import { MenuOption, NScrollbar, useMessage } from 'naive-ui'
-import { ref } from 'vue'
+import { MenuOption, useMessage } from 'naive-ui'
+import { ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import Icon from '@/components/icon.vue'
 
@@ -12,8 +12,22 @@ const msg = useMessage()
 const { viewList, currentView } = storeToRefs(tabs)
 const router = useRouter()
 const route = useRoute()
-const scrollbar = ref<HTMLElement>()
+const scrollbar: any = ref(null)
+const leftArrowDisabled = ref<boolean>(false)
+const rightArrowDisabled = ref<boolean>(false)
 
+watch(route, (n) => {
+  currentView.value = n.name as string
+  router.push({ name: n.name })
+  if (tabs.findTab({ key: n.name, label: n.meta.title } as MenuOption)) {
+    return
+  }
+  viewList.value.push({ key: n.name, label: n.meta.title })
+})
+
+const iconClick = (name: string) => {
+  closeTab(name)
+}
 const itemClick = (name: string, e: MouseEvent) => {
   currentView.value = name
   tabClick(e.target as HTMLElement, name)
@@ -24,16 +38,50 @@ const itemChildClick = (name: string, e: MouseEvent) => {
   tabClick(e.target as HTMLElement, name)
 }
 
-const iconClick = (name: string) => {
-  closeTab(name)
+const tabClick = (el: HTMLElement, name: string) => {
+  scrollbar.value.scrollTo(
+    {
+      left: el.offsetLeft,
+      debounce: true,
+      behavior: 'auto',
+    } as any,
+    0
+  )
+  router.push(name)
 }
 
-const tabClick = (el: HTMLElement, name: string) => {
-  ;(scrollbar as unknown as InstanceType<typeof NScrollbar>).value.scrollTo({
-    left: el.offsetLeft,
-    behavior: 'auto',
-  })
-  router.push(name)
+const leftArrowClick = () => {
+  const scrollX = scrollbar.value.$el?.scrollLeft || 0
+  scrollbar.value.scrollTo(
+    {
+      left: Math.max(0, scrollX - 200),
+      debounce: true,
+      behavior: 'smooth',
+    } as any,
+    0
+  )
+  isDisabledArrow()
+}
+
+const rightArrowClick = () => {
+  const scrollX = scrollbar.value.$el?.scrollLeft || 0
+  scrollbar.value.scrollTo(
+    {
+      left: scrollX + 200,
+      debounce: false,
+      behavior: 'smooth',
+    } as any,
+    0
+  )
+  isDisabledArrow()
+}
+
+const isDisabledArrow = () => {
+  setTimeout(() => {
+    const { scrollLeft, scrollWidth, clientWidth } = scrollbar.value.$el as HTMLElement
+    leftArrowDisabled.value = scrollLeft === 0
+    rightArrowDisabled.value = scrollLeft === scrollWidth - clientWidth
+  }, 100)
 }
 
 const closeTab = async (name: string) => {
@@ -56,9 +104,9 @@ const closeTab = async (name: string) => {
 
 <template>
   <div class="tab-bar">
-    <Icon type="left" :size="18" class="icon-location" />
+    <Icon type="left" :size="18" class="icon-location" @click="leftArrowClick" />
     <div class="tabs">
-      <n-scrollbar ref="scrollbar" x-scrollable :size="0">
+      <n-scrollbar ref="scrollbar" :x-scrollable="true" :size="0">
         <n-button
           v-for="item of viewList"
           :key="item.key"
@@ -83,7 +131,7 @@ const closeTab = async (name: string) => {
         </n-button>
       </n-scrollbar>
     </div>
-    <Icon type="right" class="icon-location" :size="18" />
+    <Icon type="right" class="icon-location" :size="18" @click="rightArrowClick" />
   </div>
 </template>
 
@@ -92,25 +140,27 @@ const closeTab = async (name: string) => {
   position: relative
   box-sizing: border-box
   white-space: nowrap
+  display: flex
+  height: 40px
   box-shadow: 10px 5px 10px rgb(0 0 0 / 10%)
 
   .icon-location
     position: static
     display: inline-block
-    cursor: not-allowed
+    cursor: pointer
     font-size: 20px
-    margin: 0 8px
+    margin: 8px 8px
 
   .tabs
     display: inline-block
-    height: 30px
+    width: 100%
+    margin-left: 0
     white-space: nowrap
     overflow: hidden
 
     .tab-item
       padding: 7px 10px
       margin: 5px 5px
-      width: 150px
       cursor: pointer
       .icon-item
         margin-left: 0

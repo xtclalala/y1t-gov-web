@@ -1,12 +1,12 @@
 <template>
   <n-layout-header bordered>
-    <n-button text @click="router.go(0)">
+    <n-button text @click="reFlush">
       <n-icon size="22" :component="ReIcon" />
     </n-button>
-    <n-breadcrumb>
-      <n-breadcrumb-item>Dashboard</n-breadcrumb-item>
-      <n-breadcrumb-item>Home</n-breadcrumb-item>
-    </n-breadcrumb>
+    <!--    <n-breadcrumb>-->
+    <!--      <n-breadcrumb-item>Dashboard</n-breadcrumb-item>-->
+    <!--      <n-breadcrumb-item>Home</n-breadcrumb-item>-->
+    <!--    </n-breadcrumb>-->
     <n-space :size="20" align="center" style="line-height: 1">
       <n-tooltip>
         <template #trigger>
@@ -58,7 +58,7 @@
 </template>
 
 <script lang="ts" setup>
-import { h, computed, Component, ref } from 'vue'
+import { h, computed, Component } from 'vue'
 import { useMessage, NIcon } from 'naive-ui'
 import { useRouter, RouterLink } from 'vue-router'
 import {
@@ -74,9 +74,11 @@ import {
 
 const router = useRouter()
 const message = useMessage()
-// todo
 // const { data: me } = useCurrentUser()
 const me = { value: { name: 'test' } }
+
+// todo 刷新当前页
+// provide()
 
 const renderIcon = (icon: Component) => {
   return () => {
