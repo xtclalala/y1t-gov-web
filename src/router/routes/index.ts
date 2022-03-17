@@ -1,8 +1,9 @@
 import type { AppRouteRecordRaw, AppRouteModule } from '@/router/types'
 
-import { PAGE_NOT_FOUND_ROUTE, ABOUT_ROUTER } from '@/router/routes/basic'
-import { SYSTEM_ROUTE } from '@/router/routes/system_setting'
+import { PAGE_NOT_FOUND_ROUTE, ABOUT_ROUTER, REDIRECT_ROUTE } from '@/router/routes/basic'
+import { SYSTEM_ROUTE, TEST } from '@r/routes/config'
 import { PageEnum } from '@/enums/pageEnum'
+import { LAYOUT } from '@r/constant'
 
 const modules = import.meta.globEager('./modules/**/*.ts')
 
@@ -17,9 +18,11 @@ Object.keys(modules).forEach((key) => {
 // export const asyncRoutes = [PAGE_NOT_FOUND_ROUTE, ...routeModuleList]
 export const asyncRoutes = [...routeModuleList]
 
-export const Routes: AppRouteRecordRaw[] = [PAGE_NOT_FOUND_ROUTE, ABOUT_ROUTER, SYSTEM_ROUTE]
+export const Routes: AppRouteRecordRaw[] = [SYSTEM_ROUTE, TEST]
 
-export const RootRoute: AppRouteRecordRaw = {
+const BaseRoutes: AppRouteRecordRaw[] = [PAGE_NOT_FOUND_ROUTE, ABOUT_ROUTER, REDIRECT_ROUTE]
+
+const RootRoute: AppRouteRecordRaw = {
   path: '/',
   name: 'Root',
   redirect: PageEnum.SYSTEM_USER,
@@ -28,10 +31,21 @@ export const RootRoute: AppRouteRecordRaw = {
   },
 }
 
+const Route: AppRouteRecordRaw = {
+  path: '/S',
+  name: 'S',
+  component: LAYOUT,
+  meta: {
+    title: 'S',
+  },
+  children: [...Routes],
+}
+
 // Basic routing without permission
 export const basicRoutes = [
   // LoginRoute,
   RootRoute,
+  Route,
   // ...mainOutRoutes,
-  ...Routes,
+  ...BaseRoutes,
 ]

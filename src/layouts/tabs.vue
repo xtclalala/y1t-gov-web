@@ -22,6 +22,9 @@ watch(route, (n) => {
   if (tabs.findTab({ key: n.name, label: n.meta.title } as MenuOption)) {
     return
   }
+  if ('redirect' === n.meta.title) {
+    return
+  }
   viewList.value.push({ key: n.name, label: n.meta.title })
 })
 
@@ -146,13 +149,14 @@ const closeTab = async (name: string) => {
 
   .icon-location
     position: static
-    display: inline-block
+    //display: inline-block
     cursor: pointer
     font-size: 20px
     margin: 8px 8px
 
   .tabs
-    display: inline-block
+    //justify-content: flex-start
+    //display: inline-block
     width: 100%
     margin-left: 0
     white-space: nowrap

@@ -27,6 +27,28 @@ export const PAGE_NOT_FOUND_ROUTE: AppRouteRecordRaw = {
   ],
 }
 
+export const REDIRECT_ROUTE: AppRouteRecordRaw = {
+  path: '/redirect',
+  component: LAYOUT,
+  name: 'RedirectTo',
+  meta: {
+    title: 'redirect',
+    hideBreadcrumb: true,
+    hideMenu: true,
+  },
+  children: [
+    {
+      path: '/redirect/:path(.*)',
+      name: 'redirect',
+      component: () => import('@/pages/redirect/index.vue'),
+      meta: {
+        title: 'redirect',
+        hideBreadcrumb: true,
+      },
+    },
+  ],
+}
+
 export const ABOUT_ROUTER: AppRouteRecordRaw = {
   path: '/about',
   name: 'AboutPage',

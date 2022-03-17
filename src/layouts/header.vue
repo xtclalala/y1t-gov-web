@@ -58,9 +58,9 @@
 </template>
 
 <script lang="ts" setup>
-import { h, computed, Component } from 'vue'
+import { h, computed, Component, unref } from 'vue'
 import { useMessage, NIcon } from 'naive-ui'
-import { useRouter, RouterLink } from 'vue-router'
+import { useRouter, RouterLink, useRoute } from 'vue-router'
 import {
   PersonCircleOutline as UserIcon,
   SettingsOutline as SetIcon,
@@ -73,12 +73,17 @@ import {
 } from '@vicons/ionicons5'
 
 const router = useRouter()
+const route = useRoute()
 const message = useMessage()
 // const { data: me } = useCurrentUser()
 const me = { value: { name: 'test' } }
 
-// todo 刷新当前页
-// provide()
+const reFlush = () => {
+  console.log(unref(route).fullPath)
+  router.push({
+    path: '/redirect' + unref(route).fullPath,
+  })
+}
 
 const renderIcon = (icon: Component) => {
   return () => {

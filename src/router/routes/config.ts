@@ -1,6 +1,6 @@
 import type { AppRouteRecordRaw } from '@/router/types'
 import { PageEnum } from '@/enums/pageEnum'
-import { LAYOUT } from '@r/constant'
+import { PAGE } from '@r/constant'
 
 // import { t } from '@/utils/i18n/useI18n'
 
@@ -8,7 +8,7 @@ export const SYSTEM_ROUTE: AppRouteRecordRaw = {
   path: '/system',
   name: 'systemSetting',
   redirect: PageEnum.SYSTEM_USER,
-  component: LAYOUT,
+  component: PAGE,
   meta: {
     title: '系统设置',
     icon: 'github',
@@ -65,4 +65,15 @@ export const SYSTEM_ROUTE: AppRouteRecordRaw = {
       },
     },
   ],
+}
+
+export const TEST: AppRouteRecordRaw = {
+  path: '/test',
+  name: 'test',
+  component: () => import('@/pages/test/Test.vue'),
+  meta: {
+    // title: t('routes.system.sysMenu'),
+    title: '测试',
+    hideBreadcrumb: true,
+  },
 }
