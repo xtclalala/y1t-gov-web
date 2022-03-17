@@ -18,6 +18,8 @@ export interface AppRouteRecordRaw extends Omit<RouteRecordRaw, 'meta'> {
   id?: string
   pid?: string
   pName?: string
+  disabled?: boolean
+  icon?: any
 }
 
 export interface MenuTag {

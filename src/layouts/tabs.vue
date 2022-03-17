@@ -6,6 +6,7 @@ import { MenuOption, useMessage } from 'naive-ui'
 import { ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import Icon from '@/components/icon.vue'
+import { AppRouteRecordRaw } from '@r/types'
 
 const tabs = tabsViewStore()
 const msg = useMessage()
@@ -17,20 +18,14 @@ const leftArrowDisabled = ref<boolean>(false)
 const rightArrowDisabled = ref<boolean>(false)
 
 watch(route, (n) => {
-  currentView.value = n.name as string
   router.push({ name: n.name })
-  if (tabs.findTab({ key: n.name, label: n.meta.title } as MenuOption)) {
-    return
-  }
-  if ('redirect' === n.meta.title) {
-    return
-  }
-  viewList.value.push({ key: n.name, label: n.meta.title })
+  tabs.routerPush(n)
 })
 
 const iconClick = (name: string) => {
   closeTab(name)
 }
+
 const itemClick = (name: string, e: MouseEvent) => {
   currentView.value = name
   tabClick(e.target as HTMLElement, name)
@@ -50,7 +45,7 @@ const tabClick = (el: HTMLElement, name: string) => {
     } as any,
     0
   )
-  router.push(name)
+  router.push({ name })
 }
 
 const leftArrowClick = () => {
@@ -88,17 +83,15 @@ const isDisabledArrow = () => {
 }
 
 const closeTab = async (name: string) => {
-  console.log(name)
   if (viewList.value.length === 1) {
     msg.warning('最后一页不能删除')
     return
   }
-  const index = viewList.value.findIndex((self: MenuOption) => self.key === name)
-  console.log(index)
+  const index = viewList.value.findIndex((self: AppRouteRecordRaw) => self.key === name)
   if (index !== -1) {
     await tabs.removeTab(index)
     if (currentView.value === name) {
-      currentView.value = viewList.value[viewList.value.length - 1].key
+      currentView.value = tabs.listSliceEnd[0].name
       router.push(currentView.value)
     }
   }

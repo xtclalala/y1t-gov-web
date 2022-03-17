@@ -69,11 +69,23 @@ export const SYSTEM_ROUTE: AppRouteRecordRaw = {
 
 export const TEST: AppRouteRecordRaw = {
   path: '/test',
-  name: 'test',
+  name: 'text',
   component: () => import('@/pages/test/Test.vue'),
   meta: {
     // title: t('routes.system.sysMenu'),
     title: '测试',
     hideBreadcrumb: true,
+  },
+}
+
+export const ABOUT_ROUTER: AppRouteRecordRaw = {
+  path: '/about',
+  name: 'AboutPage',
+  component: () => import('@/pages/about/index.vue'),
+  meta: {
+    // title: t('routes.dashboard.about'),
+    title: '关于',
+    icon: 'simple-icons:about-dot-me',
+    hideMenu: true,
   },
 }

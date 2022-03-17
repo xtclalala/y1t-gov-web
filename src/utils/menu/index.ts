@@ -1,4 +1,4 @@
-import { MenuOption } from 'naive-ui'
+// import { MenuOption } from 'naive-ui'
 import { AppRouteRecordRaw } from '@r/types'
 
 import { h } from 'vue'
@@ -14,10 +14,12 @@ const renderIcon = (icon: string | undefined) => {
 // const hRouterLink = (name: string, title: string) => () =>
 //   h(RouterLink, { to: { name: name } }, { default: () => title })
 
-export const router2menu = (routes: AppRouteRecordRaw[]): MenuOption[] => {
-  const menu: MenuOption[] = []
-  for (const { meta, name, children } of routes) {
-    const menuItem: MenuOption = {
+export const router2menu = (routes: AppRouteRecordRaw[]): AppRouteRecordRaw[] => {
+  const menu: AppRouteRecordRaw[] = []
+  for (const item of routes) {
+    const { meta, name, children } = item
+    const menuItem: AppRouteRecordRaw = {
+      ...item,
       // label: hRouterLink(name, meta.title),
       label: meta.title,
       key: name,

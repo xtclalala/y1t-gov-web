@@ -10,7 +10,7 @@
     <n-space :size="20" align="center" style="line-height: 1">
       <n-tooltip>
         <template #trigger>
-          <router-link to="#">
+          <router-link to="/about">
             <n-icon size="22" :component="HelpIcon" />
           </router-link>
         </template>
@@ -79,7 +79,6 @@ const message = useMessage()
 const me = { value: { name: 'test' } }
 
 const reFlush = () => {
-  console.log(unref(route).fullPath)
   router.push({
     path: '/redirect' + unref(route).fullPath,
   })

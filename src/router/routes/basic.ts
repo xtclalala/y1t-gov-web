@@ -48,28 +48,3 @@ export const REDIRECT_ROUTE: AppRouteRecordRaw = {
     },
   ],
 }
-
-export const ABOUT_ROUTER: AppRouteRecordRaw = {
-  path: '/about',
-  name: 'AboutPage',
-  component: LAYOUT,
-  meta: {
-    // title: t('routes.dashboard.about'),
-    title: '关于',
-    icon: 'simple-icons:about-dot-me',
-    hideMenu: true,
-  },
-  children: [
-    {
-      path: '/about',
-      name: 'AboutPage',
-      component: () => import('@/pages/about/index.vue'),
-      meta: {
-        // title: t('routes.dashboard.about'),
-        title: '关于',
-        icon: 'simple-icons:about-dot-me',
-        hideMenu: true,
-      },
-    },
-  ],
-}

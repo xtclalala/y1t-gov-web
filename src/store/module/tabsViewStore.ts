@@ -1,30 +1,44 @@
 import { defineStore } from 'pinia'
-import { MenuOption } from 'naive-ui'
+import { AppRouteRecordRaw } from '@r/types'
 
 export const tabsViewStore = defineStore('tabsView', {
   state: () => {
     return {
-      viewList: [
-        { label: '测试', key: 'test' },
-        { label: '测试', key: 'test' },
-        { label: '测试', key: 'test' },
-        { label: '测试', key: 'test' },
-        { label: '测试', key: 'test' },
-      ],
+      viewList: [],
       currentView: '',
     }
+  },
+  getters: {
+    getListLength(): Number {
+      return this.viewList.length
+    },
+    listSliceEnd(): any {
+      return this.viewList.slice(-1)
+    },
   },
   actions: {
     removeTab(index: number) {
       this.viewList.splice(index, 1)
     },
-    findTab(route: MenuOption): boolean {
+    findTab(route: AppRouteRecordRaw): boolean {
       for (const item of this.viewList) {
-        if (item.key === route.key) {
+        // @ts-ignore
+        if (item.name === route.name) {
           return true
         }
       }
       return false
+    },
+    routerPush(to: AppRouteRecordRaw) {
+      this.currentView = to.name
+      if (this.findTab(to)) {
+        return
+      }
+      if ('redirect' === to.meta.title) {
+        return
+      }
+      // @ts-ignore
+      this.viewList.push(to)
     },
   },
 })
