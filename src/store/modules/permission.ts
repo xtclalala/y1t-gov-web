@@ -18,7 +18,7 @@ import { ERROR_LOG_ROUTE, PAGE_NOT_FOUND_ROUTE } from '@/router/routes/basic'
 
 import { filter } from '@/utils/helper/treeHelper'
 
-import { getMenuList } from '@/api/sys_role/menu'
+import { getMenuList } from '@/api/sys_role/yMenu'
 import { getPermCode } from '@/api/sys_role/user'
 
 import { useNotification } from 'naive-ui'
@@ -29,9 +29,9 @@ interface PermissionState {
   permCodeList: string[] | number[]
   // Whether the route has been dynamically added
   isDynamicAddedRoute: boolean
-  // To trigger a menu update
+  // To trigger a yMenu update
   lastBuildMenuTime: number
-  // Backstage menu list
+  // Backstage yMenu list
   backMenuList: Menu[]
   frontMenuList: Menu[]
 }
@@ -41,11 +41,11 @@ export const usePermissionStore = defineStore({
     permCodeList: [],
     // Whether the route has been dynamically added
     isDynamicAddedRoute: false,
-    // To trigger a menu update
+    // To trigger a yMenu update
     lastBuildMenuTime: 0,
-    // Backstage menu list
+    // Backstage yMenu list
     backMenuList: [],
-    // menu List
+    // yMenu List
     frontMenuList: [],
   }),
   getters: {
@@ -198,7 +198,7 @@ export const usePermissionStore = defineStore({
           // Dynamically introduce components
           routeList = transformObjToRoute(routeList)
 
-          //  Background routing to menu structure
+          //  Background routing to yMenu structure
           const backMenuList = transformRouteToMenu(routeList)
           this.setBackMenuList(backMenuList)
 

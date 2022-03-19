@@ -2,10 +2,10 @@
 import { tabsViewStore } from '@/store/module/tabsViewStore'
 import { CloseCircleOutline } from '@vicons/ionicons5'
 import { useRouter, useRoute } from 'vue-router'
-import { MenuOption, useMessage } from 'naive-ui'
+import { useMessage } from 'naive-ui'
 import { ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
-import Icon from '@/components/icon.vue'
+import { yIcon } from '@/components/yIcon'
 import { AppRouteRecordRaw } from '@r/types'
 
 const tabs = tabsViewStore()
@@ -100,7 +100,7 @@ const closeTab = async (name: string) => {
 
 <template>
   <div class="tab-bar">
-    <Icon type="left" :size="18" class="icon-location" @click="leftArrowClick" />
+    <y-icon type="left" :size="18" class="icon-location" @click="leftArrowClick" />
     <div class="tabs">
       <n-scrollbar ref="scrollbar" :x-scrollable="true" :size="0">
         <n-button
@@ -118,16 +118,11 @@ const closeTab = async (name: string) => {
           >
             {{ item.label }}
           </span>
-          <n-icon
-            v-if="true"
-            class="icon-item"
-            :component="CloseCircleOutline"
-            @click="iconClick(item.key)"
-          />
+          <y-icon v-if="true" class="icon-item" type="close" @click="iconClick(item.key)" />
         </n-button>
       </n-scrollbar>
     </div>
-    <Icon type="right" class="icon-location" :size="18" @click="rightArrowClick" />
+    <y-icon type="right" class="icon-location" :size="18" @click="rightArrowClick" />
   </div>
 </template>
 

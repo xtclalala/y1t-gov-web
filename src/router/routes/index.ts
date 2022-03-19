@@ -1,9 +1,11 @@
 import type { AppRouteRecordRaw, AppRouteModule } from '@/router/types'
 
 import { PAGE_NOT_FOUND_ROUTE, REDIRECT_ROUTE } from '@/router/routes/basic'
-import { SYSTEM_ROUTE, TEST, ABOUT_ROUTER } from '@r/routes/config'
+import { SYSTEM_ROUTE, TEST, ABOUT_ROUTER, LOGIN_ROUTE } from '@r/routes/config'
 import { PageEnum } from '@/enums/pageEnum'
 import { LAYOUT } from '@r/constant'
+import { rPath } from '@r/enums/rPath'
+import { rName } from '@r/enums/rName'
 
 const modules = import.meta.globEager('./modules/**/*.ts')
 
@@ -20,23 +22,23 @@ export const asyncRoutes = [...routeModuleList]
 
 export const Routes: AppRouteRecordRaw[] = [TEST, ABOUT_ROUTER, SYSTEM_ROUTE]
 
-const BaseRoutes: AppRouteRecordRaw[] = [PAGE_NOT_FOUND_ROUTE, REDIRECT_ROUTE]
+const BaseRoutes: AppRouteRecordRaw[] = [PAGE_NOT_FOUND_ROUTE, REDIRECT_ROUTE, LOGIN_ROUTE]
 
 const RootRoute: AppRouteRecordRaw = {
-  path: '/',
-  name: 'Root',
+  path: rPath.ROOT,
+  name: rName.ROOT,
   redirect: PageEnum.SYSTEM_USER,
   meta: {
     title: '根',
   },
 }
 
-const Route: AppRouteRecordRaw = {
-  path: '/S',
-  name: 'S',
+const ViewRoute: AppRouteRecordRaw = {
+  path: rPath.TAB_VIEW,
+  name: rName.TAB_VIEW,
   component: LAYOUT,
   meta: {
-    title: 'S',
+    title: 'tab',
   },
   children: [...Routes],
 }
@@ -45,7 +47,7 @@ const Route: AppRouteRecordRaw = {
 export const basicRoutes = [
   // LoginRoute,
   RootRoute,
-  Route,
+  ViewRoute,
   // ...mainOutRoutes,
   ...BaseRoutes,
 ]

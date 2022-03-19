@@ -30,11 +30,11 @@ declare module 'vue-router' {
     carryParam?: boolean;
     // Used internally to mark single-level menus
     single?: boolean;
-    // Currently active menu
+    // Currently active yMenu
     currentActiveMenu?: string;
     // Never show in tab
     hideTab?: boolean;
-    // Never show in menu
+    // Never show in yMenu
     hideMenu?: boolean;
     isLink?: boolean;
     // only build for Menu

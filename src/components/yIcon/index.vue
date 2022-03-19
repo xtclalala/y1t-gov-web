@@ -5,7 +5,11 @@
 <script lang="ts" setup>
 import { NIcon } from 'naive-ui'
 import {
+  PersonCircleOutline as user,
+  Pencil as edit,
+  LogOutOutline as logout,
   RefreshOutline as refresh,
+  NotificationsCircle as notificationsRed,
   SpeedometerOutline as dashboard,
   CreateOutline as posts,
   NewspaperOutline as pages,
@@ -24,9 +28,17 @@ import {
   AlertCircleOutline as fallback,
   ChevronBack as left,
   ChevronForward as right,
+  LogoTux as logo,
+  CloseCircleOutline as close,
 } from '@vicons/ionicons5'
 
 const icons = {
+  close,
+  logo,
+  user,
+  edit,
+  logout,
+  notificationsRed,
   refresh,
   dashboard,
   posts,

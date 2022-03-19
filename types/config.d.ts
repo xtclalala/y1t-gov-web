@@ -99,7 +99,7 @@ export interface ProjectConfig {
   // Theme color
   themeColor: string;
 
-  // The main interface is displayed in full screen, the menu is not displayed, and the top
+  // The main interface is displayed in full screen, the yMenu is not displayed, and the top
   fullContent: boolean;
   // content width
   contentMode: ContentEnum;
@@ -133,6 +133,12 @@ export interface ProjectConfig {
   closeMessageOnSwitch: boolean;
   // Whether to cancel the http request that has been sent but not responded when switching the interface.
   removeAllHttpPending: boolean;
+}
+
+export  interface ProjectInfo {
+  projectGithub: string;
+  authorGithub: string;
+
 }
 
 export interface GlobConfig {

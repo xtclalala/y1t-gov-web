@@ -1,0 +1,46 @@
+<template>
+  <n-dropdown placement="bottom-end" show-arrow :options="options" @select="handleOptionsSelect">
+    <n-avatar size="small" round src="#" />
+  </n-dropdown>
+</template>
+
+<script setup lang="ts">
+import { computed, h } from 'vue'
+import { renderIcon } from '@/utils/yIcon'
+import { RouterLink, useRouter } from 'vue-router'
+import { useMessage } from 'naive-ui'
+import { userStore } from '@/store/module/user'
+
+const router = useRouter()
+const message = useMessage()
+const me = userStore()
+// todo 拿到个人信息
+// 选中下拉框中的回调
+const handleOptionsSelect = async (key: unknown): Promise<void> => {
+  if ((key as string) === 'logout') {
+    // await token.revoke()
+    await router.push({ name: 'menu' })
+  } else if ((key as string) === 'me') {
+    message.success(`Welcome back, ${me.name as string}!`)
+  }
+}
+
+const options = computed(() => [
+  { key: 'me', icon: renderIcon('user'), label: `Hey, ${me.name as string}!` },
+  { key: 'divider', type: 'divider' },
+  {
+    key: 'profile',
+    icon: renderIcon('settings'),
+    label: () => h(RouterLink, { to: '/user' }, 'Your Profiles'),
+  },
+  {
+    key: 'settings',
+    icon: renderIcon('edit'),
+    label: () => h(RouterLink, { to: '/role' }, 'Settings'),
+  },
+  { key: 'divider', type: 'divider' },
+  { key: 'logout', icon: renderIcon('logout'), label: 'Sign out' },
+])
+</script>
+
+<style scoped></style>

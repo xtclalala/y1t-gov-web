@@ -8,7 +8,7 @@ export enum ContentEnum {
   FIXED = 'fixed',
 }
 
-// menu theme enum
+// yMenu theme enum
 export enum ThemeEnum {
   DARK = 'dark',
   LIGHT = 'light',

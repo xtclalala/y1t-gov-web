@@ -1,11 +1,10 @@
 <template>
-  <h1>{{ msg }}</h1>
+  <div>{{ msg }}</div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-
-const msg = ref<string>('sys yMenu')
+const msg = ref<string>('登录页')
 </script>
 
 <style scoped></style>

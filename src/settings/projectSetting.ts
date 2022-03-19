@@ -40,7 +40,7 @@ const setting: ProjectConfig = {
   // Color Weakness Mode
   colorWeak: false,
 
-  // Whether to cancel the menu, the top, the multi-tab page display, for possible embedded in other systems
+  // Whether to cancel the yMenu, the top, the multi-tab page display, for possible embedded in other systems
   fullContent: false,
 
   // content mode
@@ -70,22 +70,22 @@ const setting: ProjectConfig = {
     showDoc: true,
     // Whether to show the notification button
     showNotice: true,
-    // Whether to display the menu search
+    // Whether to display the yMenu search
     showSearch: true,
   },
 
   // Menu configuration
   menuSetting: {
-    // sidebar menu bg color
+    // sidebar yMenu bg color
     bgColor: SIDE_BAR_BG_COLOR_LIST[0],
-    //  Whether to fix the left menu
+    //  Whether to fix the left yMenu
     fixed: true,
     // Menu collapse
     collapsed: false,
-    // Whether to display the menu name when folding the menu
+    // Whether to display the yMenu name when folding the yMenu
     collapsedShowTitle: false,
     // Whether it can be dragged
-    // Only limited to the opening of the left menu, the mouse has a drag bar on the right side of the menu
+    // Only limited to the opening of the left yMenu, the mouse has a drag bar on the right side of the yMenu
     canDrag: false,
     // Whether to show no dom
     show: true,
@@ -99,19 +99,19 @@ const setting: ProjectConfig = {
     type: MenuTypeEnum.SIDEBAR,
     // Menu theme
     theme: ThemeEnum.DARK,
-    // Split menu
+    // Split yMenu
     split: false,
-    // Top menu layout
+    // Top yMenu layout
     topMenuAlign: 'center',
     // Fold trigger position
     trigger: TriggerEnum.HEADER,
-    // Turn on accordion mode, only show a menu
+    // Turn on accordion mode, only show a yMenu
     accordion: true,
-    // Switch page to close menu
+    // Switch page to close yMenu
     closeMixSidebarOnChange: false,
     // Module opening method ‘click’ |'hover'
     mixSideTrigger: MixSidebarTriggerEnum.CLICK,
-    // Fixed expanded menu
+    // Fixed expanded yMenu
     mixSideFixed: false,
   },
 

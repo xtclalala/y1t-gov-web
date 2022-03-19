@@ -1,12 +1,14 @@
 import type { AppRouteRecordRaw } from '@/router/types'
 import { PageEnum } from '@/enums/pageEnum'
 import { PAGE } from '@r/constant'
+import { rPath } from '@r/enums/rPath'
+import { rName } from '@r/enums/rName'
 
 // import { t } from '@/utils/i18n/useI18n'
 
 export const SYSTEM_ROUTE: AppRouteRecordRaw = {
-  path: '/system',
-  name: 'systemSetting',
+  path: rPath.SYSTEM,
+  name: rName.SYSTEM,
   redirect: PageEnum.SYSTEM_USER,
   component: PAGE,
   meta: {
@@ -15,8 +17,8 @@ export const SYSTEM_ROUTE: AppRouteRecordRaw = {
   },
   children: [
     {
-      path: '/system/menu',
-      name: 'menu',
+      path: rPath.SYSTEM_MENU,
+      name: rName.SYSTEM_MENU,
       component: () => import('@/pages/system_setting/sys_menu/index.vue'),
       meta: {
         // title: t('routes.system.sysMenu'),
@@ -25,8 +27,8 @@ export const SYSTEM_ROUTE: AppRouteRecordRaw = {
       },
     },
     {
-      path: '/system/organization',
-      name: 'organization',
+      path: rPath.SYSTEM_ORGAMIZE,
+      name: rName.SYSTEM_ORGAMIZE,
       component: () => import('@/pages/system_setting/sys_organization/index.vue'),
       meta: {
         // title: t('routes.system.sysOrganization'),
@@ -35,8 +37,8 @@ export const SYSTEM_ROUTE: AppRouteRecordRaw = {
       },
     },
     {
-      path: '/system/permission',
-      name: 'permission',
+      path: rPath.SYSTEM_PERMISSION,
+      name: rName.SYSTEM_PERMISSION,
       component: () => import('@/pages/system_setting/sys_permission/index.vue'),
       meta: {
         // title: t('routes.system.sysPermission'),
@@ -45,8 +47,8 @@ export const SYSTEM_ROUTE: AppRouteRecordRaw = {
       },
     },
     {
-      path: '/system/role',
-      name: 'role',
+      path: rPath.SYSTEM_ROLE,
+      name: rName.SYSTEM_ROLE,
       component: () => import('@/pages/system_setting/sys_role/index.vue'),
       meta: {
         // title: t('routes.system.sysRole'),
@@ -55,8 +57,8 @@ export const SYSTEM_ROUTE: AppRouteRecordRaw = {
       },
     },
     {
-      path: '/system/user',
-      name: 'user',
+      path: rPath.SYSTEM_USER,
+      name: rName.SYSTEM_USER,
       component: () => import('@/pages/system_setting/sys_user/index.vue'),
       meta: {
         // title: t('routes.system.sysUser'),
@@ -68,8 +70,8 @@ export const SYSTEM_ROUTE: AppRouteRecordRaw = {
 }
 
 export const TEST: AppRouteRecordRaw = {
-  path: '/test',
-  name: 'text',
+  path: rPath.TEST,
+  name: rName.TEST,
   component: () => import('@/pages/test/Test.vue'),
   meta: {
     // title: t('routes.system.sysMenu'),
@@ -79,13 +81,23 @@ export const TEST: AppRouteRecordRaw = {
 }
 
 export const ABOUT_ROUTER: AppRouteRecordRaw = {
-  path: '/about',
-  name: 'AboutPage',
+  path: rPath.ABOUT,
+  name: rName.ABOUT,
   component: () => import('@/pages/about/index.vue'),
   meta: {
     // title: t('routes.dashboard.about'),
     title: '关于',
     icon: 'simple-icons:about-dot-me',
     hideMenu: true,
+  },
+}
+
+export const LOGIN_ROUTE: AppRouteRecordRaw = {
+  path: rPath.LOGIN,
+  name: rName.LOGIN,
+  component: () => import('@/pages/common/login/login.vue'),
+  meta: {
+    title: '登录',
+    hideBreadcrumb: true,
   },
 }

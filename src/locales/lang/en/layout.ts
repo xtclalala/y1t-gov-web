@@ -35,15 +35,15 @@ export default {
     topMenuAlignLeft: 'Left',
     topMenuAlignRight: 'Center',
     topMenuAlignCenter: 'Right',
-    // menu trigger
+    // yMenu trigger
     menuTriggerNone: 'Not Show',
     menuTriggerBottom: 'Bottom',
     menuTriggerTop: 'Top',
-    // menu type
-    menuTypeSidebar: 'Left menu mode',
-    menuTypeMixSidebar: 'Left menu mixed mode',
+    // yMenu type
+    menuTypeSidebar: 'Left yMenu mode',
+    menuTypeMixSidebar: 'Left yMenu mixed mode',
     menuTypeMix: 'Top Menu Mix mode',
-    menuTypeTopMenu: 'Top menu mode',
+    menuTypeTopMenu: 'Top yMenu mode',
 
     on: 'On',
     off: 'Off',
@@ -64,8 +64,8 @@ export default {
     interfaceFunction: 'Interface function',
     interfaceDisplay: 'Interface display',
     animation: 'Animation',
-    splitMenu: 'Split menu',
-    closeMixSidebarOnChange: 'Switch page to close menu',
+    splitMenu: 'Split yMenu',
+    closeMixSidebarOnChange: 'Switch page to close yMenu',
 
     sysTheme: 'System theme',
     headerTheme: 'Header theme',
@@ -74,15 +74,15 @@ export default {
     menuDrag: 'Drag Sidebar',
     menuSearch: 'Menu search',
     menuAccordion: 'Sidebar accordion',
-    menuCollapse: 'Collapse menu',
-    collapseMenuDisplayName: 'Collapse menu display name',
-    topMenuLayout: 'Top menu layout',
+    menuCollapse: 'Collapse yMenu',
+    collapseMenuDisplayName: 'Collapse yMenu display name',
+    topMenuLayout: 'Top yMenu layout',
     menuCollapseButton: 'Menu collapse button',
     contentMode: 'Content area width',
-    expandedMenuWidth: 'Expanded menu width',
+    expandedMenuWidth: 'Expanded yMenu width',
 
     breadcrumb: 'Breadcrumbs',
-    breadcrumbIcon: 'Breadcrumbs Icon',
+    breadcrumbIcon: 'Breadcrumbs yIcon',
     tabs: 'Tabs',
     tabDetail: 'Tab Detail',
     tabsQuickBtn: 'Tabs quick button',
@@ -106,10 +106,10 @@ export default {
     fixedHeader: 'Fixed header',
     fixedSideBar: 'Fixed Sidebar',
 
-    mixSidebarTrigger: 'Mixed menu Trigger',
+    mixSidebarTrigger: 'Mixed yMenu Trigger',
     triggerHover: 'Hover',
     triggerClick: 'Click',
 
-    mixSidebarFixed: 'Fixed expanded menu',
+    mixSidebarFixed: 'Fixed expanded yMenu',
   },
 }

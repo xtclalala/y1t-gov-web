@@ -1,14 +1,14 @@
 /**
- * @description: menu type
+ * @description: yMenu type
  */
 export enum MenuTypeEnum {
-  // left menu
+  // left yMenu
   SIDEBAR = 'sidebar',
 
   MIX_SIDEBAR = 'mix-sidebar',
-  // mixin menu
+  // mixin yMenu
   MIX = 'mix',
-  // top menu
+  // top yMenu
   TOP_MENU = 'top-menu',
 }
 
@@ -24,7 +24,7 @@ export enum TriggerEnum {
 
 export type Mode = 'vertical' | 'vertical-right' | 'horizontal' | 'inline'
 
-// menu mode
+// yMenu mode
 export enum MenuModeEnum {
   VERTICAL = 'vertical',
   HORIZONTAL = 'horizontal',

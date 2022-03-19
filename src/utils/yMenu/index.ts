@@ -2,7 +2,7 @@
 import { AppRouteRecordRaw } from '@r/types'
 
 import { h } from 'vue'
-import Icon from '@/components/icon.vue'
+import Icon from '@/components/yIcon/index.vue'
 // import { RouterLink } from 'vue-router'
 
 const renderIcon = (icon: string | undefined) => {

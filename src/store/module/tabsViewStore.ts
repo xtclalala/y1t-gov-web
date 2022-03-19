@@ -6,6 +6,7 @@ export const tabsViewStore = defineStore('tabsView', {
     return {
       viewList: [],
       currentView: '',
+      tBlacklist: ['RedirectTo', 'login'],
     }
   },
   getters: {
@@ -34,7 +35,7 @@ export const tabsViewStore = defineStore('tabsView', {
       if (this.findTab(to)) {
         return
       }
-      if ('redirect' === to.meta.title) {
+      if (this.tBlacklist.findIndex((self: string) => self === to.name) !== -1) {
         return
       }
       // @ts-ignore

@@ -1,12 +1,14 @@
 import type { AppRouteRecordRaw } from '@/router/types'
 
-import { EXCEPTION_COMPONENT, LAYOUT, PAGE_NOT_FOUND_NAME } from '@/router/constant'
+import { EXCEPTION_COMPONENT, LAYOUT } from '@/router/constant'
+import { rPath } from '@r/enums/rPath'
+import { rName } from '@r/enums/rName'
 // import { t } from '@/utils/i18n/useI18n'
 
 // 404 on a page
 export const PAGE_NOT_FOUND_ROUTE: AppRouteRecordRaw = {
-  path: '/:path(.*)*',
-  name: PAGE_NOT_FOUND_NAME,
+  path: rPath.NOT_FOUND,
+  name: rName.NOT_FOUND,
   component: LAYOUT,
   meta: {
     title: 'ErrorPage',
@@ -15,8 +17,8 @@ export const PAGE_NOT_FOUND_ROUTE: AppRouteRecordRaw = {
   },
   children: [
     {
-      path: '/:path(.*)*',
-      name: PAGE_NOT_FOUND_NAME,
+      path: rPath.NOT_FOUND,
+      name: rName.NOT_FOUND,
       component: EXCEPTION_COMPONENT,
       meta: {
         title: 'ErrorPage',
@@ -28,9 +30,9 @@ export const PAGE_NOT_FOUND_ROUTE: AppRouteRecordRaw = {
 }
 
 export const REDIRECT_ROUTE: AppRouteRecordRaw = {
-  path: '/redirect',
+  path: rPath.REDIRECT,
+  name: rName.REDIRECT,
   component: LAYOUT,
-  name: 'RedirectTo',
   meta: {
     title: 'redirect',
     hideBreadcrumb: true,
@@ -38,8 +40,8 @@ export const REDIRECT_ROUTE: AppRouteRecordRaw = {
   },
   children: [
     {
-      path: '/redirect/:path(.*)',
-      name: 'redirect',
+      path: rPath.REDIRECT_ROUTE,
+      name: rName.REDIRECT_ROUTE,
       component: () => import('@/pages/redirect/index.vue'),
       meta: {
         title: 'redirect',
