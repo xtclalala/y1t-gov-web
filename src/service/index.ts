@@ -8,19 +8,16 @@ import type { AxiosTransform, CreateAxiosOptions } from './axiosTransform'
 import { VAxios } from './Axios'
 import { checkStatus } from './checkStatus'
 import { useGlobalSetting } from '@/utils/env'
-import { useNotification } from 'naive-ui'
-import { RequestEnum, ResultEnum, ContentTypeEnum } from '@/enums/httpEnum'
+import { RequestEnum, ContentTypeEnum } from '@/enums/httpEnum'
 import { isString } from '@/utils/is'
 import { getToken } from '@/utils/auth'
 import { setObjToUrlParams, deepMerge } from '@/utils'
 import { useErrorLogStoreWithOut } from '@/store/modules/errorLog'
-import { useI18n } from 'vue-i18n'
+// import { useI18n } from 'vue-i18n'
 import { joinTimestamp, formatRequestDate } from './helper'
-import { useUserStoreWithOut } from '@/store/modules/user'
-
+// import { useUserStoreWithOut } from '@/store/modules/user'
 const globSetting = useGlobalSetting()
 const urlPrefix = globSetting.urlPrefix
-const { error } = useNotification()
 
 /**
  * @description: 数据处理，方便区分多种处理方式
@@ -30,7 +27,7 @@ const transform: AxiosTransform = {
    * @description: 处理请求数据。如果数据不是预期格式，可直接抛出错误
    */
   transformRequestHook: (res: AxiosResponse<Result>, options: RequestOptions) => {
-    const { t } = useI18n()
+    // const { t } = useI18n()
     const { isTransformResponse, isReturnNativeResponse } = options
     // 是否返回原生响应头 比如：需要获取响应头时使用该属性
     if (isReturnNativeResponse) {
@@ -46,35 +43,24 @@ const transform: AxiosTransform = {
     const { data } = res
     if (!data) {
       // return '[HTTP] Request has no return value';
-      throw new Error(t('sys_role.api.apiRequestFailed'))
+      throw new Error('sys_role.api.apiRequestFailed')
     }
     //  这里 code，result，message为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
-    const { code, result, message } = data
+    // const { result } = data
 
     // 这里逻辑可以根据项目进行修改
-    const hasSuccess = data && Reflect.has(data, 'code') && code === ResultEnum.SUCCESS
+    const hasSuccess = data && Reflect.has(data, 'status')
     if (hasSuccess) {
-      return result
+      // todo
+      window.$message?.success(data.message)
+      return data
     }
 
     // 在此处根据自己项目的实际情况对不同的code执行不同的操作
     // 如果不希望中断当前请求，请return数据，否则直接抛出异常即可
-    let timeoutMsg = ''
-    switch (code) {
-      case ResultEnum.TIMEOUT:
-        timeoutMsg = t('sys_role.api.timeoutMessage')
-        const userStore = useUserStoreWithOut()
-        userStore.setToken(undefined)
-        userStore.logout(true)
-        break
-      default:
-        if (message) {
-          timeoutMsg = message
-        }
-    }
-    error({ title: t('sys_role.api.errorTip'), content: timeoutMsg })
+    // error({ title: t('sys_role.api.errorTip'), content: timeoutMsg })
 
-    throw new Error(timeoutMsg || t('sys_role.api.apiRequestFailed'))
+    // throw new Error(timeoutMsg || t('sys_role.api.apiRequestFailed'))
   },
 
   // 请求之前处理config
@@ -150,24 +136,24 @@ const transform: AxiosTransform = {
    * @description: 响应错误处理
    */
   responseInterceptorsCatch: (error: any) => {
-    const { t } = useI18n()
+    // const { t } = useI18n()
     const errorLogStore = useErrorLogStoreWithOut()
     errorLogStore.addAjaxErrorInfo(error)
     const { response, code, message } = error || {}
     const msg: string = response?.data?.error?.message ?? ''
     const err: string = error?.toString?.() ?? ''
-    let errMessage = ''
+    const errMessage = ''
 
     try {
       if (code === 'ECONNABORTED' && message.indexOf('timeout') !== -1) {
-        errMessage = t('sys_role.api.apiTimeoutMessage')
+        // errMessage = t('sys_role.api.apiTimeoutMessage')
       }
       if (err?.includes('Network Error')) {
-        errMessage = t('sys_role.api.networkExceptionMsg')
+        // errMessage = t('sys_role.api.networkExceptionMsg')
       }
 
       if (errMessage) {
-        error({ title: t('sys_role.api.errorTip'), content: errMessage })
+        // error({ title: t('sys_role.api.errorTip'), content: errMessage })
         return Promise.reject(error)
       }
     } catch (error) {
@@ -189,7 +175,7 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
         authenticationScheme: '',
         timeout: 10 * 1000,
         // 基础接口地址
-        // baseURL: globSetting.apiUrl,
+        baseURL: globSetting.urlPrefix,
 
         headers: { 'Content-Type': ContentTypeEnum.JSON },
         // 如果是form-data格式
@@ -199,7 +185,7 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
         // 配置项，下面的选项都可以在独立的接口请求中覆盖
         requestOptions: {
           // 默认将prefix 添加到url
-          joinPrefix: true,
+          joinPrefix: false,
           // 是否返回原生响应头 比如：需要获取响应头时使用该属性
           isReturnNativeResponse: false,
           // 需要对返回数据进行处理

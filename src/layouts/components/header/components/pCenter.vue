@@ -10,6 +10,7 @@ import { renderIcon } from '@/utils/yIcon'
 import { RouterLink, useRouter } from 'vue-router'
 import { useMessage } from 'naive-ui'
 import { userStore } from '@/store/module/user'
+import { rPath } from '@/enums/rPath'
 
 const router = useRouter()
 const message = useMessage()
@@ -17,10 +18,7 @@ const me = userStore()
 // todo 拿到个人信息
 // 选中下拉框中的回调
 const handleOptionsSelect = async (key: unknown): Promise<void> => {
-  if ((key as string) === 'logout') {
-    // await token.revoke()
-    await router.push({ name: 'menu' })
-  } else if ((key as string) === 'me') {
+  if ((key as string) === 'me') {
     message.success(`Welcome back, ${me.name as string}!`)
   }
 }
@@ -28,6 +26,7 @@ const handleOptionsSelect = async (key: unknown): Promise<void> => {
 const options = computed(() => [
   { key: 'me', icon: renderIcon('user'), label: `Hey, ${me.name as string}!` },
   { key: 'divider', type: 'divider' },
+  // todo 个人中心
   {
     key: 'profile',
     icon: renderIcon('settings'),
@@ -39,7 +38,11 @@ const options = computed(() => [
     label: () => h(RouterLink, { to: '/role' }, 'Settings'),
   },
   { key: 'divider', type: 'divider' },
-  { key: 'logout', icon: renderIcon('logout'), label: 'Sign out' },
+  {
+    key: 'logout',
+    icon: renderIcon('logout'),
+    label: () => h(RouterLink, { to: rPath.LOGIN }, 'Sign out'),
+  },
 ])
 </script>
 

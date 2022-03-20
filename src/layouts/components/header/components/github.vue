@@ -2,7 +2,7 @@
   <n-tooltip>
     <template #trigger>
       <a :href="projectGithub" target="_blank">
-        <y-icon size="22" type="github" />
+        <y-icon :size="22" type="github" :depth="2" />
       </a>
     </template>
     View on github
@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import { yIcon } from '@/components/yIcon'
+import YIcon from '@/components/yIcon/index.vue'
 import ProjectInfo from '@/settings/projectInfo'
 const { projectGithub } = ProjectInfo
 </script>

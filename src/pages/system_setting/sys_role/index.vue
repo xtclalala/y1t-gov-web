@@ -6,7 +6,6 @@
 import { ref } from 'vue'
 
 const msg = ref<string>('sys role')
-console.log(msg.value)
 </script>
 
 <style scoped></style>

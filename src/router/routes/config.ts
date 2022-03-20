@@ -1,8 +1,8 @@
 import type { AppRouteRecordRaw } from '@/router/types'
 import { PageEnum } from '@/enums/pageEnum'
 import { PAGE } from '@r/constant'
-import { rPath } from '@r/enums/rPath'
-import { rName } from '@r/enums/rName'
+import { rPath } from '@/enums/rPath'
+import { rName } from '@/enums/rName'
 
 // import { t } from '@/utils/i18n/useI18n'
 
@@ -87,7 +87,7 @@ export const ABOUT_ROUTER: AppRouteRecordRaw = {
   meta: {
     // title: t('routes.dashboard.about'),
     title: '关于',
-    icon: 'simple-icons:about-dot-me',
+    icon: 'close',
     hideMenu: true,
   },
 }
@@ -95,7 +95,7 @@ export const ABOUT_ROUTER: AppRouteRecordRaw = {
 export const LOGIN_ROUTE: AppRouteRecordRaw = {
   path: rPath.LOGIN,
   name: rName.LOGIN,
-  component: () => import('@/pages/common/login/login.vue'),
+  component: () => import('@/pages/common/login.vue'),
   meta: {
     title: '登录',
     hideBreadcrumb: true,

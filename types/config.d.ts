@@ -157,7 +157,7 @@ export interface GlobEnvConfig {
   // Site title
   VITE_GLOB_APP_TITLE: string
   // Service interface url
-  VITE_GLOB_API_URL: string,
+  VITE_GLOB_API_URL: string
   // uri prefix
-  VITE_GLOB_API_URL_PREFIX
+  VITE_GLOB_API_URL_PREFIX: string
 }

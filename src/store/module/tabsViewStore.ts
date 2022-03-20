@@ -1,12 +1,13 @@
 import { defineStore } from 'pinia'
 import { AppRouteRecordRaw } from '@r/types'
+import { rName } from '@/enums/rName'
 
 export const tabsViewStore = defineStore('tabsView', {
   state: () => {
     return {
       viewList: [],
       currentView: '',
-      tBlacklist: ['RedirectTo', 'login'],
+      tBlacklist: [rName.REDIRECT, rName.LOGIN, rName.REDIRECT_ROUTE],
     }
   },
   getters: {

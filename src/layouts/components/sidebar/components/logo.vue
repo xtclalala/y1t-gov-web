@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 import ProjectInfo from '@/settings/projectInfo'
-import { yIcon } from '@/components/yIcon'
+import YIcon from '@/components/yIcon/index.vue'
 const { projectGithub } = ProjectInfo
 </script>
 

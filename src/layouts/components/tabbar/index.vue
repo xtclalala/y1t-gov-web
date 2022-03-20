@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { tabsViewStore } from '@/store/module/tabsViewStore'
-import { CloseCircleOutline } from '@vicons/ionicons5'
 import { useRouter, useRoute } from 'vue-router'
 import { useMessage } from 'naive-ui'
 import { ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
-import { yIcon } from '@/components/yIcon'
+import YIcon from '@/components/yIcon/index.vue'
 import { AppRouteRecordRaw } from '@r/types'
+import { router2menu } from '@/utils/yMenu'
 
 const tabs = tabsViewStore()
 const msg = useMessage()
@@ -17,10 +17,16 @@ const scrollbar: any = ref(null)
 const leftArrowDisabled = ref<boolean>(false)
 const rightArrowDisabled = ref<boolean>(false)
 
-watch(route, (n) => {
-  router.push({ name: n.name })
-  tabs.routerPush(n)
-})
+watch(
+  route,
+  (n) => {
+    // console.log(n)
+    router.push({ name: n.name as string })
+    const r = router2menu(n as AppRouteRecordRaw)
+    tabs.routerPush(r)
+  },
+  { immediate: true }
+)
 
 const iconClick = (name: string) => {
   closeTab(name)
@@ -92,7 +98,7 @@ const closeTab = async (name: string) => {
     await tabs.removeTab(index)
     if (currentView.value === name) {
       currentView.value = tabs.listSliceEnd[0].name
-      router.push(currentView.value)
+      router.push({ name: currentView.value })
     }
   }
 }

@@ -4,10 +4,10 @@ import { PAGE_NOT_FOUND_ROUTE, REDIRECT_ROUTE } from '@/router/routes/basic'
 import { SYSTEM_ROUTE, TEST, ABOUT_ROUTER, LOGIN_ROUTE } from '@r/routes/config'
 import { PageEnum } from '@/enums/pageEnum'
 import { LAYOUT } from '@r/constant'
-import { rPath } from '@r/enums/rPath'
-import { rName } from '@r/enums/rName'
+import { rPath } from '@/enums/rPath'
+import { rName } from '@/enums/rName'
 
-const modules = import.meta.globEager('./modules/**/*.ts')
+const modules = import.meta.globEager('./routes/**/*.ts')
 
 const routeModuleList: AppRouteModule[] = []
 

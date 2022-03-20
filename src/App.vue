@@ -1,16 +1,38 @@
 <template>
-  <n-message-provider>
-    <RouterView />
-  </n-message-provider>
+  <n-config-provider :theme="theme">
+    <n-global-style />
+    <n-loading-bar-provider>
+      <n-message-provider>
+        <n-dialog-provider>
+          <n-notification-provider>
+            <naive-provider-content />
+            <RouterView />
+          </n-notification-provider>
+        </n-dialog-provider>
+      </n-message-provider>
+    </n-loading-bar-provider>
+  </n-config-provider>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<script lang="ts" setup>
+import { computed, defineComponent, h } from 'vue'
+import { useOsTheme, darkTheme } from 'naive-ui'
+import { useLoadingBar, useDialog, useMessage, useNotification } from 'naive-ui'
+
+function registerNaiveTools() {
+  window.$loadingBar = useLoadingBar()
+  window.$dialog = useDialog()
+  window.$message = useMessage()
+  window.$notification = useNotification()
 }
-</style>
+const NaiveProviderContent = defineComponent({
+  setup() {
+    registerNaiveTools()
+  },
+  render() {
+    return h('div')
+  },
+})
+const osTheme = useOsTheme()
+const theme = computed(() => (osTheme.value === 'dark' ? darkTheme : null))
+</script>

@@ -7,14 +7,15 @@
 <script setup lang="ts">
 import { unref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { yIcon } from '@/components/yIcon'
+import YIcon from '@/components/yIcon/index.vue'
+import { rPath } from '@/enums/rPath'
 
 const router = useRouter()
 const route = useRoute()
 
 const refresh = () => {
   router.push({
-    path: '/redirect' + unref(route).fullPath,
+    path: rPath.REDIRECT + unref(route).fullPath,
   })
 }
 </script>

@@ -1,8 +1,8 @@
 import { h } from 'vue'
-import { yIcon } from '@/components/yIcon'
+import YIcon from '@/components/yIcon/index.vue'
 
 export const renderIcon = (icon: string | undefined) => {
   return () => {
-    return h(yIcon, { type: icon })
+    return h(YIcon, { type: icon })
   }
 }

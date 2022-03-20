@@ -15,9 +15,6 @@ export interface AppRouteRecordRaw extends Omit<RouteRecordRaw, 'meta'> {
   fullPath?: string
   label?: string
   key?: string
-  id?: string
-  pid?: string
-  pName?: string
   disabled?: boolean
   icon?: any
 }

@@ -20,10 +20,11 @@ export default defineConfig({
     port: 3000,
     host: '0.0.0.0',
     proxy: {
-      '^/y1t': {
-        target: 'http://127.0.0.1:8080',
+      // '^/y1t': {
+      '^/mock': {
+        target: 'http://127.0.0.1:4523',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/y1t/, ''),
+        rewrite: (path) => path.replace(/^\/mock/, '/mock'),
       },
       '^/7lk': {
         target: 'ws://127.0.0.1:8080',

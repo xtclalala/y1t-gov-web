@@ -3,7 +3,7 @@
     <template #trigger>
       <!--          todo 可能要用tsx去加载-->
       <n-badge dot processing>
-        <y-icon size="22" type="notificationsRed" />
+        <y-icon :size="22" type="notificationsRed" :depth="2" />
       </n-badge>
     </template>
     <n-tabs type="line" justify-content="space-evenly" style="--pane-padding: 0">
@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { yIcon } from '@/components/yIcon'
+import YIcon from '@/components/yIcon/index.vue'
 </script>
 
 <style scoped></style>

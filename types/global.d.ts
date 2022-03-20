@@ -4,7 +4,7 @@ import type {
   VNodeChild,
   ComponentPublicInstance,
   FunctionalComponent,
-  PropType as VuePropType,
+  PropType as VuePropType, App,
 } from 'vue'
 
 declare global {
@@ -17,10 +17,14 @@ declare global {
     }
     lastBuildTime: string
   }
-  // declare interface Window {
-  //   // Global vue app instance
-  //   __APP__: App<Element>;
-  // }
+  declare interface Window {
+    // Global vue app instance
+    __APP__: App<Element>;
+    $loadingBar?: import('naive-ui').LoadingBarProviderInst;
+    $dialog?: import('naive-ui').DialogProviderInst;
+    $message?: import('naive-ui').MessageProviderInst;
+    $notification?: import('naive-ui').NotificationProviderInst;
+  }
 
   // vue
   declare type PropType<T> = VuePropType<T>

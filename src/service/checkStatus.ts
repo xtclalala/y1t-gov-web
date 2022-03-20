@@ -1,17 +1,17 @@
-import { useNotification } from 'naive-ui'
+// import { useNotification } from 'naive-ui'
 import { useI18n } from 'vue-i18n'
 // import router from '/@/router';
 // import { PageEnum } from '/@/enums/pageEnum';
-import { useUserStoreWithOut } from '@/store/modules/user'
+// import { useUserStoreWithOut } from '@/store/modules/user'
 import projectSetting from '@/settings/projectSetting'
 import { SessionTimeoutProcessingEnum } from '@/enums/appEnum'
 
-const { error } = useNotification()
+// const { error } = useNotification()
 const stp = projectSetting.sessionTimeoutProcessing
 
 export function checkStatus(status: number, msg: string): void {
   const { t } = useI18n()
-  const userStore = useUserStoreWithOut()
+  // const userStore = useUserStoreWithOut()
   let errMessage = ''
 
   switch (status) {
@@ -22,12 +22,12 @@ export function checkStatus(status: number, msg: string): void {
     // Jump to the login page if not logged in, and carry the path of the current page
     // Return to the current page after successful login. This step needs to be operated on the login page.
     case 401:
-      userStore.setToken(undefined)
+      // userStore.setToken(undefined)
       errMessage = msg || t('sys_role.api.errMsg401')
       if (stp === SessionTimeoutProcessingEnum.PAGE_COVERAGE) {
-        userStore.setSessionTimeout(true)
+        // userStore.setSessionTimeout(true)
       } else {
-        userStore.logout(true)
+        // userStore.logout(true)
       }
       break
     case 403:
@@ -65,6 +65,6 @@ export function checkStatus(status: number, msg: string): void {
   }
 
   if (errMessage) {
-    error({ content: errMessage, title: status.toString() })
+    // error({ content: errMessage, title: status.toString() })
   }
 }
