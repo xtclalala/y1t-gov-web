@@ -1,14 +1,10 @@
 import { defHttp } from '@/service'
 import { LoginParams } from '@/api/common/model/login'
+import { RequestOptions, Result } from '#axios'
 
 enum Api {
   Login = '/721636/login',
 }
 
-interface t {
-  status: number
-  message: string
-  result: any
-}
-
-export const doLogin = (params: LoginParams) => defHttp.post<t>({ url: Api.Login, params })
+export const doLogin = <T = Result>(params: LoginParams, options?: RequestOptions) =>
+  defHttp.post<T>({ url: Api.Login, params }, options)

@@ -8,7 +8,7 @@ import type { AxiosTransform, CreateAxiosOptions } from './axiosTransform'
 import { VAxios } from './Axios'
 import { checkStatus } from './checkStatus'
 import { useGlobalSetting } from '@/utils/env'
-import { RequestEnum, ContentTypeEnum } from '@/enums/httpEnum'
+import { RequestEnum, ContentTypeEnum, ResultEnum } from '@/enums/httpEnum'
 import { isString } from '@/utils/is'
 import { getToken } from '@/utils/auth'
 import { setObjToUrlParams, deepMerge } from '@/utils'
@@ -33,27 +33,31 @@ const transform: AxiosTransform = {
     if (isReturnNativeResponse) {
       return res
     }
+    const { data } = res
     // 不进行任何处理，直接返回
     // 用于页面代码可能需要直接获取code，data，message这些信息时开启
     if (!isTransformResponse) {
-      return res.data
+      return data
     }
-    // 错误的时候返回
 
-    const { data } = res
+    // 错误的时候返回
     if (!data) {
       // return '[HTTP] Request has no return value';
       throw new Error('sys_role.api.apiRequestFailed')
     }
     //  这里 code，result，message为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
-    // const { result } = data
+    const { result, message, status } = data
 
-    // 这里逻辑可以根据项目进行修改
     const hasSuccess = data && Reflect.has(data, 'status')
     if (hasSuccess) {
-      // todo
-      window.$message?.success(data.message)
-      return data
+      switch (status) {
+        case ResultEnum.SUCCESS:
+          window.$message?.success(message)
+          break
+        default:
+          window.$message?.warning(message)
+      }
+      return result
     }
 
     // 在此处根据自己项目的实际情况对不同的code执行不同的操作
@@ -142,14 +146,16 @@ const transform: AxiosTransform = {
     const { response, code, message } = error || {}
     const msg: string = response?.data?.error?.message ?? ''
     const err: string = error?.toString?.() ?? ''
-    const errMessage = ''
+    let errMessage = ''
 
     try {
       if (code === 'ECONNABORTED' && message.indexOf('timeout') !== -1) {
         // errMessage = t('sys_role.api.apiTimeoutMessage')
+        errMessage = 'sys_role.api.apiTimeoutMessage'
       }
       if (err?.includes('Network Error')) {
         // errMessage = t('sys_role.api.networkExceptionMsg')
+        errMessage = 'sys_role.api.networkExceptionMsg'
       }
 
       if (errMessage) {
@@ -163,6 +169,15 @@ const transform: AxiosTransform = {
     checkStatus(error?.response?.status, msg)
     return Promise.reject(error)
   },
+
+  /**
+   * @description: 响应错误处理
+   */
+  // requestCatchHook: (e: Error, options: RequestOptions) => {
+  // return new Promise((resolve, reject) =>{
+  //
+  // })
+  // },
 }
 
 function createAxios(opt?: Partial<CreateAxiosOptions>) {
@@ -173,7 +188,7 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
         // authentication schemes，e.g: Bearer
         // authenticationScheme: 'Bearer',
         authenticationScheme: '',
-        timeout: 10 * 1000,
+        timeout: 1 * 1000,
         // 基础接口地址
         baseURL: globSetting.urlPrefix,
 

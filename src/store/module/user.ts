@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { LoginParams } from '@/api/common/model/login'
+import { LoginParams, LoginResponse } from '@/api/common/model/login'
 import { doLogin } from '@/api/common/login'
 
 export const userStore = defineStore('user', {
@@ -14,7 +14,7 @@ export const userStore = defineStore('user', {
   },
   actions: {
     login: async (params: LoginParams) => {
-      return await doLogin(params)
+      return doLogin<LoginResponse>(params)
     },
   },
 })
