@@ -41,13 +41,13 @@ const transform: AxiosTransform = {
     }
 
     // 错误的时候返回
-    if (!data) {
+    if (Object.keys(data).length === 0) {
       // return '[HTTP] Request has no return value';
-      throw new Error('sys_role.api.apiRequestFailed')
+      // throw new Error('sys_role.api.apiRequestFailed')
+      throw new Error('没有内容')
     }
     //  这里 code，result，message为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
     const { result, message, status } = data
-
     const hasSuccess = data && Reflect.has(data, 'status')
     if (hasSuccess) {
       switch (status) {
@@ -157,7 +157,6 @@ const transform: AxiosTransform = {
         // errMessage = t('sys_role.api.networkExceptionMsg')
         errMessage = 'sys_role.api.networkExceptionMsg'
       }
-
       if (errMessage) {
         // error({ title: t('sys_role.api.errorTip'), content: errMessage })
         return Promise.reject(error)

@@ -2,8 +2,14 @@ import { defineStore } from 'pinia'
 import { AppRouteRecordRaw } from '@r/types'
 import { rName } from '@/enums/rName'
 
+interface ITabsViewStore {
+  viewList: AppRouteRecordRaw[]
+  currentView: string
+  tBlacklist: string[]
+}
+
 export const tabsViewStore = defineStore('tabsView', {
-  state: () => {
+  state: (): ITabsViewStore => {
     return {
       viewList: [],
       currentView: '',
@@ -11,9 +17,6 @@ export const tabsViewStore = defineStore('tabsView', {
     }
   },
   getters: {
-    getListLength(): Number {
-      return this.viewList.length
-    },
     listSliceEnd(): any {
       return this.viewList.slice(-1)
     },
@@ -24,7 +27,6 @@ export const tabsViewStore = defineStore('tabsView', {
     },
     findTab(route: AppRouteRecordRaw): boolean {
       for (const item of this.viewList) {
-        // @ts-ignore
         if (item.name === route.name) {
           return true
         }
@@ -39,7 +41,6 @@ export const tabsViewStore = defineStore('tabsView', {
       if (this.tBlacklist.findIndex((self: string) => self === to.name) !== -1) {
         return
       }
-      // @ts-ignore
       this.viewList.push(to)
     },
   },

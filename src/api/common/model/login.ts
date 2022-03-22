@@ -6,3 +6,10 @@ export interface LoginParams {
 export interface LoginResponse {
   token: string
 }
+
+export interface Information {
+  username: string
+  roles: []
+  organization: []
+  permissions: []
+}
