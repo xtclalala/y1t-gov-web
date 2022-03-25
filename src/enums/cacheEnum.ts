@@ -8,6 +8,7 @@ export const USER_INFO = 'USER__INFO__'
 
 // role info key
 export const ROLES_KEY = 'ROLES__KEY__'
+export const CURRENT_ROLE = 'CURRENT__KEY__'
 
 // project config key
 export const PROJ_CFG_KEY = 'PROJ__CFG__KEY__'

@@ -10,10 +10,10 @@ export enum rPath {
   REDIRECT_ROUTE = '/redirect/:path(.*)',
 
   SYSTEM = '/system',
-  SYSTEM_MENU = '/system/menu',
-  SYSTEM_ROLE = '/system/role',
-  SYSTEM_USER = '/system/user',
-  SYSTEM_ORGAMIZE = '/system/organize',
-  SYSTEM_PERMISSION = '/system/permission',
-  ABOUT = '/aboutProject',
+  SYSTEM_MENU = 'menu',
+  SYSTEM_ROLE = 'role',
+  SYSTEM_USER = 'user',
+  SYSTEM_ORGANIZE = 'organize',
+  SYSTEM_PERMISSION = 'permission',
+  ABOUT = 'about',
 }

@@ -2,7 +2,7 @@ export enum rName {
   TEST = 'Test',
 
   ROOT = 'Root',
-  TAB_VIEW = 'tab',
+  TAB_VIEW = 'Tab',
   LOGIN = 'Login',
 
   NOT_FOUND = 'PageNotFound',
@@ -10,11 +10,11 @@ export enum rName {
   REDIRECT = 'Redirect',
   REDIRECT_ROUTE = 'RedirectTo',
 
-  SYSTEM = 'systemSetting',
-  SYSTEM_MENU = 'menu',
-  SYSTEM_ROLE = 'role',
-  SYSTEM_USER = 'user',
-  SYSTEM_ORGAMIZE = 'organize',
-  SYSTEM_PERMISSION = 'permission',
-  ABOUT = 'about',
+  SYSTEM = 'SystemSetting',
+  SYSTEM_MENU = 'Menu',
+  SYSTEM_ROLE = 'Role',
+  SYSTEM_USER = 'User',
+  SYSTEM_ORGAMIZE = 'Organize',
+  SYSTEM_PERMISSION = 'Permission',
+  ABOUT = 'About',
 }

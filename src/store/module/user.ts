@@ -3,6 +3,7 @@ import { Information, LoginParams, LoginResponse } from '@/api/common/model/logi
 import { doLogin, getInformation } from '@/api/common/login'
 import { getAuthCache, setAuthCache } from '@/utils/auth'
 import {
+  CURRENT_ROLE,
   ORGANIZATIONS_KEY,
   PERMISSIONS_KEY,
   ROLES_KEY,
@@ -16,6 +17,8 @@ import { PermissionModeEnum } from '@/enums/appEnum'
 interface IUser {
   username: string
   token: string
+  // todo 改成 role 接口
+  currentRole: Object
   roles: []
   organization: []
   permissions: []
@@ -28,6 +31,7 @@ export const userStore = defineStore('user', {
       username: 'test',
       token: '',
       // ...各种字段，
+      currentRole: {},
       roles: [],
       organization: [],
       permissions: [],
@@ -35,6 +39,9 @@ export const userStore = defineStore('user', {
     }
   },
   getters: {
+    getCurrentRole(): Object {
+      return this.currentRole || getAuthCache<Object>(CURRENT_ROLE)
+    },
     getToken(): string {
       return this.token || getAuthCache<string>(TOKEN_KEY)
     },
@@ -60,7 +67,6 @@ export const userStore = defineStore('user', {
       this.setPermissions(permissions)
       this.setOrganizations(organization)
       this.setRoles(roles)
-      this.setRouter()
     },
     setToken(token: string) {
       this.token = token
@@ -81,6 +87,10 @@ export const userStore = defineStore('user', {
     setUsername(username: string) {
       this.username = username
       setAuthCache(USER_INFO, username)
+    },
+    setCurrentRole(role: Object) {
+      this.currentRole = role
+      setAuthCache(CURRENT_ROLE, role)
     },
     setRouter: function () {
       const appStore = useAppStoreWithOut()

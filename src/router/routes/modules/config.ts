@@ -1,4 +1,4 @@
-import type { AppRouteRecordRaw } from '@/router/types'
+import type { AppRouteRecordRaw } from '@r/types'
 import { PageEnum } from '@/enums/pageEnum'
 import { PAGE } from '@r/constant'
 import { rPath } from '@/enums/rPath'
@@ -27,7 +27,7 @@ export const SYSTEM_ROUTE: AppRouteRecordRaw = {
       },
     },
     {
-      path: rPath.SYSTEM_ORGAMIZE,
+      path: rPath.SYSTEM_ORGANIZE,
       name: rName.SYSTEM_ORGAMIZE,
       component: () => import('@/pages/system_setting/sys_organization/index.vue'),
       meta: {
@@ -95,9 +95,8 @@ export const ABOUT_ROUTER: AppRouteRecordRaw = {
 export const LOGIN_ROUTE: AppRouteRecordRaw = {
   path: rPath.LOGIN,
   name: rName.LOGIN,
-  component: () => import('@/pages/common/login.vue'),
+  component: () => import('@/pages/common/login/index.vue'),
   meta: {
     title: '登录',
-    hideBreadcrumb: true,
   },
 }

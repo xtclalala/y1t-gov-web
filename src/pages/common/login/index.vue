@@ -20,6 +20,7 @@
       >Sign in</n-button
     >
     <br />
+    <choose-active-role />
   </n-card>
 </template>
 
@@ -29,7 +30,7 @@ import { useRouter } from 'vue-router'
 import { useMessage } from 'naive-ui'
 import { userStore } from '@/store/module/user'
 import { LoginParams } from '@/api/common/model/login'
-// import { LoginParams } from '@/api/common/model/login'
+import ChooseActiveRole from './components/chooseActiveRole.vue'
 
 const router = useRouter()
 const message = useMessage()
@@ -61,8 +62,8 @@ const handleLogin = async (e: Event): Promise<void> => {
   loading.value = true
   try {
     // await token.authenticate(model.value.username, model.value.password)
-    const a = await user.login(model)
-    console.log('a', a)
+    // await user.login(model.value)
+    // 登录成功，选择身份为活跃身份
     // const route = router.currentRoute.value
     // const redirect = route.query.redirect?.toString()
     // await router.replace(redirect ?? route.redirectedFrom?.fullPath ?? '/')

@@ -15,6 +15,7 @@ import {
   MULTIPLE_TABS_KEY,
   ORGANIZATIONS_KEY,
   PERMISSIONS_KEY,
+  CURRENT_ROLE,
 } from '@/enums/cacheEnum'
 import { DEFAULT_CACHE_TIME } from '@/settings/encryptionSetting'
 import { toRaw } from 'vue'
@@ -29,6 +30,7 @@ interface BasicStore {
   [MULTIPLE_TABS_KEY]: RouteLocationNormalized[]
   [ORGANIZATIONS_KEY]: []
   [PERMISSIONS_KEY]: []
+  [CURRENT_ROLE]: Object
 }
 
 type LocalStore = BasicStore
