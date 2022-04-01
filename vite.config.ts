@@ -1,6 +1,9 @@
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { resolve } from 'path'
+
+const NODE_ENV = process.env.VITE_USER_NODE_ENV || 'development'
+const config = loadEnv(NODE_ENV, './')
 
 // https://vitejs.dev/config/
 // @ts-ignore
@@ -20,11 +23,11 @@ export default defineConfig({
     port: 3000,
     host: '0.0.0.0',
     proxy: {
-      // '^/y1t': {
-      '^/mock': {
-        target: 'http://127.0.0.1:4523',
+      [config.VITE_GLOB_API_URL_PREFIX]: {
+        // target: 'http://127.0.0.1:4523',
+        target: config.VITE_GLOB_SERVICE_URL,
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/mock/, '/mock'),
+        rewrite: (path) => path.replace(new RegExp('^' + config.VITE_GLOB_API_URL_PREFIX), ''),
       },
       '^/7lk': {
         target: 'ws://127.0.0.1:8080',

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { Information, LoginParams, LoginResponse } from '@/api/common/model/login'
+import { Information, IRole, LoginParams, LoginResponse } from '@/api/common/model/login'
 import { doLogin, getInformation } from '@/api/common/login'
 import { getAuthCache, setAuthCache } from '@/utils/auth'
 import {
@@ -13,13 +13,14 @@ import {
 import { AppRouteRecordRaw } from '@r/types'
 import { useAppStoreWithOut } from '@/store/module/app'
 import { PermissionModeEnum } from '@/enums/appEnum'
+import { IRoleSelect, roles2Select } from '@/utils/yRoles'
 
 interface IUser {
   username: string
   token: string
   // todo 改成 role 接口
-  currentRole: Object
-  roles: []
+  currentRole: IRoleSelect | undefined
+  roles: IRoleSelect[]
   organization: []
   permissions: []
   router: AppRouteRecordRaw[]
@@ -31,21 +32,29 @@ export const userStore = defineStore('user', {
       username: 'test',
       token: '',
       // ...各种字段，
-      currentRole: {},
-      roles: [],
+      currentRole: {
+        name: '',
+        id: '',
+        label: '',
+        value: '',
+      },
+      roles: [
+        { name: 't1', id: 't1', label: 't1', value: 't1' },
+        { name: 't2', id: 't2', label: 't2', value: 't2' },
+      ],
       organization: [],
       permissions: [],
       router: [],
     }
   },
   getters: {
-    getCurrentRole(): Object {
-      return this.currentRole || getAuthCache<Object>(CURRENT_ROLE)
+    getCurrentRole(): IRoleSelect {
+      return this.currentRole || getAuthCache<IRoleSelect>(CURRENT_ROLE)
     },
     getToken(): string {
       return this.token || getAuthCache<string>(TOKEN_KEY)
     },
-    getRoles(): [] {
+    getRoles(): IRoleSelect[] {
       return this.roles || getAuthCache(ROLES_KEY)
     },
     getOrganization(): [] {
@@ -72,9 +81,10 @@ export const userStore = defineStore('user', {
       this.token = token
       setAuthCache(TOKEN_KEY, token)
     },
-    setRoles(roles: []) {
-      this.roles = roles
-      setAuthCache(ROLES_KEY, roles)
+    setRoles(roles: IRole[]) {
+      const s = roles2Select(roles)
+      this.roles = s
+      setAuthCache(ROLES_KEY, s)
     },
     setOrganizations(organization: []) {
       this.organization = organization
@@ -88,9 +98,10 @@ export const userStore = defineStore('user', {
       this.username = username
       setAuthCache(USER_INFO, username)
     },
-    setCurrentRole(role: Object) {
-      this.currentRole = role
-      setAuthCache(CURRENT_ROLE, role)
+    setCurrentRole(value: string | null) {
+      const c = this.roles.find((self) => self.value === value)
+      this.currentRole = c
+      setAuthCache(CURRENT_ROLE, c)
     },
     setRouter: function () {
       const appStore = useAppStoreWithOut()

@@ -20,7 +20,7 @@
       >Sign in</n-button
     >
     <br />
-    <choose-active-role />
+    <choose-active-role ref="choose" />
   </n-card>
 </template>
 
@@ -47,7 +47,7 @@ const rules = {
     trigger: 'blur',
   },
 }
-
+const choose: any = ref(null)
 const model = ref<LoginParams>({
   username: 'zce',
   password: 'wanglei',
@@ -62,7 +62,8 @@ const handleLogin = async (e: Event): Promise<void> => {
   loading.value = true
   try {
     // await token.authenticate(model.value.username, model.value.password)
-    // await user.login(model.value)
+    await user.login(model.value)
+    choose.value.showModal.value = true
     // 登录成功，选择身份为活跃身份
     // const route = router.currentRoute.value
     // const redirect = route.query.redirect?.toString()

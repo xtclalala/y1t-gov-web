@@ -9,7 +9,13 @@ export interface LoginResponse {
 
 export interface Information {
   username: string
-  roles: []
+  roles: IRole[]
   organization: []
   permissions: []
+}
+
+export interface IRole {
+  name: string
+  id: string
+  // more
 }
