@@ -23,6 +23,10 @@ export interface RequestOptions {
   ignoreCancelToken?: boolean;
   // Whether to send token in header
   withToken?: boolean;
+  // 是否显示消息弹窗
+  isMessage?: boolean;
+  // 弹窗存活时间
+  duration?: number
 }
 
 export interface Result<T = any> {

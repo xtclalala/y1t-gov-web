@@ -1,5 +1,5 @@
 <template>
-  <n-config-provider :theme="theme">
+  <n-config-provider :theme="theme" :locale="zhCN">
     <n-global-style />
     <n-loading-bar-provider>
       <n-message-provider>
@@ -16,7 +16,7 @@
 
 <script lang="ts" setup>
 import { computed, defineComponent, h } from 'vue'
-import { useOsTheme, darkTheme } from 'naive-ui'
+import { useOsTheme, darkTheme, zhCN } from 'naive-ui'
 import { useLoadingBar, useDialog, useMessage, useNotification } from 'naive-ui'
 
 function registerNaiveTools() {

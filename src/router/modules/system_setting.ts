@@ -1,12 +1,10 @@
-import type { AppRouteRecordRaw } from '@r/types'
-import { PageEnum } from '@/enums/pageEnum'
-import { PAGE } from '@r/constant'
+import { AppRouteRecordRaw } from '@r/types'
 import { rPath } from '@/enums/rPath'
 import { rName } from '@/enums/rName'
+import { PageEnum } from '@/enums/pageEnum'
+import { PAGE } from '@r/constant'
 
-// import { t } from '@/utils/i18n/useI18n'
-
-export const SYSTEM_ROUTE: AppRouteRecordRaw = {
+const routes: AppRouteRecordRaw = {
   path: rPath.SYSTEM,
   name: rName.SYSTEM,
   redirect: PageEnum.SYSTEM_USER,
@@ -69,34 +67,4 @@ export const SYSTEM_ROUTE: AppRouteRecordRaw = {
   ],
 }
 
-export const TEST: AppRouteRecordRaw = {
-  path: rPath.TEST,
-  name: rName.TEST,
-  component: () => import('@/pages/test/Test.vue'),
-  meta: {
-    // title: t('routes.system.sysMenu'),
-    title: '测试',
-    hideBreadcrumb: true,
-  },
-}
-
-export const ABOUT_ROUTER: AppRouteRecordRaw = {
-  path: rPath.ABOUT,
-  name: rName.ABOUT,
-  component: () => import('@/pages/about/index.vue'),
-  meta: {
-    // title: t('routes.dashboard.about'),
-    title: '关于',
-    icon: 'close',
-    hideMenu: true,
-  },
-}
-
-export const LOGIN_ROUTE: AppRouteRecordRaw = {
-  path: rPath.LOGIN,
-  name: rName.LOGIN,
-  component: () => import('@/pages/common/login/index.vue'),
-  meta: {
-    title: '登录',
-  },
-}
+export default routes

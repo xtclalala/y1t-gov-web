@@ -8,7 +8,7 @@ interface ITabsViewStore {
   tBlacklist: string[]
 }
 
-export const tabsViewStore = defineStore('tabsView', {
+export const viewStore = defineStore('tabsView', {
   state: (): ITabsViewStore => {
     return {
       viewList: [],

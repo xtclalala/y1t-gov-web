@@ -19,6 +19,8 @@ import { joinTimestamp, formatRequestDate } from './helper'
 const globSetting = useGlobalSetting()
 const urlPrefix = globSetting.urlPrefix
 
+// todo 集成进全局设置
+const Authorization = 'y1t-gov'
 /**
  * @description: 数据处理，方便区分多种处理方式
  */
@@ -28,7 +30,7 @@ const transform: AxiosTransform = {
    */
   transformRequestHook: (res: AxiosResponse<Result>, options: RequestOptions) => {
     // const { t } = useI18n()
-    const { isTransformResponse, isReturnNativeResponse } = options
+    const { isTransformResponse, isReturnNativeResponse, isMessage, duration } = options
     // 是否返回原生响应头 比如：需要获取响应头时使用该属性
     if (isReturnNativeResponse) {
       return res
@@ -50,12 +52,14 @@ const transform: AxiosTransform = {
     const { result, message, status } = data
     const hasSuccess = data && Reflect.has(data, 'status')
     if (hasSuccess) {
-      switch (status) {
-        case ResultEnum.SUCCESS:
-          window.$message?.success(message)
-          break
-        default:
-          window.$message?.warning(message)
+      if (isMessage) {
+        switch (status) {
+          case ResultEnum.SUCCESS:
+            window.$message?.success(message, { duration })
+            break
+          default:
+            window.$message?.warning(message, { duration })
+        }
       }
       return result
     }
@@ -122,7 +126,7 @@ const transform: AxiosTransform = {
     const token = getToken()
     if (token && (config as Recordable)?.requestOptions?.withToken !== false) {
       // jwt token
-      ;(config as Recordable).headers.Authorization = options.authenticationScheme
+      ;(config as Recordable).headers[Authorization] = options.authenticationScheme
         ? `${options.authenticationScheme} ${token}`
         : token
     }
@@ -187,7 +191,7 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
         // authentication schemes，e.g: Bearer
         // authenticationScheme: 'Bearer',
         authenticationScheme: '',
-        timeout: 1 * 1000,
+        timeout: 10 * 1000,
         // 基础接口地址
         baseURL: globSetting.urlPrefix,
 
@@ -220,6 +224,10 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
           ignoreCancelToken: true,
           // 是否携带token
           withToken: true,
+          // 是否弹出消息框
+          isMessage: true,
+          // 弹窗存在时间
+          duration: 1500,
         },
       },
       opt || {}

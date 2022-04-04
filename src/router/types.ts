@@ -6,10 +6,11 @@ export type Component<T = any> = ReturnType<typeof defineComponent> | (() => Pro
 
 // @ts-ignore
 export interface AppRouteRecordRaw extends Omit<RouteRecordRaw, 'meta'> {
+  hidden?: boolean
   name: string
+  title?: string
   meta: RouteMeta
   component?: Component | string
-  components?: Component
   children?: AppRouteRecordRaw[]
   props?: Recordable
   fullPath?: string
@@ -17,6 +18,9 @@ export interface AppRouteRecordRaw extends Omit<RouteRecordRaw, 'meta'> {
   key?: string
   disabled?: boolean
   icon?: any
+  pid?: number
+  ID?: number
+  sort?: number
 }
 
 export interface MenuTag {
@@ -26,9 +30,13 @@ export interface MenuTag {
 }
 
 export interface Menu {
+  label: string
+
+  key: string
+
   name: string
 
-  icon?: string
+  icon?: any
 
   path: string
 
@@ -37,7 +45,7 @@ export interface Menu {
 
   disabled?: boolean
 
-  children?: Menu[]
+  children?: Menu[] | undefined
 
   orderNo?: number
 

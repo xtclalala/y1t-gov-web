@@ -4,10 +4,14 @@
     <n-h2 style="--font-weight: 400">Sign-in</n-h2>
     <n-form size="large" :rules="rules" :model="model">
       <n-form-item-row label="Username" path="username">
-        <n-input v-model:value="model.username" placeholder="Input your username" />
+        <n-input v-model:value="model.username" :placeholder="rules.username.placeholder" />
       </n-form-item-row>
       <n-form-item-row label="Password" path="password">
-        <n-input v-model:value="model.password" type="password" placeholder="Input your password" />
+        <n-input
+          v-model:value="model.password"
+          type="password"
+          :placeholder="rules.password.placeholder"
+        />
       </n-form-item-row>
     </n-form>
     <n-button
@@ -20,7 +24,7 @@
       >Sign in</n-button
     >
     <br />
-    <choose-active-role ref="choose" />
+    <choose-active-role :show="show" @handleAck="handleAck" />
   </n-card>
 </template>
 
@@ -31,6 +35,7 @@ import { useMessage } from 'naive-ui'
 import { userStore } from '@/store/module/user'
 import { LoginParams } from '@/api/common/model/login'
 import ChooseActiveRole from './components/chooseActiveRole.vue'
+import { PageEnum } from '@/enums/pageEnum'
 
 const router = useRouter()
 const message = useMessage()
@@ -40,19 +45,20 @@ const rules = {
     required: true,
     message: 'Username is required.',
     trigger: 'blur',
+    placeholder: 'Input your username',
   },
   password: {
     required: true,
     message: 'Password is required.',
     trigger: 'blur',
+    placeholder: 'Input your password',
   },
 }
-const choose: any = ref(null)
+const show = ref<boolean>(false)
 const model = ref<LoginParams>({
-  username: 'zce',
-  password: 'wanglei',
+  username: 'admin11',
+  password: '123456',
 })
-
 const loading = ref(false)
 
 const disabled = computed<boolean>(() => model.value.username === '' || model.value.password === '')
@@ -62,16 +68,17 @@ const handleLogin = async (e: Event): Promise<void> => {
   loading.value = true
   try {
     // await token.authenticate(model.value.username, model.value.password)
-    await user.login(model.value)
-    choose.value.showModal.value = true
-    // 登录成功，选择身份为活跃身份
-    // const route = router.currentRoute.value
-    // const redirect = route.query.redirect?.toString()
-    // await router.replace(redirect ?? route.redirectedFrom?.fullPath ?? '/')
+    show.value = await user.login(model.value)
   } catch (e) {
     message.error(e instanceof Error ? e.message : 'unknown error')
+  } finally {
+    loading.value = false
   }
-  loading.value = false
+}
+
+const handleAck = (value) => {
+  show.value = value
+  router.push(PageEnum.BASE_HOME)
 }
 </script>
 

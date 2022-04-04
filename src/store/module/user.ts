@@ -1,29 +1,18 @@
 import { defineStore } from 'pinia'
-import { Information, IRole, LoginParams, LoginResponse } from '@/api/common/model/login'
+import { Information, IOrg, IRole, LoginParams } from '@/api/common/model/login'
 import { doLogin, getInformation } from '@/api/common/login'
 import { getAuthCache, setAuthCache } from '@/utils/auth'
-import {
-  CURRENT_ROLE,
-  ORGANIZATIONS_KEY,
-  PERMISSIONS_KEY,
-  ROLES_KEY,
-  TOKEN_KEY,
-  USER_INFO,
-} from '@/enums/cacheEnum'
-import { AppRouteRecordRaw } from '@r/types'
-import { useAppStoreWithOut } from '@/store/module/app'
-import { PermissionModeEnum } from '@/enums/appEnum'
+import { CURRENT_ROLE, ORGANIZATIONS_KEY, ROLES_KEY, TOKEN_KEY, USER_INFO } from '@/enums/cacheEnum'
+
 import { IRoleSelect, roles2Select } from '@/utils/yRoles'
+import { store } from '@/store'
 
 interface IUser {
   username: string
   token: string
-  // todo 改成 role 接口
   currentRole: IRoleSelect | undefined
-  roles: IRoleSelect[]
-  organization: []
-  permissions: []
-  router: AppRouteRecordRaw[]
+  roles: IRoleSelect[] | undefined
+  organization: IOrg[] | undefined
 }
 
 export const userStore = defineStore('user', {
@@ -32,19 +21,9 @@ export const userStore = defineStore('user', {
       username: 'test',
       token: '',
       // ...各种字段，
-      currentRole: {
-        name: '',
-        id: '',
-        label: '',
-        value: '',
-      },
-      roles: [
-        { name: 't1', id: 't1', label: 't1', value: 't1' },
-        { name: 't2', id: 't2', label: 't2', value: 't2' },
-      ],
-      organization: [],
-      permissions: [],
-      router: [],
+      currentRole: undefined,
+      roles: undefined,
+      organization: undefined,
     }
   },
   getters: {
@@ -57,25 +36,25 @@ export const userStore = defineStore('user', {
     getRoles(): IRoleSelect[] {
       return this.roles || getAuthCache(ROLES_KEY)
     },
-    getOrganization(): [] {
+    getOrganization(): IOrg[] {
       return this.organization || getAuthCache(ORGANIZATIONS_KEY)
-    },
-    getPermissions(): [] {
-      return this.permissions || getAuthCache(PERMISSIONS_KEY)
     },
     getUsername(): string {
       return this.username || getAuthCache<string>(USER_INFO)
     },
   },
   actions: {
-    async login(params: LoginParams) {
-      const { token } = await doLogin<LoginResponse>(params)
+    login: async function (params: LoginParams) {
+      const token = await doLogin<string>(params)
+      if (token === undefined) {
+        return false
+      }
       this.setToken(token)
-      const { username, roles, organization, permissions } = await getInformation<Information>()
+      const { username, roles, orgs } = await getInformation<Information>({ isMessage: false })
       this.setUsername(username)
-      this.setPermissions(permissions)
-      this.setOrganizations(organization)
+      this.setOrganizations(orgs)
       this.setRoles(roles)
+      return true
     },
     setToken(token: string) {
       this.token = token
@@ -86,36 +65,22 @@ export const userStore = defineStore('user', {
       this.roles = s
       setAuthCache(ROLES_KEY, s)
     },
-    setOrganizations(organization: []) {
+    setOrganizations(organization: IOrg[]) {
       this.organization = organization
       setAuthCache(ORGANIZATIONS_KEY, organization)
-    },
-    setPermissions(permissions: []) {
-      this.permissions = permissions
-      setAuthCache(PERMISSIONS_KEY, permissions)
     },
     setUsername(username: string) {
       this.username = username
       setAuthCache(USER_INFO, username)
     },
-    setCurrentRole(value: string | null) {
-      const c = this.roles.find((self) => self.value === value)
+    setCurrentRole(value: number | null) {
+      const c = this.roles?.find((self) => self.value === value)
       this.currentRole = c
       setAuthCache(CURRENT_ROLE, c)
     },
-    setRouter: function () {
-      const appStore = useAppStoreWithOut()
-      const { permissionMode } = appStore.getProjectConfig
-      switch (permissionMode) {
-        case PermissionModeEnum.BACK:
-          break
-        case PermissionModeEnum.ROLE:
-          break
-        case PermissionModeEnum.ROUTE_MAPPING:
-          break
-        default:
-          break
-      }
-    },
   },
 })
+
+export function userStoreWidthOut() {
+  return userStore(store)
+}

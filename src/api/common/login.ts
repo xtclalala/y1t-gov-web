@@ -3,8 +3,8 @@ import { LoginParams } from '@/api/common/model/login'
 import { RequestOptions, Result } from '#axios'
 
 enum Api {
-  Login = '/user/login',
-  Informational = '/informational',
+  Login = '/login',
+  Informational = '/user/routerAndRole',
 }
 
 export const doLogin = <T = Result>(params: LoginParams, options?: RequestOptions) =>

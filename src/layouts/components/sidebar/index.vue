@@ -25,16 +25,16 @@
 import Loge from './components/logo.vue'
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { Routes } from '@r/routes'
-import { router2menuDeep } from '@/utils/yMenu'
-import { tabsViewStore } from '@/store/module/tabsViewStore'
+import { viewStore } from '@/store/module/views'
 import { AppRouteRecordRaw } from '@r/types'
+import { useRouteStore } from '@/store/module/router'
 
 const router = useRouter()
+const uRouter = useRouteStore()
 const collapsed = ref<boolean>(false)
 const route = useRoute()
-const tabsView = tabsViewStore()
-const options = router2menuDeep(Routes)
+const tabsView = viewStore()
+const options = uRouter.getMenus
 
 const expandedKeys = ref<string[]>([])
 const handleAlt = (key: string, item: AppRouteRecordRaw) => {

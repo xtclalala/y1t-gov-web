@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { tabsViewStore } from '@/store/module/tabsViewStore'
+import { viewStore } from '@/store/module/views'
 import { useRouter, useRoute } from 'vue-router'
 import { useMessage } from 'naive-ui'
 import { ref, watch } from 'vue'
@@ -8,7 +8,7 @@ import YIcon from '@/components/yIcon/index.vue'
 import { AppRouteRecordRaw } from '@r/types'
 import { router2menu } from '@/utils/yMenu'
 
-const tabs = tabsViewStore()
+const tabs = viewStore()
 const msg = useMessage()
 const { viewList, currentView } = storeToRefs(tabs)
 const router = useRouter()
@@ -20,7 +20,6 @@ const rightArrowDisabled = ref<boolean>(false)
 watch(
   route,
   (n) => {
-    // console.log(n)
     router.push({ name: n.name as string })
     const r = router2menu(n as AppRouteRecordRaw)
     tabs.routerPush(r)

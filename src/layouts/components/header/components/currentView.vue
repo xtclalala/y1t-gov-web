@@ -6,9 +6,9 @@
 </template>
 
 <script setup lang="ts">
-import { tabsViewStore } from '@/store/module/tabsViewStore'
+import { viewStore } from '@/store/module/views'
 
-const tabsStore = tabsViewStore()
+const tabsStore = viewStore()
 </script>
 
 <style scoped></style>

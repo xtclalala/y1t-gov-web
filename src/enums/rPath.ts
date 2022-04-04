@@ -6,6 +6,7 @@ export enum rPath {
   LOGIN = '/login',
 
   NOT_FOUND = '/:path(.*)*',
+  NOT_FOUND_404 = '/404',
   REDIRECT = '/redirect',
   REDIRECT_ROUTE = '/redirect/:path(.*)',
 
@@ -15,5 +16,5 @@ export enum rPath {
   SYSTEM_USER = 'user',
   SYSTEM_ORGANIZE = 'organize',
   SYSTEM_PERMISSION = 'permission',
-  ABOUT = 'about',
+  ABOUT = '/about',
 }
