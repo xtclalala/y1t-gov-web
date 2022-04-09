@@ -1,28 +1,18 @@
-import type {
-  ProjectConfig,
-  HeaderSetting,
-  MenuSetting,
-  TransitionSetting,
-  MultiTabsSetting,
-} from '#/config'
 import type { BeforeMiniState } from '#/store'
 
 import { defineStore } from 'pinia'
 import { store } from '@/store'
 
 import { ThemeEnum } from '@/enums/appEnum'
-import { APP_DARK_MODE_KEY_, PROJ_CFG_KEY } from '@/enums/cacheEnum'
+import { APP_DARK_MODE_KEY_ } from '@/enums/cacheEnum'
 import { Persistent } from '@/utils/cache/persistent'
 import { darkMode } from '@/settings/designSetting'
 import { resetRouter } from '@r/index'
-import { deepMerge } from '@/utils'
 
 interface AppState {
   darkMode?: ThemeEnum
   // Page loading status
   pageLoading: boolean
-  // project config
-  projectConfig: ProjectConfig | null
   // When the window shrinks, remember some states, and restore these states when the window is restored
   beforeMiniInfo: BeforeMiniState
 }
@@ -32,7 +22,6 @@ export const useAppStore = defineStore({
   state: (): AppState => ({
     darkMode: undefined,
     pageLoading: false,
-    projectConfig: Persistent.getLocal(PROJ_CFG_KEY),
     beforeMiniInfo: {},
   }),
   getters: {
@@ -45,23 +34,6 @@ export const useAppStore = defineStore({
 
     getBeforeMiniInfo(): BeforeMiniState {
       return this.beforeMiniInfo
-    },
-
-    getProjectConfig(): ProjectConfig {
-      return this.projectConfig || ({} as ProjectConfig)
-    },
-
-    getHeaderSetting(): HeaderSetting {
-      return this.getProjectConfig.headerSetting
-    },
-    getMenuSetting(): MenuSetting {
-      return this.getProjectConfig.menuSetting
-    },
-    getTransitionSetting(): TransitionSetting {
-      return this.getProjectConfig.transitionSetting
-    },
-    getMultiTabsSetting(): MultiTabsSetting {
-      return this.getProjectConfig.multiTabsSetting
     },
   },
   actions: {
@@ -76,11 +48,6 @@ export const useAppStore = defineStore({
 
     setBeforeMiniInfo(state: BeforeMiniState): void {
       this.beforeMiniInfo = state
-    },
-
-    setProjectConfig(config: DeepPartial<ProjectConfig>): void {
-      this.projectConfig = deepMerge(this.projectConfig || {}, config)
-      Persistent.setLocal(PROJ_CFG_KEY, this.projectConfig)
     },
 
     async resetAllState() {

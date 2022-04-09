@@ -9,6 +9,7 @@ import { IRoleSelect } from '@/utils/yRoles'
 import { addMeta, router2menuDeep } from '@/utils/yMenu'
 import { AppRouteRecordRaw, Menu } from '@r/types'
 import { asyncRouterHandle, payloadRoute } from '@/utils/yRouter/router'
+import projectSetting from '@/settings/projectSetting'
 
 export interface IAsyncRouteState {
   menus: Menu[]
@@ -59,16 +60,14 @@ export const useRouteStore = defineStore({
     async generateRoutes(data: IRoleSelect) {
       let accessedRouters: AppRouteRecordRaw[] = []
 
-      // const { getPermissionMode } = useProjectSetting()
-      // const permissionMode = unref(getPermissionMode)
-      const permissionMode = PermissionModeEnum.ROUTE_MAPPING
+      const { permissionMode } = projectSetting
       switch (permissionMode) {
-        // case PermissionModeEnum.BACK:
-        //   let menus = data.menus || []
-        //   menus = payloadRoute(toRaw(menus))
-        //   asyncRouterHandle(menus)
-        //   accessedRouters = toRaw(addMeta(menus))
-        //   break
+        case PermissionModeEnum.BACK:
+          let menus = data.menus || []
+          menus = payloadRoute(toRaw(menus))
+          asyncRouterHandle(menus)
+          accessedRouters = toRaw(addMeta(menus))
+          break
         // case PermissionModeEnum.ROLE:
         //   const routeFilter = (route) => {
         //     const { meta } = route

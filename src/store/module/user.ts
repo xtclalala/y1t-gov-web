@@ -34,10 +34,10 @@ export const userStore = defineStore('user', {
       return this.token || getAuthCache<string>(TOKEN_KEY)
     },
     getRoles(): IRoleSelect[] {
-      return this.roles || getAuthCache(ROLES_KEY)
+      return this.roles || getAuthCache<IRoleSelect[]>(ROLES_KEY)
     },
     getOrganization(): IOrg[] {
-      return this.organization || getAuthCache(ORGANIZATIONS_KEY)
+      return this.organization || getAuthCache<IOrg[]>(ORGANIZATIONS_KEY)
     },
     getUsername(): string {
       return this.username || getAuthCache<string>(USER_INFO)
