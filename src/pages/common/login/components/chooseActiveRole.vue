@@ -22,6 +22,7 @@ import { userStore } from '@/store/module/user'
 import { storeToRefs } from 'pinia'
 import { RouteRecordRaw, useRouter } from 'vue-router'
 import { useRouteStore } from '@/store/module/router'
+import { PageEnum } from '@/enums/pageEnum'
 
 interface Props {
   show: boolean
@@ -33,7 +34,7 @@ const props = withDefaults(defineProps<Props>(), {
 const { show } = toRefs(props)
 const routeStore = useRouteStore()
 const router = useRouter()
-const emit = defineEmits(['handleAck'])
+const emit = defineEmits(['update:show'])
 const currentRole = ref(null)
 const user = userStore()
 const { roles } = storeToRefs(user)
@@ -47,7 +48,8 @@ const submitCallback = () => {
   routeStore.generateRoutes(user.getCurrentRole)
 
   router.addRoute(routeStore.addRouters as RouteRecordRaw)
-  emit('handleAck', false)
+  emit('update:show', false)
+  router.push(PageEnum.BASE_HOME)
 }
 </script>
 

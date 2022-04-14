@@ -44,7 +44,7 @@ export const userStore = defineStore('user', {
     },
   },
   actions: {
-    login: async function (params: LoginParams) {
+    login: async function (params: LoginParams): Promise<boolean> {
       const token = await doLogin<string>(params)
       if (token === undefined) {
         return false

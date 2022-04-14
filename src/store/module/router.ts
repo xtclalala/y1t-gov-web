@@ -13,7 +13,7 @@ import projectSetting from '@/settings/projectSetting'
 
 export interface IAsyncRouteState {
   menus: Menu[]
-  routers: any[]
+  routers: AppRouteRecordRaw[]
   addRouters: AppRouteRecordRaw
   keepAliveComponents: string[]
   isDynamicAddedRoute: boolean
@@ -62,12 +62,13 @@ export const useRouteStore = defineStore({
 
       const { permissionMode } = projectSetting
       switch (permissionMode) {
-        case PermissionModeEnum.BACK:
+        case PermissionModeEnum.BACK: {
           let menus = data.menus || []
           menus = payloadRoute(toRaw(menus))
           asyncRouterHandle(menus)
           accessedRouters = toRaw(addMeta(menus))
           break
+        }
         // case PermissionModeEnum.ROLE:
         //   const routeFilter = (route) => {
         //     const { meta } = route
@@ -79,11 +80,13 @@ export const useRouteStore = defineStore({
         //   }
         //   accessedRouters = accessedRouters.filter(routeFilter)
         //   break
-        case PermissionModeEnum.ROUTE_MAPPING:
+        case PermissionModeEnum.ROUTE_MAPPING: {
           accessedRouters = BusinessRoutes
           break
-        default:
+        }
+        default: {
           accessedRouters = BusinessRoutes
+        }
       }
       this.setRouters(accessedRouters)
       this.setMenus(accessedRouters)

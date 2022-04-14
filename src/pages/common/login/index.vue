@@ -24,7 +24,7 @@
       >Sign in</n-button
     >
     <br />
-    <choose-active-role :show="show" @handleAck="handleAck" />
+    <choose-active-role v-model:show="show" />
   </n-card>
 </template>
 
@@ -67,18 +67,12 @@ const handleLogin = async (e: Event): Promise<void> => {
   e.preventDefault()
   loading.value = true
   try {
-    // await token.authenticate(model.value.username, model.value.password)
     show.value = await user.login(model.value)
   } catch (e) {
     message.error(e instanceof Error ? e.message : 'unknown error')
   } finally {
     loading.value = false
   }
-}
-
-const handleAck = (value) => {
-  show.value = value
-  router.push(PageEnum.BASE_HOME)
 }
 </script>
 
