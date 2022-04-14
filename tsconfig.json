@@ -20,7 +20,7 @@
     "lib": ["dom", "esnext"],
     "noImplicitAny": false,
     "skipLibCheck": true,
-    "types": ["vite/client", "naive-ui/volar"],
+    "types": ["vite/client", "naive-ui/volar", "./types"],
     "removeComments": true,
     "useDefineForClassFields": true,
     "suppressImplicitAnyIndexErrors": true,

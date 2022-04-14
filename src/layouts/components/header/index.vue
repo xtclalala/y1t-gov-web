@@ -3,6 +3,7 @@
     <Refresh />
     <!--    <current-view />-->
     <n-space :size="20" align="center" style="line-height: 1">
+      <Theme />
       <About />
       <Github />
       <Notify />
@@ -18,6 +19,7 @@ import About from './components/about.vue'
 import Github from './components/github.vue'
 import Notify from './components/notify.vue'
 import PCenter from './components/pCenter.vue'
+import Theme from './components/theme.vue'
 </script>
 
 <style scoped>

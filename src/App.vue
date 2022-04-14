@@ -6,6 +6,7 @@
         <n-dialog-provider>
           <n-notification-provider>
             <naive-provider-content />
+            <sw />
             <RouterView />
           </n-notification-provider>
         </n-dialog-provider>
@@ -16,15 +17,17 @@
 
 <script lang="ts" setup>
 import { computed, defineComponent, h } from 'vue'
-import { useOsTheme, darkTheme, zhCN } from 'naive-ui'
+import { useOsTheme, darkTheme, zhCN, lightTheme } from 'naive-ui'
 import { useLoadingBar, useDialog, useMessage, useNotification } from 'naive-ui'
-
+import { useAppStore } from '@/store/module/app'
+import Sw from '@/layouts/components/header/components/theme.vue'
 function registerNaiveTools() {
   window.$loadingBar = useLoadingBar()
   window.$dialog = useDialog()
   window.$message = useMessage()
   window.$notification = useNotification()
 }
+
 const NaiveProviderContent = defineComponent({
   setup() {
     registerNaiveTools()
@@ -33,6 +36,8 @@ const NaiveProviderContent = defineComponent({
     return h('div')
   },
 })
+
+const app = useAppStore()
 const osTheme = useOsTheme()
-const theme = computed(() => (osTheme.value === 'dark' ? darkTheme : null))
+const theme = computed(() => (osTheme.value === app.getDarkMode ? darkTheme : lightTheme))
 </script>
