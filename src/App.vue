@@ -6,7 +6,6 @@
         <n-dialog-provider>
           <n-notification-provider>
             <naive-provider-content />
-            <sw />
             <RouterView />
           </n-notification-provider>
         </n-dialog-provider>
@@ -20,7 +19,7 @@ import { computed, defineComponent, h } from 'vue'
 import { useOsTheme, darkTheme, zhCN, lightTheme } from 'naive-ui'
 import { useLoadingBar, useDialog, useMessage, useNotification } from 'naive-ui'
 import { useAppStore } from '@/store/module/app'
-import Sw from '@/layouts/components/header/components/theme.vue'
+
 function registerNaiveTools() {
   window.$loadingBar = useLoadingBar()
   window.$dialog = useDialog()

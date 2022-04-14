@@ -1,7 +1,7 @@
 <template>
   <n-tooltip>
     <template #trigger>
-      <router-link :to="rPath.ABOUT">
+      <router-link :to="{ name: rName.ABOUT }">
         <y-icon :size="22" type="help" :depth="2" />
       </router-link>
     </template>
@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
 import YIcon from '@/components/yIcon/index.vue'
-import { rPath } from '@/enums/rPath'
+import { rName } from '@/enums/rName'
 </script>
 
 <style scoped></style>

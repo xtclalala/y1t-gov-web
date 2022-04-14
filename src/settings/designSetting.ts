@@ -1,7 +1,5 @@
 import { ThemeEnum } from '@/enums/appEnum'
 
-export const prefixCls = 'vben'
-
 export const darkMode = ThemeEnum.LIGHT
 
 // app theme preset color

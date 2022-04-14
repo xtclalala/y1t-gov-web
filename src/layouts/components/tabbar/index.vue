@@ -134,8 +134,8 @@ const closeTab = async (name: string) => {
 <style lang="sass" scoped>
 .tab-bar
   position: relative
-  box-sizing: border-box
-  white-space: nowrap
+  //box-sizing: border-box
+  //white-space: nowrap
   display: flex
   height: 40px
   box-shadow: 10px 5px 10px rgb(0 0 0 / 10%)
