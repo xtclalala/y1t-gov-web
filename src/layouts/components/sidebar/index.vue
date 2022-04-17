@@ -26,7 +26,7 @@ import Loge from './components/logo.vue'
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { viewStore } from '@/store/module/views'
-import { AppRouteRecordRaw } from '@r/types'
+import { Menu } from '@r/types'
 import { useRouteStore } from '@/store/module/router'
 
 const router = useRouter()
@@ -35,9 +35,10 @@ const collapsed = ref<boolean>(false)
 const route = useRoute()
 const tabsView = viewStore()
 const options = uRouter.getMenus
-
 const expandedKeys = ref<string[]>([])
-const handleAlt = (key: string, item: AppRouteRecordRaw) => {
+
+// 菜单跳转
+const handleAlt = (key: string, item: Menu) => {
   tabsView.routerPush(item)
   router.push({ name: key })
 }

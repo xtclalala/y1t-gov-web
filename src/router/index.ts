@@ -8,10 +8,9 @@ import { PageEnum } from '@/enums/pageEnum'
 import { LAYOUT } from '@r/constant'
 import { rPath } from '@/enums/rPath'
 import { rName } from '@/enums/rName'
-import { filter } from '@r/filter'
 
 // 获取 modules 下的路由
-const modules = import.meta.globEager('./modules/**/*.ts')
+const modules = import.meta.globEager('./modules/*.ts')
 const routeModuleList: AppRouteRecordRaw[] = []
 Object.keys(modules).forEach((key) => {
   const mod = modules[key].default || {}
@@ -29,7 +28,7 @@ export const RootRoute: AppRouteRecordRaw = {
 }
 
 // 业务路由
-export const BusinessRoutes: AppRouteRecordRaw[] = [...filter(routeModuleList)]
+export const BusinessRoutes: AppRouteRecordRaw[] = [...routeModuleList]
 
 // 基本路由
 export const BaseRoutes: AppRouteRecordRaw[] = [PAGE_NOT_FOUND_ROUTE, REDIRECT_ROUTE, LOGIN_ROUTE]
@@ -42,11 +41,11 @@ export const ViewRoute: AppRouteRecordRaw = {
   meta: {
     title: 'tab',
   },
-  children: [],
+  children: [...routeModuleList],
 }
 
 // Basic routing without permission
-export const basicRoutes = [RootRoute, ...BaseRoutes]
+export const basicRoutes = [RootRoute, ...BaseRoutes, ViewRoute]
 
 // app router
 export const router = createRouter({

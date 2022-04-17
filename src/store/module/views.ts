@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
-import { AppRouteRecordRaw } from '@r/types'
+import { Menu } from '@r/types'
 import { rName } from '@/enums/rName'
 
 interface ITabsViewStore {
-  viewList: AppRouteRecordRaw[]
+  viewList: Menu[]
   currentView: string
   tBlacklist: string[]
 }
@@ -25,7 +25,7 @@ export const viewStore = defineStore('tabsView', {
     removeTab(index: number) {
       this.viewList.splice(index, 1)
     },
-    findTab(route: AppRouteRecordRaw): boolean {
+    findTab(route: Menu): boolean {
       for (const item of this.viewList) {
         if (item.name === route.name) {
           return true
@@ -33,7 +33,7 @@ export const viewStore = defineStore('tabsView', {
       }
       return false
     },
-    routerPush(to: AppRouteRecordRaw) {
+    routerPush(to: Menu) {
       this.currentView = to.name
       if (this.findTab(to)) {
         return

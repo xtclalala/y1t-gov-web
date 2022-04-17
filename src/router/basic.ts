@@ -1,11 +1,11 @@
 import type { AppRouteRecordRaw } from '@r/types'
 
-import { EXCEPTION_COMPONENT, LAYOUT, REDIRECT_COMPONENT } from '@r/constant'
+import { LAYOUT } from '@r/constant'
 import { rPath } from '@/enums/rPath'
 import { rName } from '@/enums/rName'
 // import { t } from '@/utils/i18n/useI18n'
 
-// 404 on a page
+// 404
 export const PAGE_NOT_FOUND_ROUTE: AppRouteRecordRaw = {
   path: rPath.NOT_FOUND,
   name: rName.NOT_FOUND,
@@ -20,7 +20,7 @@ export const PAGE_NOT_FOUND_ROUTE: AppRouteRecordRaw = {
     {
       path: rPath.NOT_FOUND,
       name: rName.NOT_FOUND,
-      component: EXCEPTION_COMPONENT,
+      component: import('@/pages/exception/404.vue'),
       meta: {
         title: 'ErrorPage',
         hideBreadcrumb: true,
@@ -30,6 +30,7 @@ export const PAGE_NOT_FOUND_ROUTE: AppRouteRecordRaw = {
   ],
 }
 
+// 重定向
 export const REDIRECT_ROUTE: AppRouteRecordRaw = {
   path: rPath.REDIRECT,
   name: rName.REDIRECT,
@@ -43,7 +44,7 @@ export const REDIRECT_ROUTE: AppRouteRecordRaw = {
     {
       path: rPath.REDIRECT_ROUTE,
       name: rName.REDIRECT_ROUTE,
-      component: REDIRECT_COMPONENT,
+      component: import('@/pages/redirect/index.vue'),
       meta: {
         title: 'redirect',
         hideBreadcrumb: true,
@@ -52,6 +53,7 @@ export const REDIRECT_ROUTE: AppRouteRecordRaw = {
   ],
 }
 
+// 登录
 export const LOGIN_ROUTE: AppRouteRecordRaw = {
   path: rPath.LOGIN,
   name: rName.LOGIN,

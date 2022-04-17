@@ -1,72 +1,84 @@
 import { toRaw } from 'vue'
 import { defineStore } from 'pinia'
 import { store } from '@/store'
-import { BusinessRoutes, basicRoutes, ViewRoute } from '@r/index'
+import { BusinessRoutes } from '@r/index'
 
 // import { useProjectSetting } from '@/hooks/setting/useProjectSetting'
 import { PermissionModeEnum } from '@/enums/appEnum'
-import { IRoleSelect } from '@/utils/yRoles'
 import { addMeta, router2menuDeep } from '@/utils/yMenu'
 import { AppRouteRecordRaw, Menu } from '@r/types'
-import { asyncRouterHandle, payloadRoute } from '@/utils/yRouter/router'
+import { payloadRoute, tree2list } from '@/utils/yRouter/router'
 import projectSetting from '@/settings/projectSetting'
+import { getAuthCache, setAuthCache } from '@/utils/auth'
+import { MENU_CACHE_KEY, WHITELIST_CACHE_KEY } from '@/enums/cacheEnum'
+import { userStore } from '@/store/module/user'
 
 export interface IAsyncRouteState {
-  menus: Menu[]
-  routers: AppRouteRecordRaw[]
-  addRouters: AppRouteRecordRaw
-  keepAliveComponents: string[]
-  isDynamicAddedRoute: boolean
+  menus: Menu[] | undefined
+  whitelist: Menu[] | undefined
+  isDynamicAddedRoute: boolean | undefined
 }
 
 export const useRouteStore = defineStore({
   id: 'route',
   state: (): IAsyncRouteState => ({
-    menus: [],
-    routers: basicRoutes,
-    addRouters: ViewRoute,
-    keepAliveComponents: [],
+    menus: undefined,
+    whitelist: undefined,
     // Whether the route has been dynamically added
-    isDynamicAddedRoute: true,
+    isDynamicAddedRoute: undefined,
   }),
   getters: {
     getMenus(): Menu[] {
-      return this.menus
+      return this.menus || getAuthCache<Menu[]>(MENU_CACHE_KEY)
     },
     getIsDynamicAddedRoute(): boolean {
-      return this.isDynamicAddedRoute
+      if (this.isDynamicAddedRoute === undefined) {
+        const { permissionMode } = projectSetting
+        switch (permissionMode) {
+          case PermissionModeEnum.BACK:
+          case PermissionModeEnum.ROLE:
+            this.isDynamicAddedRoute = true
+            break
+          case PermissionModeEnum.ROUTE_MAPPING:
+            this.isDynamicAddedRoute = false
+            break
+          default:
+            this.isDynamicAddedRoute = undefined
+        }
+      }
+      return this.isDynamicAddedRoute || false
     },
   },
   actions: {
-    getRouters() {
-      return toRaw(this.addRouters)
-    },
     setDynamicAddedRoute(added: boolean) {
       this.isDynamicAddedRoute = added
     },
+
     // 设置动态路由
-    setRouters(routers: AppRouteRecordRaw[]) {
-      this.addRouters.children?.push(...routers)
-      this.routers = basicRoutes.concat(this.addRouters)
+    setMenus(menus: Menu[]) {
+      this.menus = menus
+      setAuthCache(MENU_CACHE_KEY, menus)
     },
-    setMenus(menus: AppRouteRecordRaw[]) {
-      // 设置动态路由
-      this.menus = router2menuDeep(menus)
+
+    // 设置动态路由
+    setWhitelist(menus: Menu[]) {
+      const w: Menu[] = tree2list<Menu>(menus)
+      this.whitelist = w
+      setAuthCache(WHITELIST_CACHE_KEY, w)
     },
-    setKeepAliveComponents(compNames) {
-      // 设置需要缓存的组件
-      this.keepAliveComponents = compNames
-    },
-    async generateRoutes(data: IRoleSelect) {
-      let accessedRouters: AppRouteRecordRaw[] = []
+
+    // 生成菜单
+    async generateMenus() {
+      let accessedMenus: AppRouteRecordRaw[] = []
 
       const { permissionMode } = projectSetting
       switch (permissionMode) {
         case PermissionModeEnum.BACK: {
-          let menus = data.menus || []
+          this.setDynamicAddedRoute(true)
+          const user = userStore()
+          let menus = user.getCurrentRole.menus
           menus = payloadRoute(toRaw(menus))
-          asyncRouterHandle(menus)
-          accessedRouters = toRaw(addMeta(menus))
+          accessedMenus = toRaw(addMeta(menus))
           break
         }
         // case PermissionModeEnum.ROLE:
@@ -78,19 +90,21 @@ export const useRouteStore = defineStore({
         //     }
         //     return permissionsList.some((item) => permissions.includes(item.value))
         //   }
-        //   accessedRouters = accessedRouters.filter(routeFilter)
+        //   accessedMenus = accessedMenus.filter(routeFilter)
         //   break
         case PermissionModeEnum.ROUTE_MAPPING: {
-          accessedRouters = BusinessRoutes
+          this.setDynamicAddedRoute(false)
+          accessedMenus = BusinessRoutes
           break
         }
         default: {
-          accessedRouters = BusinessRoutes
+          accessedMenus = BusinessRoutes
         }
       }
-      this.setRouters(accessedRouters)
-      this.setMenus(accessedRouters)
-      return accessedRouters
+      const m = toRaw(router2menuDeep(accessedMenus))
+      this.setMenus(m)
+      this.setWhitelist(m)
+      return accessedMenus
     },
   },
 })

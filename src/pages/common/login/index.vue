@@ -36,8 +36,10 @@ import { userStore } from '@/store/module/user'
 import { LoginParams } from '@/api/common/model/login'
 import ChooseActiveRole from './components/chooseActiveRole.vue'
 import { PageEnum } from '@/enums/pageEnum'
+import { useRouteStore } from '@/store/module/router'
 
 const router = useRouter()
+const rs = useRouteStore()
 const message = useMessage()
 const user = userStore()
 const rules = {
@@ -67,7 +69,16 @@ const handleLogin = async (e: Event): Promise<void> => {
   e.preventDefault()
   loading.value = true
   try {
-    show.value = await user.login(model.value)
+    const res = await user.login(model.value)
+    if (res) {
+      // 动态路由 需要选择身份
+      if (rs.isDynamicAddedRoute) {
+        show.value = res
+      } else {
+        await rs.generateMenus()
+        await router.push(PageEnum.BASE_HOME)
+      }
+    }
   } catch (e) {
     message.error(e instanceof Error ? e.message : 'unknown error')
   } finally {

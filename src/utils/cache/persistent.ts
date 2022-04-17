@@ -16,10 +16,13 @@ import {
   ORGANIZATIONS_KEY,
   PERMISSIONS_KEY,
   CURRENT_ROLE,
+  MENU_CACHE_KEY,
+  WHITELIST_CACHE_KEY,
 } from '@/enums/cacheEnum'
 import { DEFAULT_CACHE_TIME } from '@/settings/encryptionSetting'
 import { toRaw } from 'vue'
 import { pick, omit } from 'lodash-es'
+import { Menu } from '@r/types'
 
 interface BasicStore {
   [TOKEN_KEY]: string | number | null | undefined
@@ -31,6 +34,8 @@ interface BasicStore {
   [ORGANIZATIONS_KEY]: []
   [PERMISSIONS_KEY]: []
   [CURRENT_ROLE]: Object
+  [MENU_CACHE_KEY]: Menu[]
+  [WHITELIST_CACHE_KEY]: Menu[]
 }
 
 type LocalStore = BasicStore

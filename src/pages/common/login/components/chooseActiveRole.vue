@@ -39,15 +39,14 @@ const currentRole = ref(null)
 const user = userStore()
 const { roles } = storeToRefs(user)
 
+// 选择活跃身份
 const submitCallback = () => {
   if (currentRole.value === null) {
     window.$message?.warning('请选择身份')
     return
   }
   user.setCurrentRole(currentRole.value)
-  routeStore.generateRoutes(user.getCurrentRole)
-
-  router.addRoute(routeStore.addRouters as RouteRecordRaw)
+  routeStore.generateMenus()
   emit('update:show', false)
   router.push(PageEnum.BASE_HOME)
 }
