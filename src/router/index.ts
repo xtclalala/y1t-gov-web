@@ -87,12 +87,8 @@ router.beforeEach((to, from, next) => {
     if (!rs.getIsDynamicAddedRoute) {
       return true
     }
-    const f = rs.whitelist?.findIndex((self) => {
-      if (self.name === to.name) {
-        return true
-      }
-    })
-    const res = f === undefined ? false : f > -1
+    const f = rs.getWhitelist?.includes(to.name as string)
+    const res = f === undefined ? false : f
     return WHITE_NAME_LIST.includes(to.name as string) || res
   }
   window.$loadingBar?.start()

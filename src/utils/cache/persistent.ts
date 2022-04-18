@@ -18,6 +18,7 @@ import {
   CURRENT_ROLE,
   MENU_CACHE_KEY,
   WHITELIST_CACHE_KEY,
+  CACHELIST_CACHE_KEY,
 } from '@/enums/cacheEnum'
 import { DEFAULT_CACHE_TIME } from '@/settings/encryptionSetting'
 import { toRaw } from 'vue'
@@ -36,6 +37,7 @@ interface BasicStore {
   [CURRENT_ROLE]: Object
   [MENU_CACHE_KEY]: Menu[]
   [WHITELIST_CACHE_KEY]: Menu[]
+  [CACHELIST_CACHE_KEY]: string[]
 }
 
 type LocalStore = BasicStore

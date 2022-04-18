@@ -24,6 +24,7 @@ export const APP_DARK_MODE_KEY_ = 'APP__DARK__MODE__'
 
 export const MENU_CACHE_KEY = 'MENU__CACHE__'
 export const WHITELIST_CACHE_KEY = 'WHITELIST_CACHE_KEY__'
+export const CACHELIST_CACHE_KEY = 'CACHELIST_CACHE_KEY__'
 
 // base global local key
 export const APP_LOCAL_CACHE_KEY = 'COMMON__LOCAL__KEY__'

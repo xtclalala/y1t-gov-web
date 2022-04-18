@@ -10,12 +10,13 @@ import { AppRouteRecordRaw, Menu } from '@r/types'
 import { payloadRoute, tree2list } from '@/utils/yRouter/router'
 import projectSetting from '@/settings/projectSetting'
 import { getAuthCache, setAuthCache } from '@/utils/auth'
-import { MENU_CACHE_KEY, WHITELIST_CACHE_KEY } from '@/enums/cacheEnum'
+import { CACHELIST_CACHE_KEY, MENU_CACHE_KEY, WHITELIST_CACHE_KEY } from '@/enums/cacheEnum'
 import { userStore } from '@/store/module/user'
 
 export interface IAsyncRouteState {
   menus: Menu[] | undefined
-  whitelist: Menu[] | undefined
+  whitelist: string[] | undefined
+  cachelist: string[]
   isDynamicAddedRoute: boolean | undefined
 }
 
@@ -24,12 +25,19 @@ export const useRouteStore = defineStore({
   state: (): IAsyncRouteState => ({
     menus: undefined,
     whitelist: undefined,
+    cachelist: [],
     // Whether the route has been dynamically added
     isDynamicAddedRoute: undefined,
   }),
   getters: {
     getMenus(): Menu[] {
       return this.menus || getAuthCache<Menu[]>(MENU_CACHE_KEY)
+    },
+    getWhitelist(): string[] {
+      return this.whitelist || getAuthCache<string[]>(WHITELIST_CACHE_KEY)
+    },
+    getCachelist(): string[] {
+      return this.cachelist || getAuthCache<string[]>(CACHELIST_CACHE_KEY)
     },
     getIsDynamicAddedRoute(): boolean {
       if (this.isDynamicAddedRoute === undefined) {
@@ -63,8 +71,15 @@ export const useRouteStore = defineStore({
     // 设置白名单
     setWhitelist(menus: Menu[]) {
       const w: Menu[] = tree2list<Menu>(menus)
-      this.whitelist = w
-      setAuthCache(WHITELIST_CACHE_KEY, w)
+      const whitelist = w.flatMap((self) => self.name)
+      const cachelist = w
+        .filter((self) => self.meta?.keepAlive)
+        .flatMap((self) => self.name)
+        .concat('About')
+      this.whitelist = whitelist
+      this.cachelist = cachelist
+      setAuthCache(WHITELIST_CACHE_KEY, whitelist)
+      setAuthCache(CACHELIST_CACHE_KEY, cachelist)
     },
 
     // 生成菜单

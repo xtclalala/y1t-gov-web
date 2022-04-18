@@ -40,8 +40,9 @@ declare module 'vue-router' {
     // only build for Menu
     ignoreRoute?: boolean;
     // Hide path for children
-    hidePathForChildren?: boolean;
+    hidePathForChildren?: boolean
     disabled?: boolean
-    white?: boolean;
+    white?: boolean
+    keepAlive?: boolean;
   }
 }
