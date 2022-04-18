@@ -42,5 +42,6 @@ declare module 'vue-router' {
     // Hide path for children
     hidePathForChildren?: boolean;
     disabled?: boolean
+    white?: boolean;
   }
 }

@@ -25,6 +25,7 @@ export const PAGE_NOT_FOUND_ROUTE: AppRouteRecordRaw = {
         title: 'ErrorPage',
         hideBreadcrumb: true,
         hideMenu: true,
+        white: true,
       },
     },
   ],
@@ -48,6 +49,7 @@ export const REDIRECT_ROUTE: AppRouteRecordRaw = {
       meta: {
         title: 'redirect',
         hideBreadcrumb: true,
+        white: true,
       },
     },
   ],
@@ -60,5 +62,6 @@ export const LOGIN_ROUTE: AppRouteRecordRaw = {
   component: () => import('@/pages/common/login/index.vue'),
   meta: {
     title: '登录',
+    white: true,
   },
 }

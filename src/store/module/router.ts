@@ -60,7 +60,7 @@ export const useRouteStore = defineStore({
       setAuthCache(MENU_CACHE_KEY, menus)
     },
 
-    // 设置动态路由
+    // 设置白名单
     setWhitelist(menus: Menu[]) {
       const w: Menu[] = tree2list<Menu>(menus)
       this.whitelist = w

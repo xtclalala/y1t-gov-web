@@ -1,6 +1,4 @@
 export enum rName {
-  TEST = 'Test',
-
   ROOT = 'Root',
   TAB_VIEW = 'Tab',
   LOGIN = 'Login',
