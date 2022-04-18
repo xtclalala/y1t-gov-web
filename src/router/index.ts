@@ -95,10 +95,14 @@ router.beforeEach((to, from, next) => {
     const res = f === undefined ? false : f > -1
     return WHITE_NAME_LIST.includes(to.name as string) || res
   }
-
+  window.$loadingBar?.start()
   if (filter(to)) {
     next()
   } else {
     next({ name: rName.LOGIN })
   }
+})
+
+router.afterEach(() => {
+  window.$loadingBar?.finish()
 })
