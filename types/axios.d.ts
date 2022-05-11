@@ -47,3 +47,8 @@ export interface UploadFileParams {
   filename?: string;
   [key: string]: any;
 }
+
+export interface PageResult<T = any> {
+  items: T,
+  total: number
+}

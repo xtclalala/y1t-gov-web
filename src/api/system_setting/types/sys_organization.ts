@@ -1,0 +1,3 @@
+interface OrgId {
+  id: number
+}

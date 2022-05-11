@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { Information, IOrg, IRole, LoginParams } from '@/api/common/model/login'
+import { Information, IOrg, IRole, LoginParams } from '@/api/common/types/login'
 import { doLogin, getInformation } from '@/api/common/login'
 import { getAuthCache, setAuthCache } from '@/utils/auth'
 import { CURRENT_ROLE, ORGANIZATIONS_KEY, ROLES_KEY, TOKEN_KEY, USER_INFO } from '@/enums/cacheEnum'

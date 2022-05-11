@@ -1,4 +1,4 @@
-import { IRole } from '@/api/common/model/login'
+import { IRole } from '@/api/common/types/login'
 import { AppRouteRecordRaw } from '@r/types'
 
 export interface IRoleSelect {

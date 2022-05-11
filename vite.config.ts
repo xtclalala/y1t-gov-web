@@ -39,14 +39,14 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: '@import "@/assets/styles/main.scss";',
+        additionalData: '@import "@/assets/style/main.scss";',
       },
     },
   },
 
   build: {
     assetsDir: './',
-
+    minify: 'terser',
     terserOptions: {
       compress: {
         // eslint-disable-next-line camelcase

@@ -1,8 +1,7 @@
 <template>
-  <!--  <n-layout-content content-style="padding: 24px; min-height: 85vh; background-color:#F2F3F4">-->
   <n-layout-content
     embedded
-    content-style="padding: 12px; min-height: 85vh"
+    content-style="padding: 12px; min-height: 80vh; background-color:#F2F3F4"
     :native-scrollbar="false"
   >
     <router-view v-slot="{ Component, route }">
