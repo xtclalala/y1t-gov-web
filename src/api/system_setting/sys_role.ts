@@ -9,7 +9,6 @@ import {
 } from '@/api/system_setting/types/sys_role'
 
 enum Api {
-  register = '/role/register',
   updateBaseInfo = '/role/roleBaseInfo',
   updateRole = '/role/menus',
   updatePer = '/role/per',
@@ -20,7 +19,7 @@ enum Api {
 }
 
 export const register = <T = Result>(params: registerRole, options?: RequestOptions) =>
-  defHttp.post<T>({ url: Api.register, params }, options)
+  defHttp.post<T>({ url: Api.role, params }, options)
 
 export const updateBaseInfo = <T = Result>(params: BaseRole, options?: RequestOptions) =>
   defHttp.post<T>({ url: Api.updateBaseInfo, params }, options)

@@ -2,7 +2,7 @@
   <n-tooltip>
     <template #trigger>
       <a :href="projectGithub" target="_blank">
-        <y-icon :size="22" type="github" :depth="2" />
+        <y-icon :size="22" icon-type="LogoGithub" :depth="2" />
       </a>
     </template>
     View on github

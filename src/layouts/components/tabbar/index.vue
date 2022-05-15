@@ -105,7 +105,7 @@ const closeTab = async (name: string) => {
 
 <template>
   <div class="tab-bar">
-    <y-icon type="left" :size="18" class="icon-location" @click="leftArrowClick" />
+    <y-icon icon-type="ChevronBack" :size="18" class="icon-location" @click="leftArrowClick" />
     <div class="tabs">
       <n-scrollbar ref="scrollbar" :x-scrollable="true" :size="0">
         <n-button
@@ -123,11 +123,16 @@ const closeTab = async (name: string) => {
           >
             {{ item.label }}
           </span>
-          <y-icon v-if="true" class="icon-item" type="close" @click="iconClick(item.key)" />
+          <y-icon
+            v-if="true"
+            class="icon-item"
+            icon-type="CloseCircleOutline"
+            @click="iconClick(item.key)"
+          />
         </n-button>
       </n-scrollbar>
     </div>
-    <y-icon type="right" class="icon-location" :size="18" @click="rightArrowClick" />
+    <y-icon icon-type="ChevronForward" class="icon-location" :size="18" @click="rightArrowClick" />
   </div>
 </template>
 

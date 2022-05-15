@@ -1,6 +1,6 @@
 <template>
   <n-button text @click="refresh">
-    <y-icon size="22" type="refresh" />
+    <y-icon size="22" icon-type="RefreshOutline" />
   </n-button>
 </template>
 

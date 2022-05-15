@@ -4,15 +4,14 @@ import { RequestOptions, Result } from '#axios'
 import { BaseMenu, MenuId, registerMenu, SearchMenu } from '@/api/system_setting/types/sys_menu'
 
 enum Api {
-  register = '/menu/register',
   menu = '/menu/menu',
 }
 
 export const register = <T = Result>(params: registerMenu, options?: RequestOptions) =>
-  defHttp.post<T>({ url: Api.register, params }, options)
+  defHttp.post<T>({ url: Api.menu, params }, options)
 
 export const updateMenu = <T = Result>(params: BaseMenu, options?: RequestOptions) =>
-  defHttp.post<T>({ url: Api.menu, params }, options)
+  defHttp.put<T>({ url: Api.menu, params }, options)
 
 export const searchMenu = <T = Result>(params: SearchMenu, options?: RequestOptions) =>
   defHttp.get<T>({ url: Api.menu, params }, options)

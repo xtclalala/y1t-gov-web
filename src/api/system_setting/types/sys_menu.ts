@@ -1,15 +1,15 @@
 import { Page } from '@/api/system_setting/types/sys_role'
 
-export interface SearchMenu extends Page {
+export type SearchMenu = Page & {
   name?: string
   pid?: number
 }
 
-export interface MenuId {
+export type MenuId = {
   id?: number
 }
 
-export interface BaseMenu extends MenuId {
+export type BaseMenu = MenuId & {
   name: string
   title: string
   path: string
@@ -20,8 +20,11 @@ export interface BaseMenu extends MenuId {
   pid?: number
 }
 
-export interface PerMenu extends MenuId {
+export type PerMenu = MenuId & {
   sysRoleId?: Array<number>
 }
 
-export interface registerMenu extends BaseMenu, PerMenu {}
+export type registerMenu = BaseMenu &
+  PerMenu & {
+    hiddenNumber: string
+  }

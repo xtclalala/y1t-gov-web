@@ -2,7 +2,7 @@
   <n-tooltip>
     <template #trigger>
       <router-link :to="rPath">
-        <y-icon :size="22" type="help" :depth="2" />
+        <y-icon :size="22" icon-type="HelpCircleOutline" :depth="2" />
       </router-link>
     </template>
     about me

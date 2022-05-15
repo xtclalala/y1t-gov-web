@@ -1,28 +1,28 @@
-export interface Page {
+export type Page = {
   PageSize: number
   Page: number
   Desc: boolean
 }
 
-export interface SearchRoles extends Page {
+export type SearchRoles = Page & {
   name?: string
   pid?: number
 }
 
-export interface RoleId {
+export type RoleId = {
   id?: number
 }
 
-export interface BaseRole extends RoleId {
+export type BaseRole = RoleId & {
   name: string
   orgId: number
   sort: number
   pid?: number
 }
 
-export interface PerRole extends RoleId {
+export type PerRole = RoleId & {
   menuIds?: Array<number>
   permissions?: Array<number>
 }
 
-export interface registerRole extends BaseRole, PerRole {}
+export type registerRole = BaseRole & PerRole
