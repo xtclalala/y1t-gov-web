@@ -117,7 +117,7 @@ const getData = async (page: number, pageSize: number) => {
   console.log(res)
 }
 const key2id = (row) => {
-  return row.ID
+  return row.id
 }
 getData(1, 10)
 </script>
