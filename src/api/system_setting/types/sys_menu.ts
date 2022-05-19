@@ -1,8 +1,6 @@
-import { Page } from '@/api/system_setting/types/sys_role'
-
-export type SearchMenu = Page & {
-  name?: string
-  pid?: number
+export type SearchMenu = {
+  name: string | undefined
+  pid: number | undefined
 }
 
 export type MenuId = {

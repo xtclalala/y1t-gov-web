@@ -1,12 +1,12 @@
 export type Page = {
-  PageSize: number
-  Page: number
-  Desc: boolean
+  pageSize: number
+  page: number
+  desc: boolean
 }
 
-export type SearchRoles = Page & {
-  name?: string
-  pid?: number
+export type SearchRoles = {
+  name: string | undefined
+  pid: number | undefined
 }
 
 export type RoleId = {

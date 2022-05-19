@@ -1,1 +1,15 @@
 $test-color: red;
+$table-bg-color: white;
+$table-padding: 24px;
+
+//.y1t-search-box{
+//  padding: 24px;
+//  background-color: #fff;
+//  border-radius: 2px;
+//}
+
+.y1t-table-box{
+  padding: $table-padding;
+  background-color: $table-bg-color;
+  border-radius: 2px;
+}

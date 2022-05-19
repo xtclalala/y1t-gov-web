@@ -4,7 +4,7 @@
     content-style="padding: 12px; min-height: 80vh; background-color:#F2F3F4"
     :native-scrollbar="false"
   >
-    <router-view v-slot="{ Component, route }" style="background-color: white; padding: 12px">
+    <router-view v-slot="{ Component, route }">
       <!--      todo 添加缓存配置 使用的组件需要有 name属性-->
       <keep-alive :include="rs.getCachelist">
         <component :is="Component" :key="route.name" />

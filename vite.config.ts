@@ -1,14 +1,14 @@
 import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import vueJsx from '@vitejs/plugin-vue-jsx'
 import { resolve } from 'path'
 
 const NODE_ENV = process.env.VITE_USER_NODE_ENV || 'development'
 const config = loadEnv(NODE_ENV, './')
 
 // https://vitejs.dev/config/
-// @ts-ignore
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [vue(), vueJsx()],
   resolve: {
     alias: {
       // 配置导包使用的快捷方式
@@ -38,8 +38,9 @@ export default defineConfig({
   },
   css: {
     preprocessorOptions: {
-      scss: {
-        additionalData: '@import "@/assets/style/main.scss";',
+      less: {
+        // 支持内联 JavaScript
+        javascriptEnabled: true,
       },
     },
   },
