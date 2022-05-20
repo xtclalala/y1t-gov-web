@@ -5,6 +5,7 @@ import { BaseMenu, MenuId, registerMenu, SearchMenu } from '@/api/system_setting
 
 enum Api {
   menu = '/menu/menu',
+  allMenu = '/menu/allMenu',
 }
 
 export const register = <T = Result>(params: registerMenu, options?: RequestOptions) =>
@@ -15,6 +16,9 @@ export const updateMenu = <T = Result>(params: BaseMenu, options?: RequestOption
 
 export const searchMenu = <T = Result>(params: SearchMenu, options?: RequestOptions) =>
   defHttp.get<T>({ url: Api.menu, params }, options)
+
+export const allMenu = <T = Result>(options?: RequestOptions) =>
+  defHttp.get<T>({ url: Api.allMenu }, options)
 
 export const deleteMenu = <T = Result>(params: MenuId, options?: RequestOptions) =>
   defHttp.delete<T>({ url: Api.menu, params }, options)

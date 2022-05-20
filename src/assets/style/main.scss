@@ -12,4 +12,10 @@ $table-padding: 24px;
   padding: $table-padding;
   background-color: $table-bg-color;
   border-radius: 2px;
+  .n-select{
+    width: 176px;
+  }
+  .n-pagination{
+    justify-content: end;
+  }
 }

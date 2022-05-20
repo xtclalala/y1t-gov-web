@@ -1,10 +1,10 @@
-<script>
+<script lang="ts">
 export default {
   name: 'SysMenu',
 }
 </script>
 <script setup lang="ts">
-import { computed, h, reactive, ref } from 'vue'
+import { computed, h, reactive, ref, VNodeChild } from 'vue'
 import { deleteMenu, register, searchMenu } from '@/api/system_setting/sys_menu'
 import { PageResult } from '#axios'
 import { registerMenu, SearchMenu } from '@/api/system_setting/types/sys_menu'
@@ -112,12 +112,21 @@ const columns = [
     },
   },
 ]
-const searchData = ref<SearchMenu>({ name: '', pid: 0 })
+const loading = ref<boolean>(false)
+const searchData = ref<SearchMenu>({
+  name: '',
+  pid: undefined,
+  path: '',
+  title: '',
+  component: '',
+  pName: '',
+})
 const pagination = reactive({
-  pageSize: 10,
   page: 1,
-  itemCount: 100,
+  pageSize: 10,
+  itemCount: 0,
   onChange: (page: number) => {
+    loading.value = true
     pagination.page = page
     getData({ page: page, pageSize: pagination.pageSize, desc: false })
   },
@@ -185,10 +194,12 @@ const getData = async (page: Page) => {
   )
   pagination.itemCount = res.total
   data.value = res.items
+  loading.value = false
 }
 
 // 点击搜索按钮
 const doSearch = () => {
+  loading.value = true
   pagination.page = 1
   getData({ page: 1, pageSize: pagination.pageSize, desc: false })
 }
@@ -198,7 +209,14 @@ const key2id = (row) => row.id
 
 // 重置搜索条件
 const doReset = () => {
-  searchData.value = { name: '', pid: undefined }
+  searchData.value = {
+    name: '',
+    pid: undefined,
+    path: '',
+    title: '',
+    component: '',
+    pName: '',
+  }
 }
 
 const handleChangeHidden = async (e: Event) => {
@@ -216,7 +234,12 @@ const submitCallback = async (e: MouseEvent) => {
         return
       }
       await register<string>(menuModel.value, { isMessage: true })
-      await getData({ page: pagination.page, pageSize: pagination.pageSize, desc: false })
+      loading.value = false
+      await getData({
+        page: pagination.page,
+        pageSize: pagination.pageSize,
+        desc: false,
+      })
       showRegister.value = false
       clearModel()
     })
@@ -244,17 +267,52 @@ const cancelCallback = async () => {
   showRegister.value = false
 }
 
+const options = [
+  {
+    label: 1,
+    value: 'ceshi',
+  },
+  {
+    label: 2,
+    value: 'ceshi2',
+  },
+]
+const renderLabel = (option): VNodeChild => {
+  return option.value
+}
+const handleUpdateValue = (value: string, option) => {
+  searchData.value.pName = value
+  searchData.value.pid = option.label
+}
 // 操作
-getData({ page: 1, pageSize: pagination.pageSize, desc: false })
+loading.value = true
+getData({ page: pagination.page, pageSize: pagination.pageSize, desc: false })
 </script>
 
 <template>
   <n-space vertical class="y1t-table-box">
-    <n-form :label-width="'auto'" inline label-placement="left">
-      <n-form-item label="页面标题">
-        <n-input v-model:value="searchData.name" type="text" placeholder="搜索条件" />
-      </n-form-item>
-      <n-space :size="5">
+    <n-form :label-width="'auto'" label-placement="left">
+      <n-space>
+        <n-form-item label="页面名称">
+          <n-input v-model:value="searchData.name" type="text" placeholder="搜索条件" />
+        </n-form-item>
+        <n-form-item label="页面标题">
+          <n-input v-model:value="searchData.title" type="text" placeholder="搜索条件" />
+        </n-form-item>
+        <n-form-item label="组件地址">
+          <n-input v-model:value="searchData.component" type="text" placeholder="搜索条件" />
+        </n-form-item>
+        <n-form-item label="页面路径">
+          <n-input v-model:value="searchData.path" type="text" placeholder="搜索条件" />
+        </n-form-item>
+        <n-form-item label="父级页面">
+          <n-select
+            :options="options"
+            :render-label="renderLabel"
+            clearable
+            @update:value="handleUpdateValue"
+          />
+        </n-form-item>
         <n-button type="primary" @click="doSearch">
           <template #icon>
             <y-icon icon-type="SearchOutline" :depth="2" :size="15" color="white" />
@@ -281,9 +339,16 @@ getData({ page: 1, pageSize: pagination.pageSize, desc: false })
       v-model:checked-row-keys="checkedRowKeys"
       :columns="columns"
       :data="data"
-      :pagination="pagination"
       :scroll-x="1200"
+      :max-height="750"
+      :loading="loading"
       :row-key="key2id"
+    />
+    <n-pagination
+      v-model:page="pagination.page"
+      v-model:pageSize="pagination.pageSize"
+      :item-count="pagination.itemCount"
+      @update:page="pagination.onChange"
     />
   </n-space>
   <n-modal v-model:show="showRegister" title="新增" :style="modalStyle" preset="card">
