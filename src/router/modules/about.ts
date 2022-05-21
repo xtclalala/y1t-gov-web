@@ -9,7 +9,7 @@ const routes: AppRouteRecordRaw = {
   meta: {
     // title: t('routes.dashboard.about'),
     title: '关于',
-    icon: 'close',
+    icon: 'LogoGithub',
     hideMenu: true,
   },
 }

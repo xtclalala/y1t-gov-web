@@ -1,10 +1,8 @@
 export type SearchMenu = {
   name: string
-  pid: number | undefined
   path: string
   title: string
   component: string
-  pName: string
 }
 
 export type MenuId = {

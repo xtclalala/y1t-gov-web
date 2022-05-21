@@ -31,7 +31,7 @@ export const useRouteStore = defineStore({
   }),
   getters: {
     getMenus(): Menu[] {
-      return this.menus || getAuthCache<Menu[]>(MENU_CACHE_KEY)
+      return this.menus || toRaw(router2menuDeep(getAuthCache<Menu[]>(MENU_CACHE_KEY)))
     },
     getWhitelist(): string[] {
       return this.whitelist || getAuthCache<string[]>(WHITELIST_CACHE_KEY)

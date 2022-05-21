@@ -24,24 +24,24 @@ const handleOptionsSelect = async (key: unknown): Promise<void> => {
 }
 
 const options = computed(() => [
-  { key: 'me', icon: renderIcon('user'), label: `Hey, ${me.name as string}!` },
+  { key: 'me', icon: renderIcon('Barcode'), label: `Hey, ${me.name as string}!` },
   { key: 'divider', type: 'divider' },
   // todo 个人中心
   {
     key: 'profile',
-    icon: renderIcon('settings'),
-    label: () => h(RouterLink, { to: '/user' }, 'Your Profiles'),
+    icon: renderIcon('PeopleCircleOutline'),
+    label: () => h(RouterLink, { to: '/user' }, { default: () => 'Your Profiles' }),
   },
   {
     key: 'settings',
-    icon: renderIcon('edit'),
-    label: () => h(RouterLink, { to: '/role' }, 'Settings'),
+    icon: renderIcon('SettingsOutline'),
+    label: () => h(RouterLink, { to: '/role' }, { default: () => 'Settings' }),
   },
   { key: 'divider', type: 'divider' },
   {
     key: 'logout',
-    icon: renderIcon('logout'),
-    label: () => h(RouterLink, { to: rPath.LOGIN }, 'Sign out'),
+    icon: renderIcon('LogInOutline'),
+    label: () => h(RouterLink, { to: rPath.LOGIN }, { default: () => 'Sign out' }),
   },
 ])
 </script>

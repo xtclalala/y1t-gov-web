@@ -1,19 +1,19 @@
 import { AppRouteRecordRaw, Menu } from '@r/types'
 import { renderIcon } from '@/utils/yIcon'
 
-export const router2menuDeep = (routes: AppRouteRecordRaw[]): Menu[] => {
+export const router2menuDeep = (routes: AppRouteRecordRaw[] | Menu[]): Menu[] => {
   const menu: Menu[] = []
   for (const item of routes) {
-    const { meta, name, children } = item
+    const { meta = {}, name, children } = item
     if (meta.hideMenu === false) {
       break
     }
     const menuItem: Menu = {
       ...item,
-      label: meta.title,
+      label: !meta.title ? '默认标题' : meta.title,
       key: name,
       disabled: meta.disabled === true,
-      icon: renderIcon(!meta.icon ? 'github' : meta.icon),
+      icon: renderIcon(!meta.icon ? 'LogoGithub' : meta.icon),
       children: children !== undefined ? router2menuDeep(children) : undefined,
     }
     menu.push(menuItem)

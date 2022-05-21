@@ -97,9 +97,29 @@ const columns = [
             ),
             h(NDivider, { vertical: true }),
             h(
+              NButton,
+              {
+                onClick: () => {
+                  showPermissions.value = true
+                  console.log(showPermissions)
+                  // 获取页面按钮
+                },
+                text: true,
+              },
+              { default: () => '页面按钮' }
+            ),
+            h(NDivider, { vertical: true }),
+            h(
               NPopconfirm,
               {
-                onPositiveClick: () => deleteMenu({ id: row.id }, { isMessage: true }),
+                onPositiveClick: async () => {
+                  await deleteMenu({ id: row.id }, { isMessage: true })
+                  await getData({
+                    page: pagination.page,
+                    pageSize: pagination.pageSize,
+                    desc: false,
+                  })
+                },
               },
               {
                 trigger: () => h(NButton, { text: true }, { default: () => '删除' }),
@@ -115,11 +135,9 @@ const columns = [
 const loading = ref<boolean>(false)
 const searchData = ref<SearchMenu>({
   name: '',
-  pid: undefined,
   path: '',
   title: '',
   component: '',
-  pName: '',
 })
 const pagination = reactive({
   page: 1,
@@ -133,6 +151,7 @@ const pagination = reactive({
 })
 const data = ref<Array<registerMenu>>([])
 const checkedRowKeys = ref([])
+const showPermissions = ref<boolean>(false)
 const showRegister = ref<boolean>(false)
 const modalStyle = computed(() => {
   return { width: '600px' }
@@ -211,11 +230,9 @@ const key2id = (row) => row.id
 const doReset = () => {
   searchData.value = {
     name: '',
-    pid: undefined,
     path: '',
     title: '',
     component: '',
-    pName: '',
   }
 }
 
@@ -267,23 +284,6 @@ const cancelCallback = async () => {
   showRegister.value = false
 }
 
-const options = [
-  {
-    label: 1,
-    value: 'ceshi',
-  },
-  {
-    label: 2,
-    value: 'ceshi2',
-  },
-]
-const renderLabel = (option): VNodeChild => {
-  return option.value
-}
-const handleUpdateValue = (value: string, option) => {
-  searchData.value.pName = value
-  searchData.value.pid = option.label
-}
 // 操作
 loading.value = true
 getData({ page: pagination.page, pageSize: pagination.pageSize, desc: false })
@@ -304,14 +304,6 @@ getData({ page: pagination.page, pageSize: pagination.pageSize, desc: false })
         </n-form-item>
         <n-form-item label="页面路径">
           <n-input v-model:value="searchData.path" type="text" placeholder="搜索条件" />
-        </n-form-item>
-        <n-form-item label="父级页面">
-          <n-select
-            :options="options"
-            :render-label="renderLabel"
-            clearable
-            @update:value="handleUpdateValue"
-          />
         </n-form-item>
         <n-button type="primary" @click="doSearch">
           <template #icon>
@@ -398,5 +390,6 @@ getData({ page: pagination.page, pageSize: pagination.pageSize, desc: false })
       </n-space>
     </template>
   </n-modal>
+  <n-drawer v-model:show="showPermissions" :width="500"> </n-drawer>
 </template>
 <style scoped></style>

@@ -11,7 +11,7 @@ const routes: AppRouteRecordRaw = {
   component: PAGE,
   meta: {
     title: '系统设置',
-    icon: 'github',
+    icon: 'AtCircleOutline',
   },
   children: [
     {
