@@ -13,6 +13,5 @@ export enum rName {
   SYSTEM_ROLE = 'Role',
   SYSTEM_USER = 'User',
   SYSTEM_ORGAMIZE = 'Organize',
-  SYSTEM_PERMISSION = 'Permission',
   ABOUT = 'About',
 }

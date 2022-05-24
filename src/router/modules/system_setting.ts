@@ -35,16 +35,6 @@ const routes: AppRouteRecordRaw = {
       },
     },
     {
-      path: rPath.SYSTEM_PERMISSION,
-      name: rName.SYSTEM_PERMISSION,
-      component: () => import('@/pages/system_setting/sys_permission/index.vue'),
-      meta: {
-        // title: t('routes.system.sysPermission'),
-        title: '页面权限设置',
-        hideBreadcrumb: true,
-      },
-    },
-    {
       path: rPath.SYSTEM_ROLE,
       name: rName.SYSTEM_ROLE,
       component: () => import('@/pages/system_setting/sys_role/index.vue'),

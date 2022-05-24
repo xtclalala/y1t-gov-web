@@ -4,13 +4,14 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import { computed, h, reactive, ref, VNodeChild } from 'vue'
+import { computed, h, reactive, ref } from 'vue'
 import { deleteMenu, register, searchMenu } from '@/api/system_setting/sys_menu'
 import { PageResult } from '#axios'
 import { registerMenu, SearchMenu } from '@/api/system_setting/types/sys_menu'
 import { FormInst, FormRules, NButton, NDivider, NPopconfirm, NSpace } from 'naive-ui'
 import { Page } from '@/api/system_setting/types/sys_role'
 import YIcon from '@/components/yIcon/index.vue'
+import Permission from './components/permission.vue'
 
 const columns = [
   {
@@ -68,65 +69,75 @@ const columns = [
         NSpace,
         { size: 1 },
         {
-          default: () => [
-            h(
-              NButton,
-              {
-                onClick: () => {
-                  menuModel.value = row
-                  menuModel.value.pid = row.id
-                  menuModel.value.hiddenNumber = row.hidden ? '1' : ''
-                  openDialog()
+          default: () => {
+            console.log(row)
+
+            const options = [
+              h(
+                NButton,
+                {
+                  onClick: () => {
+                    menuModel.value = row
+                    menuModel.value.pid = row.id
+                    menuModel.value.hiddenNumber = row.hidden ? '1' : ''
+                    openDialog()
+                  },
+                  text: true,
                 },
-                text: true,
-              },
-              { default: () => '编辑' }
-            ),
-            h(NDivider, { vertical: true }),
-            h(
-              NButton,
-              {
-                onClick: () => {
-                  clearModel()
-                  menuModel.value.pid = row.id
-                  openDialog()
+                { default: () => '编辑' }
+              ),
+              h(NDivider, { vertical: true }),
+              h(
+                NButton,
+                {
+                  onClick: () => {
+                    showPermissions.value = true
+                    console.log(showPermissions)
+                    // 获取页面按钮
+                  },
+                  text: true,
                 },
-                text: true,
-              },
-              { default: () => '添加下级' }
-            ),
-            h(NDivider, { vertical: true }),
-            h(
-              NButton,
-              {
-                onClick: () => {
-                  showPermissions.value = true
-                  console.log(showPermissions)
-                  // 获取页面按钮
+                { default: () => '页面按钮' }
+              ),
+              h(NDivider, { vertical: true }),
+              h(
+                NPopconfirm,
+                {
+                  onPositiveClick: async () => {
+                    await deleteMenu({ id: row.id }, { isMessage: true })
+                    await getData({
+                      page: pagination.page,
+                      pageSize: pagination.pageSize,
+                      desc: false,
+                    })
+                  },
                 },
-                text: true,
-              },
-              { default: () => '页面按钮' }
-            ),
-            h(NDivider, { vertical: true }),
-            h(
-              NPopconfirm,
-              {
-                onPositiveClick: async () => {
-                  await deleteMenu({ id: row.id }, { isMessage: true })
-                  await getData({
-                    page: pagination.page,
-                    pageSize: pagination.pageSize,
-                    desc: false,
-                  })
-                },
-              },
-              {
-                trigger: () => h(NButton, { text: true }, { default: () => '删除' }),
-                default: () => '请确认是否删除!',
-              }
-            ),
-          ],
+                {
+                  trigger: () => h(NButton, { text: true }, { default: () => '删除' }),
+                  default: () => '请确认是否删除!',
+                }
+              ),
+            ]
+            // eslint-disable-next-line eqeqeq
+            if (row.children != undefined) {
+              options.push(h(NDivider, { vertical: true }))
+              options.push(
+                h(
+                  NButton,
+                  {
+                    onClick: () => {
+                      clearModel()
+                      menuModel.value.pid = row.id
+                      openDialog()
+                    },
+                    text: true,
+                  },
+                  { default: () => '添加下级' }
+                )
+              )
+            }
+            return options
+          },
         }
       )
     },
@@ -390,6 +401,6 @@ getData({ page: pagination.page, pageSize: pagination.pageSize, desc: false })
       </n-space>
     </template>
   </n-modal>
-  <n-drawer v-model:show="showPermissions" :width="500"> </n-drawer>
+  <Permission v-model:show="showPermissions"> </Permission>
 </template>
 <style scoped></style>

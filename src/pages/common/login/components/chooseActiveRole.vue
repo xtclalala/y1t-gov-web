@@ -20,7 +20,7 @@
 import { ref, toRefs } from 'vue'
 import { userStore } from '@/store/module/user'
 import { storeToRefs } from 'pinia'
-import { RouteRecordRaw, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { useRouteStore } from '@/store/module/router'
 import { PageEnum } from '@/enums/pageEnum'
 

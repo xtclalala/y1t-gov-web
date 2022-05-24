@@ -15,6 +15,5 @@ export enum rPath {
   SYSTEM_ROLE = 'role',
   SYSTEM_USER = 'user',
   SYSTEM_ORGANIZE = 'organize',
-  SYSTEM_PERMISSION = 'permission',
   ABOUT = '/about',
 }
