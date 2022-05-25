@@ -1,20 +1,21 @@
 <script setup lang="ts">
-import { reactive, ref, toRefs } from 'vue'
+import { computed, h, ref, toRefs } from 'vue'
 import YIcon from '@/components/yIcon/index.vue'
-import { Page } from '@/api/system_setting/types/sys_role'
-import { PageResult } from '#axios'
-import { registerPer, SearchPer } from '@/api/system_setting/types/sys_permission'
-import { searchPer } from '@/api/system_setting/sys_permission'
+import { registerPer } from '@/api/system_setting/types/sys_permission'
+import { allPerByMenuId, deletePer, register } from '@/api/system_setting/sys_permission'
+import { FormInst, FormRules, NButton, NDivider, NPopconfirm, NSpace } from 'naive-ui'
 
 type PerProps = {
   show: boolean
-  id: number
+  menuId: number
 }
 
-const props = defineProps<PerProps>()
-const { show } = toRefs(props)
-const emits = defineEmits(['update:show'])
-
+const props = withDefaults(defineProps<PerProps>(), {
+  show: false,
+  menuId: 0,
+})
+const { show, menuId } = toRefs(props)
+const emit = defineEmits(['update:show'])
 const columns = [
   {
     title: '按钮名称',
@@ -31,61 +32,131 @@ const columns = [
     key: 'actions',
     fixed: 'right',
     width: 200,
+    render(row) {
+      return h(
+        NSpace,
+        {
+          size: 1,
+        },
+        {
+          default: () => {
+            const options = [
+              h(
+                NButton,
+                {
+                  onClick: () => {
+                    perModel.value = row
+                    openDialog()
+                  },
+                  text: true,
+                },
+                { default: () => '编辑' }
+              ),
+              h(NDivider, { vertical: true }),
+              h(
+                NPopconfirm,
+                {
+                  onPositiveClick: async () => {
+                    await deletePer({ id: row.id }, { isMessage: true })
+                    await getData()
+                  },
+                },
+                {
+                  trigger: () => h(NButton, { text: true }, { default: () => '删除' }),
+                  default: () => '请确认是否删除!',
+                }
+              ),
+            ]
+            return options
+          },
+        }
+      )
+    },
   },
 ]
+const showRegister = ref<boolean>(false)
 const loading = ref<boolean>(false)
-const pagination = reactive({
-  page: 1,
-  pageSize: 10,
-  itemCount: 0,
-  onChange: (page: number) => {
-    loading.value = true
-    pagination.page = page
-    getData({ page: page, pageSize: pagination.pageSize, desc: false })
-  },
-})
+const form = ref<FormInst | null>(null)
 const data = ref<Array<registerPer>>([])
-const searchData = ref<SearchPer>({
+const perModel = ref<registerPer>({
+  menuId: menuId.value,
   name: '',
+  code: '',
+  sort: 100,
 })
+const rules: FormRules = {
+  name: {
+    required: true,
+    message: '请填写按钮名称！',
+    trigger: ['input', 'blur'],
+  },
+  code: {
+    required: true,
+    message: '请填写按钮编码！',
+    trigger: ['input', 'blur'],
+  },
+}
 
+const modalStyle = computed(() => {
+  return { width: '600px' }
+})
 // 更新 show
-const updateShow = (show: boolean) => {
-  emits('update:show', show)
+const closeDrawer = () => {
+  emit('update:show', false)
 }
 // 搜索
-const getData = async (page: Page) => {
-  const res = await searchPer<PageResult<Array<registerPer>>>(
-    completeAssign<SearchPer>(page, searchData.value),
-    { isMessage: false }
-  )
-  pagination.itemCount = res.total
-  data.value = res.items
+const getData = async () => {
+  data.value = await allPerByMenuId<Array<registerPer>>({ id: menuId.value }, { isMessage: false })
   loading.value = false
 }
 // 表格映射转换
 const key2id = (row) => row.id
-// 合并对象
-function completeAssign<T>(...sources): T {
-  const target = {}
-  sources.forEach((item) => {
-    Object.keys(item).reduce((prev, current) => {
-      if (item[current] !== undefined) {
-        prev[current] = item[current]
-      }
-      return prev
-    }, target)
-  })
-  return target as T
+const handleRegister = async () => {
+  clearModel()
+  openDialog()
 }
-getData({ page: pagination.page, pageSize: pagination.pageSize, desc: false })
+const clearModel = () => {
+  perModel.value = {
+    menuId: menuId.value,
+    name: '',
+    code: '',
+    sort: 100,
+  }
+}
+const openDialog = () => {
+  showRegister.value = true
+}
+const cancelCallback = async () => {
+  showRegister.value = false
+}
+const submitCallback = async (e: MouseEvent) => {
+  e.preventDefault()
+  form.value
+    ?.validate(async (errors) => {
+      if (errors) {
+        return
+      }
+      await register<string>(perModel.value, { isMessage: true })
+      loading.value = false
+      await getData()
+      showRegister.value = false
+      clearModel()
+    })
+    .catch((e) => {
+      // console.log(e)
+    })
+}
+const openAfter = () => {
+  loading.value = true
+  getData()
+}
 </script>
 
 <template>
-  <n-drawer v-model:show="show" :width="700" @update:show="updateShow">
+  <n-drawer v-model:show="show" :width="700" @after-enter="openAfter" @mask-click="closeDrawer">
     <n-drawer-content title="页面按钮">
       <n-space vertical>
-        <n-button type="primary">
+        <n-button type="primary" @click="handleRegister">
           <template #icon>
             <y-icon icon-type="Add" :depth="2" :size="17" color="white" />
           </template>
@@ -102,6 +173,32 @@ getData({ page: pagination.page, pageSize: pagination.pageSize, desc: false })
       </n-space>
     </n-drawer-content>
   </n-drawer>
+  <n-modal v-model:show="showRegister" title="新增" :style="modalStyle" preset="card">
+    <n-form
+      ref="form"
+      :model="perModel"
+      :rules="rules"
+      label-placement="left"
+      require-mark-placement="right-hanging"
+      label-width="auto"
+    >
+      <n-form-item label="按钮名称" path="name">
+        <n-input v-model:value="perModel.name" placeholder="标题" />
+      </n-form-item>
+      <n-form-item label="按钮编码" path="code">
+        <n-input v-model:value="perModel.code" placeholder="名称" />
+      </n-form-item>
+      <n-form-item label="排序" path="sort">
+        <n-input-number v-model:value="perModel.sort" placeholder="排序" />
+      </n-form-item>
+    </n-form>
+    <template #action>
+      <n-space :size="5" justify="end">
+        <n-button type="tertiary" size="small" @click="cancelCallback">取消</n-button>
+        <n-button type="success" size="small" @click="submitCallback">确认</n-button>
+      </n-space>
+    </template>
+  </n-modal>
 </template>
 
 <style scoped></style>

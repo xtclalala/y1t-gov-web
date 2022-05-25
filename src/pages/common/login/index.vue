@@ -23,7 +23,6 @@
       @click="handleLogin"
       >Sign in</n-button
     >
-    <br />
     <choose-active-role v-model:show="show" />
   </n-card>
 </template>

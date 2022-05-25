@@ -19,4 +19,4 @@ export type PerPer = PerId & {
   sysRoleId?: Array<number>
 }
 
-export type registerPer = BasePer & PerPer
+export type registerPer = Omit<BasePer, 'id'>

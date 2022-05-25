@@ -92,8 +92,10 @@ export const useRouteStore = defineStore({
           this.setDynamicAddedRoute(true)
           const user = userStore()
           let menus = user.getCurrentRole.menus
+          console.log('menus', menus)
           menus = payloadRoute(toRaw(menus))
           accessedMenus = toRaw(addMeta(menus))
+
           break
         }
         // case PermissionModeEnum.ROLE:
@@ -116,6 +118,7 @@ export const useRouteStore = defineStore({
           accessedMenus = BusinessRoutes
         }
       }
+      console.log('accessedMenus', accessedMenus)
       const m = toRaw(router2menuDeep(accessedMenus))
       this.setMenus(m)
       this.setWhitelist(m)

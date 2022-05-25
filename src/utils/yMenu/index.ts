@@ -5,7 +5,7 @@ export const router2menuDeep = (routes: AppRouteRecordRaw[] | Menu[]): Menu[] =>
   const menu: Menu[] = []
   for (const item of routes) {
     const { meta = {}, name, children } = item
-    if (meta.hideMenu === false) {
+    if (meta.hideMenu) {
       break
     }
     const menuItem: Menu = {

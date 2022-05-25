@@ -70,8 +70,6 @@ const columns = [
         { size: 1 },
         {
           default: () => {
-            console.log(row)
-
             const options = [
               h(
                 NButton,
@@ -85,19 +83,6 @@ const columns = [
                   text: true,
                 },
                 { default: () => '编辑' }
-              ),
-              h(NDivider, { vertical: true }),
-              h(
-                NButton,
-                {
-                  onClick: () => {
-                    showPermissions.value = true
-                    console.log(showPermissions)
-                    // 获取页面按钮
-                  },
-                  text: true,
-                },
-                { default: () => '页面按钮' }
               ),
               h(NDivider, { vertical: true }),
               h(
@@ -118,6 +103,23 @@ const columns = [
                 }
               ),
             ]
+            if (row.component !== 'PAGE') {
+              options.push(h(NDivider, { vertical: true }))
+              options.push(
+                h(
+                  NButton,
+                  {
+                    onClick: () => {
+                      currentMenuId.value = row.id
+                      showPermissions.value = true
+                      // 获取页面按钮
+                    },
+                    text: true,
+                  },
+                  { default: () => '页面按钮' }
+                )
+              )
+            }
             // eslint-disable-next-line eqeqeq
             if (row.children != undefined) {
               options.push(h(NDivider, { vertical: true }))
@@ -163,6 +165,8 @@ const pagination = reactive({
 const data = ref<Array<registerMenu>>([])
 const checkedRowKeys = ref([])
 const showPermissions = ref<boolean>(false)
+const currentMenuId = ref<number>(0)
+
 const showRegister = ref<boolean>(false)
 const modalStyle = computed(() => {
   return { width: '600px' }
@@ -272,7 +276,7 @@ const submitCallback = async (e: MouseEvent) => {
       clearModel()
     })
     .catch((e) => {
-      console.log(e)
+      // console.log(e)
     })
 }
 const clearModel = () => {
@@ -401,6 +405,6 @@ getData({ page: pagination.page, pageSize: pagination.pageSize, desc: false })
       </n-space>
     </template>
   </n-modal>
-  <Permission v-model:show="showPermissions"> </Permission>
+  <Permission v-model:show="showPermissions" :menu-id="currentMenuId"> </Permission>
 </template>
 <style scoped></style>

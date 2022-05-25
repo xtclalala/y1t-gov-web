@@ -1,6 +1,7 @@
 import { defHttp } from '@/service'
 import { RequestOptions, Result } from '#axios'
 import { BasePer, PerId, registerPer, SearchPer } from '@/api/system_setting/types/sys_permission'
+import { MenuId } from '@/api/system_setting/types/sys_menu'
 
 enum Api {
   per = '/permission/per',
@@ -13,7 +14,7 @@ export const register = <T = Result>(params: registerPer, options?: RequestOptio
 export const updatePer = <T = Result>(params: BasePer, options?: RequestOptions) =>
   defHttp.put<T>({ url: Api.per, params }, options)
 
-export const allPerById = <T = Result>(params: PerId, options?: RequestOptions) =>
+export const allPerByMenuId = <T = Result>(params: MenuId, options?: RequestOptions) =>
   defHttp.get<T>({ url: Api.allPer, params }, options)
 
 export const deletePer = <T = Result>(params: PerId, options?: RequestOptions) =>

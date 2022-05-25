@@ -2,13 +2,15 @@ import { AppRouteRecordRaw } from '@r/types'
 
 export const payloadRoute = (routes: AppRouteRecordRaw[]): AppRouteRecordRaw[] => {
   sortRoute(routes)
-  return routes.filter((father) => {
-    const t = routes.filter((child) => {
-      return father.ID === child.pid
-    })
-    t.length > 0 ? (father.children = t) : ''
-    return father.pid === 0
-  })
+  // return routes.filter((father) => {
+  //   const t = routes.filter((child) => {
+  //     return father.ID === child.pid
+  //   })
+  //   t.length > 0 ? (father.children = t) : ''
+  //   return father.pid === 0
+  // })
+  console.log(list2Tree(routes))
+  return list2Tree(routes)
 }
 
 export const sortRoute = (routes: AppRouteRecordRaw[]) => {
@@ -33,4 +35,13 @@ export const tree2list = <T>(tree: T[]): T[] => {
   }
 
   return l
+}
+
+export const list2Tree = <T>(list: T[]): T[] => {
+  const cloneList = JSON.parse(JSON.stringify(list))
+  return cloneList.filter((father) => {
+    const bArray = cloneList.filter((child) => father.id === child.pid)
+    bArray.length > 0 ? (father.children = bArray) : ''
+    return father.pid === 0
+  })
 }
