@@ -4,7 +4,7 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import { computed, h, reactive, ref } from 'vue'
+import { computed, h, ref } from 'vue'
 import { deleteMenu, register, searchMenu } from '@/api/system_setting/sys_menu'
 import { PageResult } from '#axios'
 import { registerMenu, SearchMenu } from '@/api/system_setting/types/sys_menu'
@@ -12,6 +12,8 @@ import { FormInst, FormRules, NButton, NDivider, NPopconfirm, NSpace } from 'nai
 import { Page } from '@/api/system_setting/types/sys_role'
 import YIcon from '@/components/yIcon/index.vue'
 import Permission from './components/permission.vue'
+import { completeAssign } from '@/utils/helper/objectHelper'
+import { useTable } from '@/hooks/comHooks/useTable'
 
 const columns = [
   {
@@ -121,7 +123,7 @@ const columns = [
               )
             }
             // eslint-disable-next-line eqeqeq
-            if (row.children != undefined) {
+            if (row.children != undefined && row.component === 'PAGE') {
               options.push(h(NDivider, { vertical: true }))
               options.push(
                 h(
@@ -145,24 +147,25 @@ const columns = [
     },
   },
 ]
-const loading = ref<boolean>(false)
-const searchData = ref<SearchMenu>({
+const sTmpData = {
   name: '',
   path: '',
   title: '',
   component: '',
-})
-const pagination = reactive({
-  page: 1,
-  pageSize: 10,
-  itemCount: 0,
-  onChange: (page: number) => {
-    loading.value = true
-    pagination.page = page
-    getData({ page: page, pageSize: pagination.pageSize, desc: false })
-  },
-})
-const data = ref<Array<registerMenu>>([])
+}
+const tableApi = async (page: Page, searchData: any) => {
+  return searchMenu<PageResult<Array<registerMenu>>>(
+    completeAssign<SearchMenu>(page, searchData.value),
+    { isMessage: false }
+  )
+}
+const [pagination, loading, data, searchData, getData, doSearch, doReset] = useTable<registerMenu>(
+  tableApi,
+  { page: 1, pageSize: 10 },
+  sTmpData,
+  'A'
+)
+
 const checkedRowKeys = ref([])
 const showPermissions = ref<boolean>(false)
 const currentMenuId = ref<number>(0)
@@ -206,51 +209,8 @@ const rules: FormRules = {
   },
 }
 
-// 合并对象
-function completeAssign<T>(...sources): T {
-  const target = {}
-  sources.forEach((item) => {
-    Object.keys(item).reduce((prev, current) => {
-      if (item[current] !== undefined) {
-        prev[current] = item[current]
-      }
-      return prev
-    }, target)
-  })
-  return target as T
-}
-
-// 搜索
-const getData = async (page: Page) => {
-  const res = await searchMenu<PageResult<Array<registerMenu>>>(
-    completeAssign<SearchMenu>(page, searchData.value),
-    { isMessage: false }
-  )
-  pagination.itemCount = res.total
-  data.value = res.items
-  loading.value = false
-}
-
-// 点击搜索按钮
-const doSearch = () => {
-  loading.value = true
-  pagination.page = 1
-  getData({ page: 1, pageSize: pagination.pageSize, desc: false })
-}
-
 // 表格映射转换
 const key2id = (row) => row.id
-
-// 重置搜索条件
-const doReset = () => {
-  searchData.value = {
-    name: '',
-    path: '',
-    title: '',
-    component: '',
-  }
-}
-
 const handleChangeHidden = async (e: Event) => {
   menuModel.value.hidden = !!(e.target as HTMLInputElement).value
 }
@@ -300,7 +260,6 @@ const cancelCallback = async () => {
 }
 
 // 操作
-loading.value = true
 getData({ page: pagination.page, pageSize: pagination.pageSize, desc: false })
 </script>
 

@@ -7,11 +7,12 @@ import { BusinessRoutes } from '@r/index'
 import { PermissionModeEnum } from '@/enums/appEnum'
 import { addMeta, router2menuDeep } from '@/utils/yMenu'
 import { AppRouteRecordRaw, Menu } from '@r/types'
-import { payloadRoute, tree2list } from '@/utils/yRouter/router'
+import { payloadRoute } from '@/utils/yRouter/router'
 import projectSetting from '@/settings/projectSetting'
 import { getAuthCache, setAuthCache } from '@/utils/auth'
 import { CACHELIST_CACHE_KEY, MENU_CACHE_KEY, WHITELIST_CACHE_KEY } from '@/enums/cacheEnum'
 import { userStore } from '@/store/module/user'
+import { treeToList } from '@/utils/helper/treeHelper'
 
 export interface IAsyncRouteState {
   menus: Menu[] | undefined
@@ -70,7 +71,8 @@ export const useRouteStore = defineStore({
 
     // 设置白名单
     setWhitelist(menus: Menu[]) {
-      const w: Menu[] = tree2list<Menu>(menus)
+      // const w: Menu[] = tree2list<Menu>(menus)
+      const w: Menu[] = treeToList<Menu[]>(menus, { children: 'children' })
       const whitelist = w.flatMap((self) => self.name)
       const cachelist = w
         .filter((self) => self.meta?.keepAlive)
@@ -92,7 +94,6 @@ export const useRouteStore = defineStore({
           this.setDynamicAddedRoute(true)
           const user = userStore()
           let menus = user.getCurrentRole.menus
-          console.log('menus', menus)
           menus = payloadRoute(toRaw(menus))
           accessedMenus = toRaw(addMeta(menus))
 
@@ -120,6 +121,7 @@ export const useRouteStore = defineStore({
       }
       console.log('accessedMenus', accessedMenus)
       const m = toRaw(router2menuDeep(accessedMenus))
+      console.log(m)
       this.setMenus(m)
       this.setWhitelist(m)
       return accessedMenus

@@ -2,8 +2,10 @@
 import { computed, h, ref, toRefs } from 'vue'
 import YIcon from '@/components/yIcon/index.vue'
 import { registerPer } from '@/api/system_setting/types/sys_permission'
-import { allPerByMenuId, deletePer, register } from '@/api/system_setting/sys_permission'
+import { deletePer, register, searchPer } from '@/api/system_setting/sys_permission'
 import { FormInst, FormRules, NButton, NDivider, NPopconfirm, NSpace } from 'naive-ui'
+import { Page } from '@/api/system_setting/types/sys_role'
+import { useTable } from '@/hooks/comHooks/useTable'
 
 type PerProps = {
   show: boolean
@@ -16,6 +18,7 @@ const props = withDefaults(defineProps<PerProps>(), {
 })
 const { show, menuId } = toRefs(props)
 const emit = defineEmits(['update:show'])
+
 const columns = [
   {
     title: '按钮名称',
@@ -74,10 +77,17 @@ const columns = [
     },
   },
 ]
+const tableApi = async (page: Page, searchData: any) => {
+  return searchPer<Array<registerPer>>(searchData.value, { isMessage: false })
+}
+const [pagination, loading, data, searchData, getData, doSearch, doReset] = useTable<registerPer>(
+  tableApi,
+  { page: 1, pageSize: 10 },
+  { menuId: 0 },
+  'B'
+)
 const showRegister = ref<boolean>(false)
-const loading = ref<boolean>(false)
 const form = ref<FormInst | null>(null)
-const data = ref<Array<registerPer>>([])
 const perModel = ref<registerPer>({
   menuId: menuId.value,
   name: '',
@@ -102,13 +112,10 @@ const modalStyle = computed(() => {
 })
 // 更新 show
 const closeDrawer = () => {
+  data.value = []
   emit('update:show', false)
 }
-// 搜索
-const getData = async () => {
-  data.value = await allPerByMenuId<Array<registerPer>>({ id: menuId.value }, { isMessage: false })
-  loading.value = false
-}
+
 // 表格映射转换
 const key2id = (row) => row.id
 const handleRegister = async () => {
@@ -148,6 +155,7 @@ const submitCallback = async (e: MouseEvent) => {
 }
 const openAfter = () => {
   loading.value = true
+  searchData.value.menuId = menuId.value
   getData()
 }
 </script>

@@ -42,6 +42,15 @@ export function treeToList<T = any>(tree: any, config: Partial<TreeHelperConfig>
   return result
 }
 
+export const list2Tree = <T>(list: T[]): T[] => {
+  const cloneList = JSON.parse(JSON.stringify(list))
+  return cloneList.filter((father) => {
+    const bArray = cloneList.filter((child) => father.id === child.pid)
+    bArray.length > 0 ? (father.children = bArray) : ''
+    return father.pid === 0
+  })
+}
+
 export function findNode<T = any>(
   tree: any,
   func: Fn,
