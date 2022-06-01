@@ -6,11 +6,10 @@ import { store } from '@/store'
 import { ThemeEnum } from '@/enums/appEnum'
 import { APP_DARK_MODE_KEY_ } from '@/enums/cacheEnum'
 import { Persistent } from '@/utils/cache/persistent'
-import { darkMode } from '@/settings/designSetting'
 import { resetRouter } from '@r/index'
 
 interface AppState {
-  darkMode?: ThemeEnum
+  darkMode: ThemeEnum | undefined
   // Page loading status
   pageLoading: boolean
   // When the window shrinks, remember some states, and restore these states when the window is restored
@@ -29,7 +28,7 @@ export const useAppStore = defineStore({
       return this.pageLoading
     },
     getDarkMode(): 'light' | 'dark' | string {
-      return this.darkMode || localStorage.getItem(APP_DARK_MODE_KEY_) || darkMode
+      return this.darkMode || localStorage.getItem(APP_DARK_MODE_KEY_) || ThemeEnum.LIGHT
     },
 
     getBeforeMiniInfo(): BeforeMiniState {

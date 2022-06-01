@@ -21,6 +21,7 @@ import { computed, defineComponent, h } from 'vue'
 import { useOsTheme, darkTheme, zhCN, lightTheme } from 'naive-ui'
 import { useLoadingBar, useDialog, useMessage, useNotification, NThemeEditor } from 'naive-ui'
 import { useAppStore } from '@/store/module/app'
+import { ThemeEnum } from '@/enums/appEnum'
 
 function registerNaiveTools() {
   window.$loadingBar = useLoadingBar()
@@ -39,6 +40,5 @@ const NaiveProviderContent = defineComponent({
 })
 
 const app = useAppStore()
-const osTheme = useOsTheme()
-const theme = computed(() => (osTheme.value === app.getDarkMode ? darkTheme : lightTheme))
+const theme = computed(() => (app.getDarkMode === ThemeEnum.LIGHT ? lightTheme : darkTheme))
 </script>

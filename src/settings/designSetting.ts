@@ -1,6 +1,6 @@
 import { ThemeEnum } from '@/enums/appEnum'
 
-export const darkMode = ThemeEnum.LIGHT
+export const darkMode = ThemeEnum.DARK
 
 // app theme preset color
 export const APP_PRESET_COLOR_LIST: string[] = [

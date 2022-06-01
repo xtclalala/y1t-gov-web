@@ -84,7 +84,7 @@ const [pagination, loading, data, searchData, getData, doSearch, doReset] = useT
   tableApi,
   { page: 1, pageSize: 10 },
   { menuId: 0 },
-  'B'
+  'Permission'
 )
 const showRegister = ref<boolean>(false)
 const form = ref<FormInst | null>(null)

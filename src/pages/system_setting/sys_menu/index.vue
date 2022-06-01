@@ -5,7 +5,7 @@ export default {
 </script>
 <script setup lang="ts">
 import { computed, h, ref } from 'vue'
-import { deleteMenu, register, searchMenu } from '@/api/system_setting/sys_menu'
+import { deleteMenu, register, searchMenu, updateMenu } from '@/api/system_setting/sys_menu'
 import { PageResult } from '#axios'
 import { registerMenu, SearchMenu } from '@/api/system_setting/types/sys_menu'
 import { FormInst, FormRules, NButton, NDivider, NPopconfirm, NSpace } from 'naive-ui'
@@ -77,8 +77,8 @@ const columns = [
                 NButton,
                 {
                   onClick: () => {
+                    isAdd.value = false
                     menuModel.value = row
-                    menuModel.value.pid = row.id
                     menuModel.value.hiddenNumber = row.hidden ? '1' : ''
                     openDialog()
                   },
@@ -163,14 +163,15 @@ const [pagination, loading, data, searchData, getData, doSearch, doReset] = useT
   tableApi,
   { page: 1, pageSize: 10 },
   sTmpData,
-  'A'
+  'Menu'
 )
 
+const isAdd = ref<boolean>(true)
 const checkedRowKeys = ref([])
 const showPermissions = ref<boolean>(false)
 const currentMenuId = ref<number>(0)
 
-const showRegister = ref<boolean>(false)
+const showModal = ref<boolean>(false)
 const modalStyle = computed(() => {
   return { width: '600px' }
 })
@@ -215,6 +216,7 @@ const handleChangeHidden = async (e: Event) => {
   menuModel.value.hidden = !!(e.target as HTMLInputElement).value
 }
 const handleRegister = async () => {
+  isAdd.value = true
   clearModel()
   openDialog()
 }
@@ -225,14 +227,18 @@ const submitCallback = async (e: MouseEvent) => {
       if (errors) {
         return
       }
-      await register<string>(menuModel.value, { isMessage: true })
+      if (isAdd.value) {
+        await register<string>(menuModel.value, { isMessage: true })
+      } else {
+        await updateMenu<string>(menuModel.value, { isMessage: true })
+      }
       loading.value = false
       await getData({
         page: pagination.page,
         pageSize: pagination.pageSize,
         desc: false,
       })
-      showRegister.value = false
+      showModal.value = false
       clearModel()
     })
     .catch((e) => {
@@ -253,12 +259,15 @@ const clearModel = () => {
   }
 }
 const openDialog = () => {
-  showRegister.value = true
+  showModal.value = true
 }
 const cancelCallback = async () => {
-  showRegister.value = false
+  showModal.value = false
+  isAdd.value = false
 }
-
+const modelTitle = () => {
+  return isAdd.value ? '新增' : '编辑'
+}
 // 操作
 getData({ page: pagination.page, pageSize: pagination.pageSize, desc: false })
 </script>
@@ -267,16 +276,16 @@ getData({ page: pagination.page, pageSize: pagination.pageSize, desc: false })
   <n-space vertical class="y1t-table-box">
     <n-form :label-width="'auto'" label-placement="left">
       <n-space>
-        <n-form-item label="页面名称">
+        <n-form-item label="页面名称" path="name">
           <n-input v-model:value="searchData.name" type="text" placeholder="搜索条件" />
         </n-form-item>
-        <n-form-item label="页面标题">
+        <n-form-item label="页面标题" path="title">
           <n-input v-model:value="searchData.title" type="text" placeholder="搜索条件" />
         </n-form-item>
-        <n-form-item label="组件地址">
+        <n-form-item label="组件地址" path="component">
           <n-input v-model:value="searchData.component" type="text" placeholder="搜索条件" />
         </n-form-item>
-        <n-form-item label="页面路径">
+        <n-form-item label="页面路径" path="path">
           <n-input v-model:value="searchData.path" type="text" placeholder="搜索条件" />
         </n-form-item>
         <n-button type="primary" @click="doSearch">
@@ -317,7 +326,7 @@ getData({ page: pagination.page, pageSize: pagination.pageSize, desc: false })
       @update:page="pagination.onChange"
     />
   </n-space>
-  <n-modal v-model:show="showRegister" title="新增" :style="modalStyle" preset="card">
+  <n-modal v-model:show="showModal" :title="modelTitle()" :style="modalStyle" preset="card">
     <n-form
       ref="form"
       :model="menuModel"
