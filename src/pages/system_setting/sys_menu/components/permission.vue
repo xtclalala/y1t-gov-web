@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { computed, h, ref, toRefs } from 'vue'
 import YIcon from '@/components/yIcon/index.vue'
-import { registerPer } from '@/api/system_setting/types/sys_permission'
-import { deletePer, register, searchPer } from '@/api/system_setting/sys_permission'
+import { BasePer, registerPer } from '@/api/system_setting/types/sys_permission'
+import { deletePer, register, searchPer, updatePer } from '@/api/system_setting/sys_permission'
 import { FormInst, FormRules, NButton, NDivider, NPopconfirm, NSpace } from 'naive-ui'
 import { Page } from '@/api/system_setting/types/sys_role'
 import { useTable } from '@/hooks/comHooks/useTable'
+import { useModal } from '@/hooks/comHooks/useModal'
+import { registerMenu } from '@/api/system_setting/types/sys_menu'
 
 type PerProps = {
   show: boolean
@@ -48,8 +50,9 @@ const columns = [
                 NButton,
                 {
                   onClick: () => {
+                    isAdd.value = false
                     perModel.value = row
-                    openDialog()
+                    openModal()
                   },
                   text: true,
                 },
@@ -80,20 +83,14 @@ const columns = [
 const tableApi = async (page: Page, searchData: any) => {
   return searchPer<Array<registerPer>>(searchData.value, { isMessage: false })
 }
-const [pagination, loading, data, searchData, getData, doSearch, doReset] = useTable<registerPer>(
-  tableApi,
-  { page: 1, pageSize: 10 },
-  { menuId: 0 },
-  'Permission'
-)
-const showRegister = ref<boolean>(false)
-const form = ref<FormInst | null>(null)
-const perModel = ref<registerPer>({
-  menuId: menuId.value,
-  name: '',
-  code: '',
-  sort: 100,
-})
+const [pagination, loading, data, searchData, getData, doSearch, doReset, key2id] =
+  useTable<registerPer>(
+    tableApi,
+    { page: 1, pageSize: 10, desc: false },
+    { menuId: 0 },
+    'Permission'
+  )
+
 const rules: FormRules = {
   name: {
     required: true,
@@ -107,51 +104,47 @@ const rules: FormRules = {
   },
 }
 
-const modalStyle = computed(() => {
-  return { width: '600px' }
-})
-// 更新 show
-const closeDrawer = () => {
-  data.value = []
-  emit('update:show', false)
+const registerApi = async (params: registerPer) => {
+  return register<string>(params, { isMessage: true })
+}
+const updateApi = async (params: BasePer) => {
+  return updatePer<string>(params, { isMessage: true })
+}
+const afterApi = async () => {
+  loading.value = false
+  await getData()
 }
 
-// 表格映射转换
-const key2id = (row) => row.id
-const handleRegister = async () => {
-  clearModel()
-  openDialog()
-}
-const clearModel = () => {
-  perModel.value = {
+const [
+  isAdd,
+  showModal,
+  form,
+  perModel,
+  modalStyle,
+  handleRegister,
+  submitCallback,
+  clearModel,
+  openModal,
+  cancelCallback,
+  modalTitle,
+] = useModal<registerPer>(
+  registerApi,
+  updateApi,
+  afterApi,
+  {
     menuId: menuId.value,
     name: '',
     code: '',
     sort: 100,
-  }
-}
-const openDialog = () => {
-  showRegister.value = true
-}
-const cancelCallback = async () => {
-  showRegister.value = false
-}
-const submitCallback = async (e: MouseEvent) => {
-  e.preventDefault()
-  form.value
-    ?.validate(async (errors) => {
-      if (errors) {
-        return
-      }
-      await register<string>(perModel.value, { isMessage: true })
-      loading.value = false
-      await getData()
-      showRegister.value = false
-      clearModel()
-    })
-    .catch((e) => {
-      // console.log(e)
-    })
+  },
+  {},
+  'Permission'
+)
+
+// 更新 show
+const closeDrawer = () => {
+  data.value = []
+  emit('update:show', false)
 }
 const openAfter = () => {
   loading.value = true
@@ -181,7 +174,7 @@ const openAfter = () => {
       </n-space>
     </n-drawer-content>
   </n-drawer>
-  <n-modal v-model:show="showRegister" title="新增" :style="modalStyle" preset="card">
+  <n-modal v-model:show="showModal" :title="modalTitle()" :style="modalStyle" preset="card">
     <n-form
       ref="form"
       :model="perModel"

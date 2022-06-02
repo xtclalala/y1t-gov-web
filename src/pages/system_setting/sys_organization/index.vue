@@ -13,7 +13,10 @@ import { PageResult } from '#axios'
 import { completeAssign } from '@/utils/helper/objectHelper'
 import { useTable } from '@/hooks/comHooks/useTable'
 import { deleteOrg, searchOrg, updateOrg, register } from '@/api/system_setting/sys_organize'
-import { registerOrg, SearchOrg } from '@/api/system_setting/types/sys_organization'
+import { BaseOrg, registerOrg, SearchOrg } from '@/api/system_setting/types/sys_organization'
+import { BaseMenu, registerMenu } from '@/api/system_setting/types/sys_menu'
+import { updateMenu } from '@/api/system_setting/sys_menu'
+import { useModal } from '@/hooks/comHooks/useModal'
 
 const columns = [
   {
@@ -53,7 +56,7 @@ const columns = [
                   onClick: () => {
                     isAdd.value = false
                     orgModel.value = row
-                    openDialog()
+                    openModal()
                   },
                   text: true,
                 },
@@ -84,7 +87,7 @@ const columns = [
                   onClick: () => {
                     clearModel()
                     orgModel.value.pid = row.id
-                    openDialog()
+                    openModal()
                   },
                   text: true,
                 },
@@ -108,13 +111,10 @@ const tableApi = async (page: Page, searchData: any) => {
     { isMessage: false }
   )
 }
-const [pagination, loading, data, searchData, getData, doSearch, doReset] = useTable<registerOrg>(
-  tableApi,
-  { page: 1, pageSize: 10 },
-  sTmpData,
-  'Organize'
-)
-const form = ref<FormInst | null>(null)
+const [pagination, loading, data, searchData, getData, doSearch, doReset, key2id] =
+  useTable<registerOrg>(tableApi, { page: 1, pageSize: 10, desc: false }, sTmpData, 'Organize')
+
+const checkedRowKeys = ref([])
 const rules: FormRules = {
   name: {
     required: true,
@@ -127,68 +127,46 @@ const rules: FormRules = {
     trigger: ['input', 'blur'],
   },
 }
-const showModal = ref<boolean>(false)
-const isAdd = ref<boolean>(true)
-const checkedRowKeys = ref([])
-const orgModel = ref<registerOrg>({
-  name: '',
-  code: '',
-  sort: 100,
-  pid: 0,
-})
-
-const modalStyle = computed(() => {
-  return { width: '600px' }
-})
-const key2id = (row) => row.id
-const handleRegister = async () => {
-  isAdd.value = true
-  clearModel()
-  openDialog()
+const registerApi = async (params: registerOrg) => {
+  return register<string>(params, { isMessage: true })
 }
-const clearModel = () => {
-  orgModel.value = {
+const updateApi = async (params: BaseOrg) => {
+  return updateOrg<string>(params, { isMessage: true })
+}
+const afterApi = async () => {
+  loading.value = false
+  await getData({
+    page: pagination.page,
+    pageSize: pagination.pageSize,
+    desc: false,
+  })
+}
+
+const [
+  isAdd,
+  showModal,
+  form,
+  orgModel,
+  modalStyle,
+  handleRegister,
+  submitCallback,
+  clearModel,
+  openModal,
+  cancelCallback,
+  modalTitle,
+] = useModal<registerMenu>(
+  registerApi,
+  updateApi,
+  afterApi,
+  {
     name: '',
     code: '',
     sort: 100,
     pid: 0,
-  }
-}
-const openDialog = () => {
-  showModal.value = true
-}
-const submitCallback = async (e: MouseEvent) => {
-  e.preventDefault()
-  form.value
-    ?.validate(async (errors) => {
-      if (errors) {
-        return
-      }
-      if (isAdd.value) {
-        await register<string>(orgModel.value, { isMessage: true })
-      } else {
-        await updateOrg<string>(orgModel.value, { isMessage: true })
-      }
-      loading.value = false
-      await getData({
-        page: pagination.page,
-        pageSize: pagination.pageSize,
-        desc: false,
-      })
-      showModal.value = false
-      clearModel()
-    })
-    .catch((e) => {
-      // console.log(e)
-    })
-}
-const cancelCallback = async () => {
-  showModal.value = false
-  isAdd.value = false
-}
-const modelTitle = () => {
-  return isAdd.value ? '新增' : '编辑'
-}
+  },
+  {},
+  'Organize'
+)
 
 getData({ page: pagination.page, pageSize: pagination.pageSize, desc: false })
 </script>
@@ -241,7 +219,7 @@ getData({ page: pagination.page, pageSize: pagination.pageSize, desc: false })
       @update:page="pagination.onChange"
     />
   </n-space>
-  <n-modal v-model:show="showModal" :title="modelTitle()" :style="modalStyle" preset="card">
+  <n-modal v-model:show="showModal" :title="modalTitle()" :style="modalStyle" preset="card">
     <n-form
       ref="form"
       :model="orgModel"

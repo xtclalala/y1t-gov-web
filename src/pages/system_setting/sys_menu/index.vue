@@ -7,13 +7,14 @@ export default {
 import { computed, h, ref } from 'vue'
 import { deleteMenu, register, searchMenu, updateMenu } from '@/api/system_setting/sys_menu'
 import { PageResult } from '#axios'
-import { registerMenu, SearchMenu } from '@/api/system_setting/types/sys_menu'
+import { BaseMenu, registerMenu, SearchMenu } from '@/api/system_setting/types/sys_menu'
 import { FormInst, FormRules, NButton, NDivider, NPopconfirm, NSpace } from 'naive-ui'
 import { Page } from '@/api/system_setting/types/sys_role'
 import YIcon from '@/components/yIcon/index.vue'
 import Permission from './components/permission.vue'
 import { completeAssign } from '@/utils/helper/objectHelper'
 import { useTable } from '@/hooks/comHooks/useTable'
+import { useModal } from '@/hooks/comHooks/useModal'
 
 const columns = [
   {
@@ -80,7 +81,7 @@ const columns = [
                     isAdd.value = false
                     menuModel.value = row
                     menuModel.value.hiddenNumber = row.hidden ? '1' : ''
-                    openDialog()
+                    openModal()
                   },
                   text: true,
                 },
@@ -132,7 +133,7 @@ const columns = [
                     onClick: () => {
                       clearModel()
                       menuModel.value.pid = row.id
-                      openDialog()
+                      openModal()
                     },
                     text: true,
                   },
@@ -159,34 +160,13 @@ const tableApi = async (page: Page, searchData: any) => {
     { isMessage: false }
   )
 }
-const [pagination, loading, data, searchData, getData, doSearch, doReset] = useTable<registerMenu>(
-  tableApi,
-  { page: 1, pageSize: 10 },
-  sTmpData,
-  'Menu'
-)
+const [pagination, loading, data, searchData, getData, doSearch, doReset, key2id] =
+  useTable<registerMenu>(tableApi, { page: 1, pageSize: 10, desc: false }, sTmpData, 'Menu')
 
-const isAdd = ref<boolean>(true)
 const checkedRowKeys = ref([])
 const showPermissions = ref<boolean>(false)
 const currentMenuId = ref<number>(0)
 
-const showModal = ref<boolean>(false)
-const modalStyle = computed(() => {
-  return { width: '600px' }
-})
-const form = ref<FormInst | null>(null)
-const menuModel = ref<registerMenu>({
-  name: '',
-  title: '',
-  path: '',
-  hidden: false,
-  hiddenNumber: '',
-  component: '',
-  icon: 'Earth',
-  sort: 100,
-  pid: 0,
-})
 const rules: FormRules = {
   title: {
     required: true,
@@ -209,44 +189,37 @@ const rules: FormRules = {
     trigger: ['input', 'blur'],
   },
 }
-
-// 表格映射转换
-const key2id = (row) => row.id
-const handleChangeHidden = async (e: Event) => {
-  menuModel.value.hidden = !!(e.target as HTMLInputElement).value
+const registerApi = async (params: registerMenu) => {
+  return register<string>(params, { isMessage: true })
 }
-const handleRegister = async () => {
-  isAdd.value = true
-  clearModel()
-  openDialog()
+const updateApi = async (params: BaseMenu) => {
+  return updateMenu<string>(params, { isMessage: true })
 }
-const submitCallback = async (e: MouseEvent) => {
-  e.preventDefault()
-  form.value
-    ?.validate(async (errors) => {
-      if (errors) {
-        return
-      }
-      if (isAdd.value) {
-        await register<string>(menuModel.value, { isMessage: true })
-      } else {
-        await updateMenu<string>(menuModel.value, { isMessage: true })
-      }
-      loading.value = false
-      await getData({
-        page: pagination.page,
-        pageSize: pagination.pageSize,
-        desc: false,
-      })
-      showModal.value = false
-      clearModel()
-    })
-    .catch((e) => {
-      // console.log(e)
-    })
+const afterApi = async () => {
+  loading.value = false
+  await getData({
+    page: pagination.page,
+    pageSize: pagination.pageSize,
+    desc: false,
+  })
 }
-const clearModel = () => {
-  menuModel.value = {
+const [
+  isAdd,
+  showModal,
+  form,
+  menuModel,
+  modalStyle,
+  handleRegister,
+  submitCallback,
+  clearModel,
+  openModal,
+  cancelCallback,
+  modalTitle,
+] = useModal<registerMenu>(
+  registerApi,
+  updateApi,
+  afterApi,
+  {
     name: '',
     title: '',
     path: '',
@@ -256,17 +229,12 @@ const clearModel = () => {
     icon: 'Earth',
     sort: 100,
     pid: 0,
-  }
-}
-const openDialog = () => {
-  showModal.value = true
-}
-const cancelCallback = async () => {
-  showModal.value = false
-  isAdd.value = false
-}
-const modelTitle = () => {
-  return isAdd.value ? '新增' : '编辑'
+  },
+  {},
+  'Menu'
+)
+const handleChangeHidden = async (e: Event) => {
+  menuModel.value.hidden = !!(e.target as HTMLInputElement).value
 }
 // 操作
 getData({ page: pagination.page, pageSize: pagination.pageSize, desc: false })
@@ -326,7 +294,7 @@ getData({ page: pagination.page, pageSize: pagination.pageSize, desc: false })
       @update:page="pagination.onChange"
     />
   </n-space>
-  <n-modal v-model:show="showModal" :title="modelTitle()" :style="modalStyle" preset="card">
+  <n-modal v-model:show="showModal" :title="modalTitle()" :style="modalStyle" preset="card">
     <n-form
       ref="form"
       :model="menuModel"

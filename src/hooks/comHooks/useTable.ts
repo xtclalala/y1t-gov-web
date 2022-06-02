@@ -5,26 +5,19 @@ import { reactive, ref } from 'vue'
 const tableMap = {}
 const tableMapStates = {}
 
-export const useTable = <T>(
-  dataApi: Function,
-  page: Omit<Page, 'desc'>,
-  searchObj: any,
-  key: string
-) => {
+export const useTable = <T>(dataApi: Function, page: Page, searchObj: any, key: string) => {
   // 创建分页对象
-  const createTable = (page: Omit<Page, 'desc'>, key: string) => {
+  const createTable = (page: Page, key: string) => {
     let pagination, loading, data, searchData
-    console.log(isNullOrUnDef(tableMapStates[key]))
     if (isNullOrUnDef(tableMapStates[key])) {
-      // count = ref<number>(num)
       pagination = reactive({
         page: page.page,
         pageSize: page.pageSize,
         itemCount: 0,
-        onChange: (page: number) => {
+        onChange: (pageNum: number) => {
           loading.value = true
-          pagination.page = page
-          getData({ page: page, pageSize: pagination.pageSize, desc: false })
+          pagination.page = pageNum
+          getData({ page: pageNum, pageSize: pagination.pageSize, desc: page.desc })
         },
       })
       loading = ref<boolean>(true)
@@ -55,7 +48,7 @@ export const useTable = <T>(
   const doSearch = () => {
     loading.value = true
     pagination.page = 1
-    getData({ page: 1, pageSize: pagination.pageSize, desc: false })
+    getData({ page: 1, pageSize: pagination.pageSize, desc: page.desc })
   }
 
   // 重置搜索条件
@@ -63,6 +56,8 @@ export const useTable = <T>(
     searchData.value = { ...searchObj }
   }
 
+  const key2id = (row) => row.id
+
   const { pagination, loading, data, searchData } = createTable(page, key)
-  return [pagination, loading, data, searchData, getData, doSearch, doReset]
+  return [pagination, loading, data, searchData, getData, doSearch, doReset, key2id]
 }
