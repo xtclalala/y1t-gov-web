@@ -22,8 +22,10 @@ import { useModal } from '@/hooks/comHooks/useModal'
 import { registerMenu } from '@/api/system_setting/types/sys_menu'
 import { BaseOrg } from '@/api/system_setting/types/sys_organization'
 import { selectOrg } from '@/api/system_setting/sys_organize'
-import SelectOrganize from './components/SelectOrganize.vue'
+import SetPermission from '@/pages/system_setting/sys_role/components/RoleSetMenu.vue'
 
+const drawerShow = ref<boolean>(false)
+const currentRole = ref<number>(0)
 const columns = [
   {
     type: 'selection',
@@ -116,9 +118,8 @@ const columns = [
                 NButton,
                 {
                   onClick: () => {
-                    clearModel()
-                    roleModel.value.pid = row.id
-                    openModal()
+                    currentRole.value = row.id
+                    drawerShow.value = true
                   },
                   text: true,
                 },
@@ -193,15 +194,7 @@ const [
   registerApi,
   updateApi,
   afterApi,
-  {
-    name: '',
-    code: '',
-    sort: 100,
-    organize: {
-      name: null,
-    },
-    orgId: null,
-  },
+  { name: '', code: '', sort: 100, organize: { name: null }, orgId: null },
   {},
   'Organize'
 )
@@ -263,7 +256,7 @@ getData({ page: pagination.page, pageSize: pagination.pageSize, desc: false })
       v-model:checked-row-keys="checkedRowKeys"
       :columns="columns"
       :data="data"
-      :scroll-x="1200"
+      :scroll-x="800"
       :max-height="750"
       :loading="loading"
       :row-key="key2id"
@@ -304,8 +297,6 @@ getData({ page: pagination.page, pageSize: pagination.pageSize, desc: false })
           clearable
           @update:value="handleUpdateValue"
         />
-
-        {{ roleModel }}
       </n-form-item>
     </n-form>
     <template #action>
@@ -315,5 +306,6 @@ getData({ page: pagination.page, pageSize: pagination.pageSize, desc: false })
       </n-space>
     </template>
   </n-modal>
+  <set-permission v-model:show="drawerShow" :current-role="currentRole" />
 </template>
 <style scoped></style>

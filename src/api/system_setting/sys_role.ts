@@ -25,6 +25,12 @@ export const register = <T = Result>(params: registerRole, options?: RequestOpti
 export const updateRole = <T = Result>(params: BaseRole, options?: RequestOptions) =>
   defHttp.put<T>({ url: Api.role, params }, options)
 
+export const roleGetMenu = <T = Result>(params: RoleId, options?: RequestOptions) =>
+  defHttp.get<T>({ url: Api.addMenu, params }, options)
+
+export const roleGetPer = <T = Result>(params: RoleId, options?: RequestOptions) =>
+  defHttp.get<T>({ url: Api.addPer, params }, options)
+
 export const roleAddMenu = <T = Result>(params: RoleMenu, options?: RequestOptions) =>
   defHttp.post<T>({ url: Api.addMenu, params }, options)
 

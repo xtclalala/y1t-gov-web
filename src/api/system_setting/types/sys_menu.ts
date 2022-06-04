@@ -30,3 +30,5 @@ export type registerMenu = BaseMenu &
   PerMenu & {
     hiddenNumber: string
   }
+
+export type SelectMenu = Pick<BaseMenu, 'id' | 'name'>
