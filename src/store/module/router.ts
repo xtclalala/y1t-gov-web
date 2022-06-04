@@ -119,9 +119,7 @@ export const useRouteStore = defineStore({
           accessedMenus = BusinessRoutes
         }
       }
-      console.log('accessedMenus', accessedMenus)
       const m = toRaw(router2menuDeep(accessedMenus))
-      console.log(m)
       this.setMenus(m)
       this.setWhitelist(m)
       return accessedMenus

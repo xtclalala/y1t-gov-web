@@ -4,6 +4,7 @@ import { BaseOrg, OrgId, registerOrg, SearchOrg } from '@/api/system_setting/typ
 
 enum Api {
   organize = '/organize/organize',
+  organizeSelect = '/organize/organize/select',
 }
 
 export const register = <T = Result>(params: registerOrg, options?: RequestOptions) =>
@@ -17,3 +18,6 @@ export const deleteOrg = <T = Result>(params: OrgId, options?: RequestOptions) =
 
 export const searchOrg = <T = Result>(params: SearchOrg, options?: RequestOptions) =>
   defHttp.get<T>({ url: Api.organize, params }, options)
+
+export const selectOrg = <T = Result>(params: Pick<SearchOrg, 'name'>, options?: RequestOptions) =>
+  defHttp.get<T>({ url: Api.organizeSelect, params }, options)

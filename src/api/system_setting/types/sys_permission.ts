@@ -1,3 +1,5 @@
+import { Page } from '@/api/system_setting/types/sys_role'
+
 export type PerId = {
   id?: number
 }
@@ -9,7 +11,7 @@ export type BasePer = PerId & {
   menuId: number
 }
 
-export type SearchPer = {
+export type SearchPer = Page & {
   name: string
   menuId?: number
   sysRoleId?: number

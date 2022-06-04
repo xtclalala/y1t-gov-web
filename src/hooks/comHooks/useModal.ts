@@ -23,7 +23,7 @@ export const useModal = <T>(
       })
       isAdd = ref<boolean>(true)
       form = ref<FormInst | null>(null)
-      model = ref<T>(modelObj)
+      model = ref<T>(Object.assign({}, modelObj))
       modalMapStates[key] = true
       modalMap[key] = { isAdd, style, showModal, form, model }
     } else {
@@ -66,7 +66,7 @@ export const useModal = <T>(
   }
 
   const clearModel = () => {
-    model.value = { ...modelObj }
+    model.value = Object.assign({}, modelObj)
   }
 
   const openModal = () => {

@@ -1,4 +1,6 @@
-export type SearchMenu = {
+import { Page } from '@/api/system_setting/types/sys_role'
+
+export type SearchMenu = Page & {
   name: string
   path: string
   title: string

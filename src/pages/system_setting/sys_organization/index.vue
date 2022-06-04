@@ -4,18 +4,16 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import { computed, h, ref } from 'vue'
+import { h, ref } from 'vue'
 import YIcon from '@/components/yIcon/index.vue'
-import { FormInst, FormRules, NButton, NDivider, NPopconfirm, NSpace } from 'naive-ui'
+import { FormRules, NButton, NDivider, NPopconfirm, NSpace } from 'naive-ui'
 import { Page } from '@/api/system_setting/types/sys_role'
 import { PageResult } from '#axios'
-
 import { completeAssign } from '@/utils/helper/objectHelper'
 import { useTable } from '@/hooks/comHooks/useTable'
 import { deleteOrg, searchOrg, updateOrg, register } from '@/api/system_setting/sys_organize'
 import { BaseOrg, registerOrg, SearchOrg } from '@/api/system_setting/types/sys_organization'
-import { BaseMenu, registerMenu } from '@/api/system_setting/types/sys_menu'
-import { updateMenu } from '@/api/system_setting/sys_menu'
+import { registerMenu } from '@/api/system_setting/types/sys_menu'
 import { useModal } from '@/hooks/comHooks/useModal'
 
 const columns = [
@@ -103,13 +101,11 @@ const columns = [
 ]
 const sTmpData = {
   name: '',
-  code: '',
 }
 const tableApi = async (page: Page, searchData: any) => {
-  return searchOrg<PageResult<Array<registerOrg>>>(
-    completeAssign<SearchOrg>(page, searchData.value),
-    { isMessage: false }
-  )
+  return searchOrg<PageResult<Array<BaseOrg>>>(completeAssign<SearchOrg>(page, searchData.value), {
+    isMessage: false,
+  })
 }
 const [pagination, loading, data, searchData, getData, doSearch, doReset, key2id] =
   useTable<registerOrg>(tableApi, { page: 1, pageSize: 10, desc: false }, sTmpData, 'Organize')
@@ -177,9 +173,6 @@ getData({ page: pagination.page, pageSize: pagination.pageSize, desc: false })
       <n-space>
         <n-form-item label="部门名称" path="name">
           <n-input v-model:value="searchData.name" type="text" placeholder="搜索条件" />
-        </n-form-item>
-        <n-form-item label="部门编码" path="code">
-          <n-input v-model:value="searchData.code" type="text" placeholder="搜索条件" />
         </n-form-item>
         <n-button type="primary" @click="doSearch">
           <template #icon>

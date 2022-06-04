@@ -1,8 +1,10 @@
+import { Page } from '@/api/system_setting/types/sys_role'
+
 export type OrgId = {
   id?: number
 }
 
-export type SearchOrg = {
+export type SearchOrg = Page & {
   name: string
   code: string
 }

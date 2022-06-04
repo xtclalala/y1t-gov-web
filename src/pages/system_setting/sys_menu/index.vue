@@ -4,14 +4,14 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import { computed, h, ref } from 'vue'
+import { h, ref } from 'vue'
 import { deleteMenu, register, searchMenu, updateMenu } from '@/api/system_setting/sys_menu'
 import { PageResult } from '#axios'
 import { BaseMenu, registerMenu, SearchMenu } from '@/api/system_setting/types/sys_menu'
-import { FormInst, FormRules, NButton, NDivider, NPopconfirm, NSpace } from 'naive-ui'
+import { FormRules, NButton, NDivider, NPopconfirm, NSpace } from 'naive-ui'
 import { Page } from '@/api/system_setting/types/sys_role'
 import YIcon from '@/components/yIcon/index.vue'
-import Permission from './components/permission.vue'
+import Permission from './components/Permission.vue'
 import { completeAssign } from '@/utils/helper/objectHelper'
 import { useTable } from '@/hooks/comHooks/useTable'
 import { useModal } from '@/hooks/comHooks/useModal'
