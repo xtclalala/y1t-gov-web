@@ -4,7 +4,7 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import { h, ref, toRaw, unref } from 'vue'
+import { h, ref } from 'vue'
 import { FormRules, NButton, NDivider, NPopconfirm, NSpace } from 'naive-ui'
 import {
   BaseRole,
@@ -19,7 +19,6 @@ import { useTable } from '@/hooks/comHooks/useTable'
 import {
   copyRole,
   deleteRole,
-  getCompleteInfo,
   register,
   searchRole,
   updateRole,
@@ -35,6 +34,22 @@ const drawerShow = ref<boolean>(false)
 const currentRole = ref<number>(0)
 const defaultMenuData = ref<number[]>([])
 const defaultPerData = ref<number[]>([])
+const options = ref<Array<BaseOrg>>([])
+const handleUpdateValue = async (value: string | number, option) => {
+  roleModel.value.orgName = option.name
+  roleModel.value.orgId = option.id
+}
+const allOrganizations = async () => {
+  options.value = await selectOrg<Array<BaseOrg>>({ name: '' }, { isMessage: false })
+}
+const setPerAfter = async (roleId: number) => {
+  await getData({
+    page: pagination.page,
+    pageSize: pagination.pageSize,
+    desc: false,
+  })
+}
+
 const columns = [
   {
     type: 'selection',
@@ -211,23 +226,6 @@ const [
   'Organize'
 )
 
-const loadingSelect = ref<boolean>(false)
-const options = ref<Array<BaseOrg>>([])
-const handleUpdateValue = async (value: string | number, option) => {
-  roleModel.value.orgName = option.name
-  roleModel.value.orgId = option.id
-}
-const allOrganizations = async () => {
-  options.value = await selectOrg<Array<BaseOrg>>({ name: '' }, { isMessage: false })
-}
-const setPerAfter = async (roleId: number) => {
-  await getData({
-    page: pagination.page,
-    pageSize: pagination.pageSize,
-    desc: false,
-  })
-}
-
 allOrganizations()
 getData({ page: pagination.page, pageSize: pagination.pageSize, desc: false })
 </script>
@@ -245,7 +243,6 @@ getData({ page: pagination.page, pageSize: pagination.pageSize, desc: false })
             label-field="name"
             filterable
             :options="options"
-            :loading="loadingSelect"
             clearable
           />
         </n-form-item>
@@ -312,7 +309,6 @@ getData({ page: pagination.page, pageSize: pagination.pageSize, desc: false })
           label-field="name"
           filterable
           :options="options"
-          :loading="loadingSelect"
           clearable
           @update:value="handleUpdateValue"
         />
