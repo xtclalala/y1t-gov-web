@@ -1,4 +1,5 @@
 import { Page } from '@/api/system_setting/types/sys_role'
+import { BasePer } from '@/api/system_setting/types/sys_permission'
 
 export type SearchMenu = Page & {
   name: string
@@ -20,6 +21,8 @@ export type BaseMenu = MenuId & {
   icon: string
   sort: number
   pid?: number
+  permissions?: BasePer[]
+  disabled?: boolean
 }
 
 export type PerMenu = MenuId & {

@@ -1,3 +1,6 @@
+import { BaseMenu } from '@/api/system_setting/types/sys_menu'
+import { BasePer } from '@/api/system_setting/types/sys_permission'
+
 export type Page = {
   pageSize: number
   page: number
@@ -22,11 +25,13 @@ export type BaseRole = RoleId & {
 }
 
 export type RoleMenu = RoleId & {
-  menuIds: Array<number>
+  menus: Array<BaseMenu>
+  menuIds?: Array<number>
 }
 
 export type RolePer = RoleId & {
-  permissions: Array<number>
+  permissions: Array<BasePer>
+  permissionIds?: Array<number>
 }
 
 export type registerRole = Omit<BaseRole & RolePer & RoleMenu, 'id'>

@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import { computed, h, ref, toRefs } from 'vue'
+import { h, toRef, toRefs } from 'vue'
 import YIcon from '@/components/yIcon/index.vue'
 import { BasePer, registerPer } from '@/api/system_setting/types/sys_permission'
 import { deletePer, register, searchPer, updatePer } from '@/api/system_setting/sys_permission'
-import { FormInst, FormRules, NButton, NDivider, NPopconfirm, NSpace } from 'naive-ui'
+import { FormRules, NButton, NDivider, NPopconfirm, NSpace } from 'naive-ui'
 import { Page } from '@/api/system_setting/types/sys_role'
 import { useTable } from '@/hooks/comHooks/useTable'
 import { useModal } from '@/hooks/comHooks/useModal'
-import { registerMenu } from '@/api/system_setting/types/sys_menu'
 
 type PerProps = {
   show: boolean
@@ -18,13 +17,14 @@ const props = withDefaults(defineProps<PerProps>(), {
   show: false,
   menuId: 0,
 })
-const { show, menuId } = toRefs(props)
+const show = toRef(props, 'show')
+const menuId = toRef(props, 'menuId')
 const emit = defineEmits(['update:show'])
 
 const columns = [
   {
     title: '按钮名称',
-    key: 'name',
+    key: 'title',
     width: 150,
   },
   {
@@ -92,7 +92,7 @@ const [pagination, loading, data, searchData, getData, doSearch, doReset, key2id
   )
 
 const rules: FormRules = {
-  name: {
+  title: {
     required: true,
     message: '请填写按钮名称！',
     trigger: ['input', 'blur'],
@@ -132,15 +132,19 @@ const [
   updateApi,
   afterApi,
   {
-    menuId: menuId.value,
-    name: '',
+    menuId: menuId,
+    title: '',
     code: '',
     sort: 100,
   },
   {},
   'Permission'
 )
-
+const beforeRegister = () => {
+  console.log(menuId.value)
+  perModel.menuId = menuId.value
+  handleRegister()
+}
 // 更新 show
 const closeDrawer = () => {
   data.value = []
@@ -157,7 +161,7 @@ const openAfter = () => {
   <n-drawer v-model:show="show" :width="700" @after-enter="openAfter" @mask-click="closeDrawer">
     <n-drawer-content title="页面按钮">
       <n-space vertical>
-        <n-button type="primary" @click="handleRegister">
+        <n-button type="primary" @click="beforeRegister">
           <template #icon>
             <y-icon icon-type="Add" :depth="2" :size="17" color="white" />
           </template>
@@ -183,11 +187,11 @@ const openAfter = () => {
       require-mark-placement="right-hanging"
       label-width="auto"
     >
-      <n-form-item label="按钮名称" path="name">
-        <n-input v-model:value="perModel.name" placeholder="标题" />
+      <n-form-item label="按钮名称" path="title">
+        <n-input v-model:value="perModel.title" placeholder="标题" />
       </n-form-item>
       <n-form-item label="按钮编码" path="code">
-        <n-input v-model:value="perModel.code" placeholder="名称" />
+        <n-input v-model:value="perModel.code" placeholder="编码" />
       </n-form-item>
       <n-form-item label="排序" path="sort">
         <n-input-number v-model:value="perModel.sort" placeholder="排序" />

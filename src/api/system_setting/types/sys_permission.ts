@@ -5,14 +5,14 @@ export type PerId = {
 }
 
 export type BasePer = PerId & {
-  name: string
+  title: string
   code: string
   sort: number
   menuId: number
 }
 
 export type SearchPer = Page & {
-  name: string
+  title: string
   menuId?: number
   sysRoleId?: number
 }

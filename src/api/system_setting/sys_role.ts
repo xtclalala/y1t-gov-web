@@ -31,11 +31,15 @@ export const roleGetMenu = <T = Result>(params: RoleId, options?: RequestOptions
 export const roleGetPer = <T = Result>(params: RoleId, options?: RequestOptions) =>
   defHttp.get<T>({ url: Api.addPer, params }, options)
 
-export const roleAddMenu = <T = Result>(params: RoleMenu, options?: RequestOptions) =>
-  defHttp.post<T>({ url: Api.addMenu, params }, options)
+export const roleAddMenu = <T = Result>(
+  params: Pick<RoleMenu, 'id' | 'menuIds'>,
+  options?: RequestOptions
+) => defHttp.post<T>({ url: Api.addMenu, params }, options)
 
-export const roleAddPer = <T = Result>(params: RolePer, options?: RequestOptions) =>
-  defHttp.post<T>({ url: Api.addPer, params }, options)
+export const roleAddPer = <T = Result>(
+  params: Pick<RolePer, 'id' | 'permissionIds'>,
+  options?: RequestOptions
+) => defHttp.post<T>({ url: Api.addPer, params }, options)
 
 export const copyRole = <T = Result>(params: RoleId, options?: RequestOptions) =>
   defHttp.post<T>({ url: Api.copyRole, params }, options)

@@ -4,15 +4,22 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import { h, ref } from 'vue'
+import { h, ref, toRaw, unref } from 'vue'
 import { FormRules, NButton, NDivider, NPopconfirm, NSpace } from 'naive-ui'
-import { BaseRole, Page, registerRole, SearchRole } from '@/api/system_setting/types/sys_role'
+import {
+  BaseRole,
+  Page,
+  registerRole,
+  RoleId,
+  SearchRole,
+} from '@/api/system_setting/types/sys_role'
 import { PageResult } from '#axios'
 import { completeAssign } from '@/utils/helper/objectHelper'
 import { useTable } from '@/hooks/comHooks/useTable'
 import {
   copyRole,
   deleteRole,
+  getCompleteInfo,
   register,
   searchRole,
   updateRole,
@@ -22,10 +29,12 @@ import { useModal } from '@/hooks/comHooks/useModal'
 import { registerMenu } from '@/api/system_setting/types/sys_menu'
 import { BaseOrg } from '@/api/system_setting/types/sys_organization'
 import { selectOrg } from '@/api/system_setting/sys_organize'
-import SetPermission from '@/pages/system_setting/sys_role/components/RoleSetMenu.vue'
+import SetPermission from '@/pages/system_setting/sys_role/components/SetPermissions.vue'
 
 const drawerShow = ref<boolean>(false)
 const currentRole = ref<number>(0)
+const defaultMenuData = ref<number[]>([])
+const defaultPerData = ref<number[]>([])
 const columns = [
   {
     type: 'selection',
@@ -118,7 +127,10 @@ const columns = [
                 NButton,
                 {
                   onClick: () => {
+                    console.log(row)
                     currentRole.value = row.id
+                    defaultMenuData.value = row.menus.flatMap((item) => item.id)
+                    defaultPerData.value = row.permissions.flatMap((item) => item.id)
                     drawerShow.value = true
                   },
                   text: true,
@@ -207,6 +219,13 @@ const handleUpdateValue = async (value: string | number, option) => {
 }
 const allOrganizations = async () => {
   options.value = await selectOrg<Array<BaseOrg>>({ name: '' }, { isMessage: false })
+}
+const setPerAfter = async (roleId: number) => {
+  await getData({
+    page: pagination.page,
+    pageSize: pagination.pageSize,
+    desc: false,
+  })
 }
 
 allOrganizations()
@@ -306,6 +325,12 @@ getData({ page: pagination.page, pageSize: pagination.pageSize, desc: false })
       </n-space>
     </template>
   </n-modal>
-  <set-permission v-model:show="drawerShow" :current-role="currentRole" />
+  <set-permission
+    v-model:show="drawerShow"
+    :current-role="currentRole"
+    :default-menu-data="defaultMenuData"
+    :default-per-data="defaultPerData"
+    @after-update="setPerAfter"
+  />
 </template>
 <style scoped></style>
