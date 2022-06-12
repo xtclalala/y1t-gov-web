@@ -15,6 +15,7 @@ export const PAGE_NOT_FOUND_ROUTE: AppRouteRecordRaw = {
     title: 'ErrorPage',
     hideBreadcrumb: true,
     hideMenu: true,
+    white: true,
   },
   children: [
     {
@@ -40,6 +41,7 @@ export const REDIRECT_ROUTE: AppRouteRecordRaw = {
     title: 'redirect',
     hideBreadcrumb: true,
     hideMenu: true,
+    white: true,
   },
   children: [
     {

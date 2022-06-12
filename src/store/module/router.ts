@@ -1,7 +1,7 @@
 import { toRaw } from 'vue'
 import { defineStore } from 'pinia'
 import { store } from '@/store'
-import { BusinessRoutes } from '@r/index'
+import { AfterBusinessRoutes, AfterPublicRoutes } from '@r/index'
 
 // import { useProjectSetting } from '@/hooks/setting/useProjectSetting'
 import { PermissionModeEnum } from '@/enums/appEnum'
@@ -86,7 +86,7 @@ export const useRouteStore = defineStore({
 
     // 生成菜单
     async generateMenus() {
-      let accessedMenus: AppRouteRecordRaw[] = []
+      let accessedMenus: AppRouteRecordRaw[] = [...AfterPublicRoutes]
 
       const { permissionMode } = projectSetting
       switch (permissionMode) {
@@ -95,8 +95,7 @@ export const useRouteStore = defineStore({
           const user = userStore()
           let menus = user.getCurrentRole.menus
           menus = payloadRoute(toRaw(menus))
-          accessedMenus = toRaw(addMeta(menus))
-
+          accessedMenus.push(...toRaw(addMeta(menus)))
           break
         }
         // case PermissionModeEnum.ROLE:
@@ -112,11 +111,11 @@ export const useRouteStore = defineStore({
         //   break
         case PermissionModeEnum.ROUTE_MAPPING: {
           this.setDynamicAddedRoute(false)
-          accessedMenus = BusinessRoutes
+          accessedMenus.push(...AfterBusinessRoutes)
           break
         }
         default: {
-          accessedMenus = BusinessRoutes
+          accessedMenus.push(...AfterBusinessRoutes)
         }
       }
       const m = toRaw(router2menuDeep(accessedMenus))

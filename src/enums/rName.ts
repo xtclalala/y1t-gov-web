@@ -14,4 +14,5 @@ export enum rName {
   SYSTEM_USER = 'User',
   SYSTEM_ORGAMIZE = 'Organize',
   ABOUT = 'About',
+  CENTER = 'CenterUser',
 }

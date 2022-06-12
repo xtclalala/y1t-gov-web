@@ -1,6 +1,4 @@
 export enum rPath {
-  TEST = '/myTest',
-
   ROOT = '/',
   TAB_VIEW = '/tabview',
   LOGIN = '/login',
@@ -16,4 +14,5 @@ export enum rPath {
   SYSTEM_USER = 'user',
   SYSTEM_ORGANIZE = 'organize',
   ABOUT = '/about',
+  CENTER = '/center',
 }

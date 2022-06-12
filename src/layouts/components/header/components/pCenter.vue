@@ -30,7 +30,7 @@ const options = computed(() => [
   {
     key: 'profile',
     icon: renderIcon('PeopleCircleOutline'),
-    label: () => h(RouterLink, { to: '/user' }, { default: () => 'Your Profiles' }),
+    label: () => h(RouterLink, { to: rPath.CENTER }, { default: () => 'Your Profiles' }),
   },
   {
     key: 'settings',

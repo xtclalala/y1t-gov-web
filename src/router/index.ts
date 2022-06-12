@@ -17,6 +17,19 @@ Object.keys(modules).forEach((key) => {
   const modList = Array.isArray(mod) ? [...mod] : [mod]
   routeModuleList.push(...modList)
 })
+// 登录以后需要权限的路由
+export const AfterBusinessRoutes: AppRouteRecordRaw[] = [...routeModuleList]
+
+// 获取 modules 下的路由
+const common = import.meta.globEager('./common/*.ts')
+const routeWhiteList: AppRouteRecordRaw[] = []
+Object.keys(common).forEach((key) => {
+  const mod = common[key].default || {}
+  const modList = Array.isArray(mod) ? [...mod] : [mod]
+  routeWhiteList.push(...modList)
+})
+// 登录以后的公共路由
+export const AfterPublicRoutes: AppRouteRecordRaw[] = [...routeWhiteList]
 
 export const RootRoute: AppRouteRecordRaw = {
   path: rPath.ROOT,
@@ -24,11 +37,9 @@ export const RootRoute: AppRouteRecordRaw = {
   redirect: PageEnum.BASE_LOGIN,
   meta: {
     title: '根',
+    white: true,
   },
 }
-
-// 业务路由
-export const BusinessRoutes: AppRouteRecordRaw[] = [...routeModuleList]
 
 // 基本路由
 export const BaseRoutes: AppRouteRecordRaw[] = [PAGE_NOT_FOUND_ROUTE, REDIRECT_ROUTE, LOGIN_ROUTE]
@@ -41,7 +52,7 @@ export const ViewRoute: AppRouteRecordRaw = {
   meta: {
     title: 'tab',
   },
-  children: [...routeModuleList],
+  children: [...routeModuleList, ...routeWhiteList],
 }
 
 // Basic routing without permission
