@@ -2,6 +2,7 @@ import { Page } from '@/api/system_setting/types/sys_role'
 
 export type OrgId = {
   id?: number
+  ids?: number[]
 }
 
 export type SearchOrg = Page & {

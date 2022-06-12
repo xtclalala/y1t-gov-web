@@ -9,23 +9,38 @@ import YIcon from '@/components/yIcon/index.vue'
 import { FormRules, NButton, NDivider, NPopconfirm, NSpace } from 'naive-ui'
 import { completeAssign } from '@/utils/helper/objectHelper'
 
-import { Page } from '@/api/system_setting/types/sys_role'
+import { BaseRole, Page } from '@/api/system_setting/types/sys_role'
 import { PageResult } from '#axios'
 import { useTable } from '@/hooks/comHooks/useTable'
-import { deleteUser, register, searchUser, updateUser } from '@/api/system_setting/sys_user'
+import {
+  deleteUser,
+  register,
+  resetPwd,
+  searchUser,
+  updateUser,
+} from '@/api/system_setting/sys_user'
 import { BaseUser, registerUser, SearchUser } from '@/api/system_setting/types/sys_user'
 import { useModal } from '@/hooks/comHooks/useModal'
 import { registerMenu } from '@/api/system_setting/types/sys_menu'
 import { selectOrg } from '@/api/system_setting/sys_organize'
 import { BaseOrg } from '@/api/system_setting/types/sys_organization'
+import { rolesByOrg } from '@/api/system_setting/sys_role'
 
 const orgOptions = ref<Array<BaseOrg>>([])
+const roleOptions = ref<Array<BaseRole>>([])
+let roleInfoTimer = 0
 const allOrganizations = async () => {
   orgOptions.value = await selectOrg<Array<BaseOrg>>({ name: '' }, { isMessage: false })
 }
-const orgUpdateValue = async (value: string | number) => {
-  userModel.value.orgId = value
+const orgUpdateValue = async (value: number[]) => {
+  if (roleInfoTimer !== 0) {
+    clearTimeout(roleInfoTimer)
+  }
+  roleInfoTimer = setTimeout(async () => {
+    roleOptions.value = await rolesByOrg<Array<BaseRole>>({ ids: value }, { isMessage: false })
+  }, 1500)
 }
+
 const columns = [
   {
     type: 'selection',
@@ -81,11 +96,19 @@ const columns = [
               h(
                 NButton,
                 {
-                  onClick: () => {
+                  onClick: async () => {
                     isAdd.value = false
-                    userModel.value = completeAssign(row)
-                    userModel.value.orgId = row.organizes.flatMap((item) => item.id)
-                    openModal()
+                    const orgIds = row.organizes.flatMap((item) => item.id)
+                    roleOptions.value = await rolesByOrg<Array<BaseRole>>(
+                      { ids: orgIds },
+                      { isMessage: false }
+                    )
+                    userModel.value.name = row.username
+                    userModel.value.id = row.id
+                    userModel.value.username = row.loginName
+                    userModel.value.orgIds = orgIds
+                    userModel.value.roleIds = row.roles.flatMap((item) => item.id)
+                    await openModal()
                   },
                   text: true,
                 },
@@ -114,12 +137,7 @@ const columns = [
                 NPopconfirm,
                 {
                   onPositiveClick: async () => {
-                    // await copyRole({ id: row.id }, { isMessage: true })
-                    await getData({
-                      page: pagination.page,
-                      pageSize: pagination.pageSize,
-                      desc: false,
-                    })
+                    await resetPwd({ id: row.id })
                   },
                 },
                 {
@@ -137,9 +155,9 @@ const columns = [
 ]
 const sTmpData = {
   username: '',
-  loginName: '',
-  roleId: null,
-  orgId: null,
+  name: '',
+  roleIds: [],
+  orgIds: [],
 }
 const tableApi = async (page: Page, searchData: any) => {
   return searchUser<PageResult<Array<registerUser>>>(
@@ -152,21 +170,27 @@ const [pagination, loading, data, searchData, getData, doSearch, doReset, key2id
 const checkedRowKeys = ref([])
 
 const rules: FormRules = {
-  username: {
+  name: {
     required: true,
     message: '请填写用户名！',
     trigger: ['input', 'blur'],
   },
-  loginName: {
+  username: {
     required: true,
     message: '请填写账号！',
     trigger: ['input', 'blur'],
   },
   // diy
-  orgId: {
+  orgIds: {
     type: 'array',
     required: true,
     message: '请选择组织！',
+    trigger: ['blur', 'change'],
+  },
+  roleIds: {
+    type: 'array',
+    required: true,
+    message: '请选择身份！',
     trigger: ['blur', 'change'],
   },
 }
@@ -203,10 +227,8 @@ const [
   {
     username: '',
     loginName: '',
-    orgName: [],
-    orgId: [],
-    roleName: [],
-    roleId: [],
+    orgIds: [],
+    roleIds: [],
   },
   {},
   'User'
@@ -219,20 +241,35 @@ getData({ page: pagination.page, pageSize: pagination.pageSize, desc: false })
   <n-space vertical class="y1t-table-box">
     <n-form :label-width="'auto'" label-placement="left">
       <n-space>
-        <n-form-item label="角色名称" path="name">
+        <n-form-item label="用户名" path="name">
           <n-input v-model:value="searchData.name" type="text" placeholder="搜索条件" />
         </n-form-item>
-        <!--        <n-form-item label="组织" path="orgId">-->
-        <!--          <n-select-->
-        <!--              v-model:value="searchData.orgId"-->
-        <!--              value-field="id"-->
-        <!--              label-field="name"-->
-        <!--              filterable-->
-        <!--              :options="options"-->
-        <!--              :loading="loadingSelect"-->
-        <!--              clearable-->
-        <!--          />-->
-        <!--        </n-form-item>-->
+        <n-form-item label="账号" path="username">
+          <n-input v-model:value="searchData.username" type="text" placeholder="搜索条件" />
+        </n-form-item>
+        <n-form-item label="组织" path="orgIds">
+          <n-select
+            v-model:value="searchData.orgIds"
+            value-field="id"
+            label-field="name"
+            multiple
+            filterable
+            :options="orgOptions"
+            clearable
+            @update:value="orgUpdateValue"
+          />
+        </n-form-item>
+        <n-form-item label="身份" path="roleIds">
+          <n-select
+            v-model:value="searchData.roleIds"
+            value-field="id"
+            label-field="name"
+            multiple
+            filterable
+            :options="roleOptions"
+            clearable
+          />
+        </n-form-item>
         <n-button type="primary" @click="doSearch">
           <template #icon>
             <y-icon icon-type="SearchOutline" :depth="2" :size="15" color="white" />
@@ -280,15 +317,15 @@ getData({ page: pagination.page, pageSize: pagination.pageSize, desc: false })
       require-mark-placement="right-hanging"
       label-width="auto"
     >
-      <n-form-item label="用户名" path="username">
-        <n-input v-model:value="userModel.username" placeholder="用户名" />
+      <n-form-item label="用户名" path="name">
+        <n-input v-model:value="userModel.name" placeholder="用户名" />
       </n-form-item>
-      <n-form-item label="账号" path="loginName">
-        <n-input v-model:value="userModel.loginName" placeholder="账号" />
+      <n-form-item label="账号" path="username">
+        <n-input v-model:value="userModel.username" placeholder="账号" />
       </n-form-item>
-      <n-form-item label="组织" path="orgId">
+      <n-form-item label="组织" path="orgIds">
         <n-select
-          v-model:value="userModel.orgId"
+          v-model:value="userModel.orgIds"
           value-field="id"
           label-field="name"
           multiple
@@ -298,17 +335,17 @@ getData({ page: pagination.page, pageSize: pagination.pageSize, desc: false })
           @update:value="orgUpdateValue"
         />
       </n-form-item>
-      <!--      <n-form-item label="身份" path="roleName">-->
-      <!--        <n-select-->
-      <!--          v-model:value="userModel.roleName"-->
-      <!--          value-field="id"-->
-      <!--          label-field="name"-->
-      <!--          filterable-->
-      <!--          :options="options"-->
-      <!--          clearable-->
-      <!--          @update:value="orgUpdateValue"-->
-      <!--        />-->
-      <!--      </n-form-item>-->
+      <n-form-item label="身份" path="roleIds">
+        <n-select
+          v-model:value="userModel.roleIds"
+          value-field="id"
+          label-field="name"
+          multiple
+          filterable
+          :options="roleOptions"
+          clearable
+        />
+      </n-form-item>
     </n-form>
 
     <template #action>

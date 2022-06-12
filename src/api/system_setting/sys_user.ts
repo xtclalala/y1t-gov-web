@@ -10,6 +10,7 @@ import {
 
 enum Api {
   user = '/user/user',
+  password = '/user/password',
   per = '/user/per',
   complete = '/menu/completeInfo',
 }
@@ -31,3 +32,6 @@ export const completeInfo = <T = Result>(params: Pick<UserId, 'id'>, options?: R
 
 export const deleteUser = <T = Result>(params: Pick<UserId, 'id'>, options?: RequestOptions) =>
   defHttp.delete<T>({ url: Api.user, params }, options)
+
+export const resetPwd = <T = Result>(params: Pick<UserId, 'id'>, options?: RequestOptions) =>
+  defHttp.put<T>({ url: Api.password, params }, options)
