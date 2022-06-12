@@ -18,7 +18,7 @@ interface IUser {
 export const userStore = defineStore('user', {
   state: (): IUser => {
     return {
-      username: 'test',
+      username: '',
       token: '',
       // ...各种字段，
       currentRole: undefined,
@@ -73,10 +73,10 @@ export const userStore = defineStore('user', {
       this.username = username
       setAuthCache(USER_INFO, username)
     },
-    setCurrentRole(value: number | null) {
-      const c = this.roles?.find((self) => self.value === value)
-      this.currentRole = c
-      setAuthCache(CURRENT_ROLE, c)
+    setCurrentRole(value: number) {
+      const current = this.roles?.find((self) => self.value === value)
+      this.currentRole = current
+      setAuthCache(CURRENT_ROLE, current)
     },
   },
 })

@@ -8,24 +8,38 @@
 import { computed, h } from 'vue'
 import { renderIcon } from '@/utils/yIcon'
 import { RouterLink, useRouter } from 'vue-router'
-import { useMessage } from 'naive-ui'
+import { NButton, useMessage } from 'naive-ui'
 import { userStore } from '@/store/module/user'
 import { rPath } from '@/enums/rPath'
+import { rName } from '@/enums/rName'
+import { useRouteStore } from '@/store/module/router'
+import { useViewStore } from '@/store/module/views'
 
 const router = useRouter()
 const message = useMessage()
-const me = userStore()
-// todo 拿到个人信息
+const userStores = userStore()
+const routeStore = useRouteStore()
+const viewStore = useViewStore()
 // 选中下拉框中的回调
 const handleOptionsSelect = async (key: unknown): Promise<void> => {
   if ((key as string) === 'me') {
-    message.success(`Welcome back, ${me.name as string}!`)
+    message.success(`Welcome back, ${userStores.username as string}!`)
   }
 }
 
+// 退出登录
+const logout = () => {
+  userStores.$reset()
+  routeStore.$reset()
+  viewStore.$reset()
+  router.push({ name: rName.LOGIN })
+}
+
 const options = computed(() => [
-  { key: 'me', icon: renderIcon('Barcode'), label: `Hey, ${me.name as string}!` },
+  { key: 'me', icon: renderIcon('Barcode'), label: `Hey, ${userStores.username as string}!` },
   { key: 'divider', type: 'divider' },
+  // todo 权限模式切换身份
+  // 修改密码
   // todo 个人中心
   {
     key: 'profile',
@@ -33,15 +47,9 @@ const options = computed(() => [
     label: () => h(RouterLink, { to: rPath.CENTER }, { default: () => 'Your Profiles' }),
   },
   {
-    key: 'settings',
-    icon: renderIcon('SettingsOutline'),
-    label: () => h(RouterLink, { to: '/role' }, { default: () => 'Settings' }),
-  },
-  { key: 'divider', type: 'divider' },
-  {
     key: 'logout',
     icon: renderIcon('LogInOutline'),
-    label: () => h(RouterLink, { to: rPath.LOGIN }, { default: () => 'Sign out' }),
+    label: () => h(NButton, { text: true, onClick: () => logout() }, { default: () => 'Sign out' }),
   },
 ])
 </script>

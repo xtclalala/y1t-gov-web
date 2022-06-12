@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { viewStore } from '@/store/module/views'
+import { useViewStore } from '@/store/module/views'
 import { useRouter, useRoute } from 'vue-router'
 import { useMessage } from 'naive-ui'
-import { ref, watch } from 'vue'
+import { nextTick, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import YIcon from '@/components/yIcon/index.vue'
 import { AppRouteRecordRaw } from '@r/types'
 import { router2menu } from '@/utils/yMenu'
 
-const tabs = viewStore()
+const viewStore = useViewStore()
 const msg = useMessage()
-const { viewList, currentView } = storeToRefs(tabs)
+const { viewList, currentView } = storeToRefs(viewStore)
 const router = useRouter()
 const route = useRoute()
 const scrollbar: any = ref(null)
@@ -22,9 +22,20 @@ watch(
   (n) => {
     router.push({ name: n.name as string })
     const r = router2menu(n as AppRouteRecordRaw)
-    tabs.routerPush(r)
+    viewStore.routerPush(r)
   },
   { immediate: true }
+)
+
+watch(
+  viewList,
+  async () => {
+    await nextTick(() => {
+      const { clientWidth, scrollWidth } = scrollbar.value.$el.nextElementSibling.firstChild
+      rightArrowDisabled.value = scrollWidth > clientWidth
+    })
+  },
+  { deep: true }
 )
 
 const iconClick = (name: string) => {
@@ -54,24 +65,21 @@ const tabClick = (el: HTMLElement, name: string) => {
 }
 
 const leftArrowClick = () => {
-  const scrollX = scrollbar.value.$el?.scrollLeft || 0
-  scrollbar.value.scrollTo(
-    {
-      left: Math.max(0, scrollX - 200),
-      debounce: true,
-      behavior: 'smooth',
-    } as any,
-    0
-  )
+  const scrollX = scrollbar.value.$el.nextElementSibling.firstChild.scrollLeft || 0
+  scrollbar.value.scrollTo({
+    left: Math.max(0, scrollX - 200),
+    debounce: true,
+    behavior: 'smooth',
+  } as any)
   isDisabledArrow()
 }
 
 const rightArrowClick = () => {
-  const scrollX = scrollbar.value.$el?.scrollLeft || 0
+  const scrollX = scrollbar.value.$el.nextElementSibling.firstElementChild.scrollLeft || 0
   scrollbar.value.scrollTo(
     {
       left: scrollX + 200,
-      debounce: false,
+      debounce: true,
       behavior: 'smooth',
     } as any,
     0
@@ -81,9 +89,12 @@ const rightArrowClick = () => {
 
 const isDisabledArrow = () => {
   setTimeout(() => {
-    const { scrollLeft, scrollWidth, clientWidth } = scrollbar.value.$el as HTMLElement
-    leftArrowDisabled.value = scrollLeft === 0
-    rightArrowDisabled.value = scrollLeft === scrollWidth - clientWidth
+    nextTick(() => {
+      const { scrollLeft, scrollWidth, clientWidth } =
+        scrollbar.value.$el.nextElementSibling.firstChild
+      leftArrowDisabled.value = scrollLeft !== 0
+      rightArrowDisabled.value = scrollWidth > scrollLeft + clientWidth + 10
+    })
   }, 100)
 }
 
@@ -92,12 +103,12 @@ const closeTab = async (name: string) => {
     msg.warning('最后一页不能删除')
     return
   }
-  const index = viewList.value.findIndex((self: AppRouteRecordRaw) => self.key === name)
+  const index = viewList.value.findIndex((self) => self.key === name)
   if (index !== -1) {
-    await tabs.removeTab(index)
+    await viewStore.removeTab(index)
     if (currentView.value === name) {
-      currentView.value = tabs.listSliceEnd[0].name
-      router.push({ name: currentView.value })
+      currentView.value = viewStore.listSliceEnd[0].name
+      await router.push({ name: currentView.value })
     }
   }
 }
@@ -105,9 +116,15 @@ const closeTab = async (name: string) => {
 
 <template>
   <div class="tab-bar">
-    <y-icon icon-type="ChevronBack" :size="18" class="icon-location" @click="leftArrowClick" />
+    <y-icon
+      v-if="leftArrowDisabled"
+      icon-type="ChevronBack"
+      :size="18"
+      class="icon-location"
+      @click="leftArrowClick"
+    />
     <div class="tabs">
-      <n-scrollbar ref="scrollbar" :x-scrollable="true" :size="0">
+      <n-scrollbar ref="scrollbar" x-scrollable>
         <n-button
           v-for="item of viewList"
           :key="item.key"
@@ -132,7 +149,13 @@ const closeTab = async (name: string) => {
         </n-button>
       </n-scrollbar>
     </div>
-    <y-icon icon-type="ChevronForward" class="icon-location" :size="18" @click="rightArrowClick" />
+    <y-icon
+      v-if="rightArrowDisabled"
+      icon-type="ChevronForward"
+      class="icon-location"
+      :size="18"
+      @click="rightArrowClick"
+    />
   </div>
 </template>
 

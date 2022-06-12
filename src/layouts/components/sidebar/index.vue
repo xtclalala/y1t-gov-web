@@ -11,7 +11,7 @@
   >
     <loge />
     <n-menu
-      :value="tabsView.currentView"
+      :value="viewStore.currentView"
       :collapsed="collapsed"
       :default-expanded-keys="expandedKeys"
       :options="options"
@@ -25,7 +25,7 @@
 import Loge from './components/logo.vue'
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { viewStore } from '@/store/module/views'
+import { useViewStore } from '@/store/module/views'
 import { Menu } from '@r/types'
 import { useRouteStore } from '@/store/module/router'
 
@@ -33,13 +33,13 @@ const router = useRouter()
 const uRouter = useRouteStore()
 const collapsed = ref<boolean>(false)
 const route = useRoute()
-const tabsView = viewStore()
+const viewStore = useViewStore()
 const options = uRouter.getMenus
 const expandedKeys = ref<string[]>([])
 
 // 菜单跳转
 const handleAlt = (key: string, item: Menu) => {
-  tabsView.routerPush(item)
+  viewStore.routerPush(item)
   router.push({ name: key })
 }
 </script>

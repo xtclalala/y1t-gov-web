@@ -8,7 +8,7 @@ interface ITabsViewStore {
   tBlacklist: string[]
 }
 
-export const viewStore = defineStore('tabsView', {
+export const useViewStore = defineStore('tabsView', {
   state: (): ITabsViewStore => {
     return {
       viewList: [],
@@ -17,7 +17,7 @@ export const viewStore = defineStore('tabsView', {
     }
   },
   getters: {
-    listSliceEnd(): any {
+    listSliceEnd(): Menu[] {
       return this.viewList.slice(-1)
     },
   },
