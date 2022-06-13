@@ -1,19 +1,27 @@
 <template>
-  <n-layout-header bordered>
-    <Refresh />
+  <n-layout-header bordered style="padding: 0">
     <!--    <current-view />-->
-    <n-space :size="20" align="center" style="line-height: 1">
-      <Theme />
-      <About />
-      <Github />
-      <Notify />
-      <PCenter />
-    </n-space>
+    <n-layout>
+      <n-layout-header bordered>
+        <Refresh />
+        <n-space :size="20" align="center" style="line-height: 1">
+          <Theme />
+          <About />
+          <Github />
+          <Notify />
+          <PCenter />
+        </n-space>
+      </n-layout-header>
+      <n-layout-content>
+        <Tabbar />
+      </n-layout-content>
+    </n-layout>
   </n-layout-header>
 </template>
 
 <script lang="ts" setup>
 import Refresh from './components/refresh.vue'
+import { Tabbar } from '@/layouts/components/tabbar'
 // import CurrentView from './components/currentView.vue'
 import About from './components/about.vue'
 import Github from './components/github.vue'

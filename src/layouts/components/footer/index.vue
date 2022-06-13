@@ -1,5 +1,5 @@
 <template>
-  <n-layout-footer>
+  <n-layout-footer position="static">
     <n-p>
       <n-a :href="projectGithub">&lt;/&gt;</n-a> with <n-text type="error">♥</n-text> by
       <n-a :href="authorGithub">y1t</n-a>. Licensed under the
@@ -14,6 +14,7 @@ const { projectGithub, authorGithub } = ProjectInfo
 </script>
 <style scoped>
 .n-layout-footer {
+  height: 118px;
   opacity: 0.6;
   padding: 30px;
   text-align: center;
