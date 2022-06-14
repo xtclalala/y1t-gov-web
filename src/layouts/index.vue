@@ -1,5 +1,5 @@
 <template>
-  <n-layout has-sider>
+  <n-layout has-sider position="absolute">
     <Sidebar />
     <n-layout>
       <Header />

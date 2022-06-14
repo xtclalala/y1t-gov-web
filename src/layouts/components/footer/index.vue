@@ -1,5 +1,5 @@
 <template>
-  <n-layout-footer position="static">
+  <n-layout-footer>
     <n-p>
       <n-a :href="projectGithub">&lt;/&gt;</n-a> with <n-text type="error">♥</n-text> by
       <n-a :href="authorGithub">y1t</n-a>. Licensed under the
