@@ -138,6 +138,9 @@ const closeTab = async (name: string) => {
           style="--n-height: 24px; --n-font-weight: 200"
           @click.self="itemClick(item.key, $event)"
         >
+          <template #icon>
+            <y-icon class="show-icon-item" icon-type="Aperture" size="15" />
+          </template>
           <span
             style="font-size: 12px; margin-top: 2px"
             class="text-item"
@@ -147,7 +150,7 @@ const closeTab = async (name: string) => {
           </span>
           <y-icon
             v-if="true"
-            class="icon-item"
+            class="close-icon-item"
             icon-type="CloseCircleOutline"
             @click="iconClick(item.key)"
           />
@@ -189,10 +192,18 @@ const closeTab = async (name: string) => {
     overflow: hidden
 
     .tab-item
-      padding: 7px 10px
-      margin: 5px 5px
+      padding: 20px 15px
+      border-radius: 0
+      //margin: 5px 5px
       cursor: pointer
-      .icon-item
+      .text-item
+        //color: red
+      // todo 字体颜色
+      .show-icon-item
+        margin-top: 2px
+        margin-left: 2px
+
+      .close-icon-item
         margin-left: 0
         width: 0
         height: 0
@@ -200,7 +211,7 @@ const closeTab = async (name: string) => {
         overflow: hidden
 
       & :hover
-        .icon-item
+        .close-icon-item
           display: inline
           width: 14px
           height: 14px

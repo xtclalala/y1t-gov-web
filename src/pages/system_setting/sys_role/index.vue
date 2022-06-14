@@ -314,7 +314,7 @@ getData({ page: pagination.page, pageSize: pagination.pageSize, desc: false })
       </n-space>
     </template>
   </n-modal>
-  <set-permission
+  <set-permissions
     v-model:show="drawerShow"
     :current-role="currentRole"
     :default-menu-data="defaultMenuData"
