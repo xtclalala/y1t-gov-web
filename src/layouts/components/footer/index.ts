@@ -1,1 +1,1 @@
-export { default as Footer } from './index.vue'
+export { default as YFooter } from './index.vue'

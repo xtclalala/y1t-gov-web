@@ -33,7 +33,7 @@ import { useRouter } from 'vue-router'
 import { useMessage } from 'naive-ui'
 import { userStore } from '@/store/module/user'
 import { LoginParams } from '@/api/common/types/login'
-import ChooseActiveRole from './components/chooseActiveRole.vue'
+import { ChooseActiveRole } from './components'
 import { PageEnum } from '@/enums/pageEnum'
 import { useRouteStore } from '@/store/module/router'
 

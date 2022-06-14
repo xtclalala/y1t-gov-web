@@ -1,7 +1,10 @@
+<script lang="ts">
+export default {
+  name: 'YPage',
+}
+</script>
 <template>
   <router-view />
 </template>
-
-<script></script>
 
 <style scoped></style>

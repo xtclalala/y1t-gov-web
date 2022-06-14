@@ -1,1 +1,1 @@
-export { default as Tabbar } from './index.vue'
+export { default as YTabBar } from './index.vue'

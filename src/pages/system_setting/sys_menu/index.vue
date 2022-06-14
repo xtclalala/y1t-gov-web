@@ -10,8 +10,8 @@ import { PageResult } from '#axios'
 import { BaseMenu, registerMenu, SearchMenu } from '@/api/system_setting/types/sys_menu'
 import { FormRules, NButton, NDivider, NPopconfirm, NSpace } from 'naive-ui'
 import { Page } from '@/api/system_setting/types/sys_role'
-import YIcon from '@/components/yIcon/index.vue'
-import Permission from './components/Permission.vue'
+import { YIcon } from '@/components'
+import { YPermission } from './components'
 import { completeAssign } from '@/utils/helper/objectHelper'
 import { useTable } from '@/hooks/comHooks/useTable'
 import { useModal } from '@/hooks/comHooks/useModal'
@@ -341,6 +341,6 @@ getData({ page: pagination.page, pageSize: pagination.pageSize, desc: false })
       </n-space>
     </template>
   </n-modal>
-  <Permission v-model:show="showPermissions" :menu-id="currentMenuId"> </Permission>
+  <y-permission v-model:show="showPermissions" :menu-id="currentMenuId"> </y-permission>
 </template>
 <style scoped></style>

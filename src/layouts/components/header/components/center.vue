@@ -1,9 +1,8 @@
-<template>
-  <n-dropdown placement="bottom-end" show-arrow :options="options" @select="handleOptionsSelect">
-    <n-avatar size="small" round src="#" />
-  </n-dropdown>
-</template>
-
+<script lang="ts">
+export default {
+  name: 'YCenter',
+}
+</script>
 <script setup lang="ts">
 import { computed, h } from 'vue'
 import { renderIcon } from '@/utils/yIcon'
@@ -53,5 +52,10 @@ const options = computed(() => [
   },
 ])
 </script>
+<template>
+  <n-dropdown placement="bottom-end" show-arrow :options="options" @select="handleOptionsSelect">
+    <n-avatar size="small" round src="#" />
+  </n-dropdown>
+</template>
 
 <style scoped></style>

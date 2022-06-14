@@ -6,13 +6,7 @@ export default {
 <script setup lang="ts">
 import { h, ref } from 'vue'
 import { FormRules, NButton, NDivider, NPopconfirm, NSpace } from 'naive-ui'
-import {
-  BaseRole,
-  Page,
-  registerRole,
-  RoleId,
-  SearchRole,
-} from '@/api/system_setting/types/sys_role'
+import type { BaseRole, Page, registerRole, SearchRole } from '@/api/system_setting/types/sys_role'
 import { PageResult } from '#axios'
 import { completeAssign } from '@/utils/helper/objectHelper'
 import { useTable } from '@/hooks/comHooks/useTable'
@@ -23,13 +17,12 @@ import {
   searchRole,
   updateRole,
 } from '@/api/system_setting/sys_role'
-import YIcon from '@/components/yIcon/index.vue'
+import { YIcon } from '@/components'
 import { useModal } from '@/hooks/comHooks/useModal'
 import { registerMenu } from '@/api/system_setting/types/sys_menu'
 import { BaseOrg } from '@/api/system_setting/types/sys_organization'
 import { selectOrg } from '@/api/system_setting/sys_organize'
-import SetPermission from '@/pages/system_setting/sys_role/components/SetPermissions.vue'
-
+import { SetPermissions } from './components'
 const drawerShow = ref<boolean>(false)
 const currentRole = ref<number>(0)
 const defaultMenuData = ref<number[]>([])

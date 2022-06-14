@@ -1,3 +1,11 @@
+<script lang="ts">
+export default {
+  name: 'YNotify',
+}
+</script>
+<script setup lang="ts">
+import { YIcon } from '@/components'
+</script>
 <template>
   <n-popover trigger="click" placement="bottom-end" :width="300">
     <template #trigger>
@@ -21,9 +29,4 @@
     </n-tabs>
   </n-popover>
 </template>
-
-<script setup lang="ts">
-import YIcon from '@/components/yIcon/index.vue'
-</script>
-
 <style scoped></style>

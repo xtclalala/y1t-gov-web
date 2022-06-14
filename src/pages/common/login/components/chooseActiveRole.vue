@@ -1,21 +1,8 @@
-<template>
-  <n-modal :show="show">
-    <n-card style="width: 400px" title="请选择活跃身份" footer-style="login-button-fixe">
-      <div>
-        <n-select
-          v-model:value="currentRole"
-          :style="{ width: '80%' }"
-          :options="roles"
-          :mask-closable="false"
-        />
-      </div>
-      <template #action>
-        <n-button style="float: right" @click="submitCallback">确定</n-button>
-      </template>
-    </n-card>
-  </n-modal>
-</template>
-
+<script lang="ts">
+export default {
+  name: 'ChooseActiveRole',
+}
+</script>
 <script setup lang="ts">
 import { ref, toRefs } from 'vue'
 import { userStore } from '@/store/module/user'
@@ -51,5 +38,21 @@ const submitCallback = () => {
   router.push(PageEnum.BASE_HOME)
 }
 </script>
-
+<template>
+  <n-modal :show="show">
+    <n-card style="width: 400px" title="请选择活跃身份" footer-style="login-button-fixe">
+      <div>
+        <n-select
+          v-model:value="currentRole"
+          :style="{ width: '80%' }"
+          :options="roles"
+          :mask-closable="false"
+        />
+      </div>
+      <template #action>
+        <n-button style="float: right" @click="submitCallback">确定</n-button>
+      </template>
+    </n-card>
+  </n-modal>
+</template>
 <style lang="sass" scoped></style>

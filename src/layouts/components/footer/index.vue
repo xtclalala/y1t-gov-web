@@ -1,3 +1,12 @@
+<script lang="ts">
+export default {
+  name: 'YFooter',
+}
+</script>
+<script setup lang="ts">
+import ProjectInfo from '@/settings/projectInfo'
+const { projectGithub, authorGithub } = ProjectInfo
+</script>
 <template>
   <n-layout-footer>
     <n-p>
@@ -8,10 +17,6 @@
     <n-p>&copy; {{ new Date().getFullYear() }} Lei’s. All rights reserved.</n-p>
   </n-layout-footer>
 </template>
-<script setup lang="ts">
-import ProjectInfo from '@/settings/projectInfo'
-const { projectGithub, authorGithub } = ProjectInfo
-</script>
 <style scoped>
 .n-layout-footer {
   height: 118px;

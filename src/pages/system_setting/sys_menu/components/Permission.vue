@@ -1,6 +1,11 @@
+<script lang="ts">
+export default {
+  name: 'YPermission',
+}
+</script>
 <script setup lang="ts">
-import { h, toRef, toRefs } from 'vue'
-import YIcon from '@/components/yIcon/index.vue'
+import { h, toRef } from 'vue'
+import { YIcon } from '@/components'
 import { BasePer, registerPer } from '@/api/system_setting/types/sys_permission'
 import { deletePer, register, searchPer, updatePer } from '@/api/system_setting/sys_permission'
 import { FormRules, NButton, NDivider, NPopconfirm, NSpace } from 'naive-ui'

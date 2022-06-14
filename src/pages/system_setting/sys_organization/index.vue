@@ -5,7 +5,7 @@ export default {
 </script>
 <script setup lang="ts">
 import { h, ref } from 'vue'
-import YIcon from '@/components/yIcon/index.vue'
+import { YIcon } from '@/components'
 import { FormRules, NButton, NDivider, NPopconfirm, NSpace } from 'naive-ui'
 import { Page } from '@/api/system_setting/types/sys_role'
 import { PageResult } from '#axios'

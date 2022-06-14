@@ -1,6 +1,3 @@
-<template>
-  <n-icon v-bind="props" :component="vIcons[props.iconType]" />
-</template>
 <script lang="ts">
 export default {
   name: 'YIcon',
@@ -17,3 +14,6 @@ const props = defineProps({
   },
 })
 </script>
+<template>
+  <n-icon v-bind="props" :component="vIcons[props.iconType]" />
+</template>

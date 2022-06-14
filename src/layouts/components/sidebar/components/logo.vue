@@ -1,3 +1,12 @@
+<script lang="ts">
+export default {
+  name: 'SideBarLogo',
+}
+</script>
+<script setup lang="ts">
+import ProjectInfo from '@/settings/projectInfo'
+const { projectGithub } = ProjectInfo
+</script>
 <template>
   <router-link to="/" #="{ navigate, href }" custom>
     <n-a class="logo" :href="projectGithub" @click="navigate">
@@ -11,12 +20,6 @@
     </n-a>
   </router-link>
 </template>
-
-<script setup lang="ts">
-import ProjectInfo from '@/settings/projectInfo'
-const { projectGithub } = ProjectInfo
-</script>
-
 <style scoped>
 .logo {
   position: sticky;

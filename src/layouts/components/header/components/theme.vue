@@ -1,3 +1,8 @@
+<script lang="ts">
+export default {
+  name: 'YTheme',
+}
+</script>
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useAppStore } from '@/store/module/app'

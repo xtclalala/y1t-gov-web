@@ -1,17 +1,21 @@
+<script lang="ts">
+export default {
+  name: 'YLayout',
+}
+</script>
+<script lang="ts" setup>
+import { YHeader } from './components'
+import { YContent } from './components'
+import { YFooter } from './components'
+import { YSideBar } from './components'
+</script>
 <template>
   <n-layout has-sider position="absolute">
-    <Sidebar />
+    <y-side-bar />
     <n-layout>
-      <Header />
-      <Content />
-      <Footer />
+      <y-header />
+      <y-content />
+      <y-footer />
     </n-layout>
   </n-layout>
 </template>
-
-<script lang="ts" setup>
-import { Header } from '@/layouts/components/header'
-import { Content } from '@/layouts/components/content'
-import { Footer } from '@/layouts/components/footer'
-import { Sidebar } from '@/layouts/components/sidebar'
-</script>

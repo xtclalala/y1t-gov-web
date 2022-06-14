@@ -1,1 +1,1 @@
-export { default as Header } from './index.vue'
+export { default as YHeader } from './index.vue'

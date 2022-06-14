@@ -1,34 +1,37 @@
+<script lang="ts">
+export default {
+  name: 'YHeader',
+}
+</script>
+<script lang="ts" setup>
+import { YAbout } from './components'
+import { YTheme } from './components'
+import { YNotify } from './components'
+import { YRefresh } from './components'
+import { YGithub } from './components'
+import { YCenter } from './components'
+import { YTabBar } from '@/layouts/components/tabbar'
+</script>
 <template>
   <n-layout-header bordered style="padding: 0">
     <!--    <current-view />-->
     <n-layout>
       <n-layout-header bordered>
-        <Refresh />
+        <y-refresh />
         <n-space :size="20" align="center" style="line-height: 1">
-          <Theme />
-          <About />
-          <Github />
-          <Notify />
-          <PCenter />
+          <y-theme />
+          <y-about />
+          <y-github />
+          <y-notify />
+          <y-center />
         </n-space>
       </n-layout-header>
       <n-layout-content>
-        <Tabbar />
+        <y-tab-bar />
       </n-layout-content>
     </n-layout>
   </n-layout-header>
 </template>
-
-<script lang="ts" setup>
-import Refresh from './components/refresh.vue'
-import { Tabbar } from '@/layouts/components/tabbar'
-// import CurrentView from './components/currentView.vue'
-import About from './components/about.vue'
-import Github from './components/github.vue'
-import Notify from './components/notify.vue'
-import PCenter from './components/pCenter.vue'
-import Theme from './components/theme.vue'
-</script>
 
 <style scoped>
 .n-layout-header {

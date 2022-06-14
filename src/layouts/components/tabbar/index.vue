@@ -1,10 +1,15 @@
+<script lang="ts">
+export default {
+  name: 'YTabBar',
+}
+</script>
 <script setup lang="ts">
 import { useViewStore } from '@/store/module/views'
 import { useRouter, useRoute } from 'vue-router'
 import { useMessage } from 'naive-ui'
 import { nextTick, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
-import YIcon from '@/components/yIcon/index.vue'
+import { YIcon } from '@/components'
 import { AppRouteRecordRaw } from '@r/types'
 import { router2menu } from '@/utils/yMenu'
 

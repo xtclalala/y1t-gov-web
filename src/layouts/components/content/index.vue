@@ -1,3 +1,13 @@
+<script lang="ts">
+export default {
+  name: 'YContent',
+}
+</script>
+<script lang="ts" setup>
+import { useRouteStore } from '@/store/module/router'
+
+const rs = useRouteStore()
+</script>
 <template>
   <n-layout-content
     embedded
@@ -13,8 +23,3 @@
     </n-layout>
   </n-layout-content>
 </template>
-<script lang="ts" setup>
-import { useRouteStore } from '@/store/module/router'
-
-const rs = useRouteStore()
-</script>

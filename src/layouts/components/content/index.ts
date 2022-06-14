@@ -1,1 +1,1 @@
-export { default as Content } from './index.vue'
+export { default as YContent } from './index.vue'

@@ -1,3 +1,13 @@
+<script lang="ts">
+export default {
+  name: 'YGithub',
+}
+</script>
+<script setup lang="ts">
+import { YIcon } from '@/components'
+import ProjectInfo from '@/settings/projectInfo'
+const { projectGithub } = ProjectInfo
+</script>
 <template>
   <n-tooltip>
     <template #trigger>
@@ -8,11 +18,4 @@
     View on github
   </n-tooltip>
 </template>
-
-<script setup lang="ts">
-import YIcon from '@/components/yIcon/index.vue'
-import ProjectInfo from '@/settings/projectInfo'
-const { projectGithub } = ProjectInfo
-</script>
-
 <style scoped></style>

@@ -1,3 +1,12 @@
+<script lang="ts">
+export default {
+  name: 'YAbout',
+}
+</script>
+<script setup lang="ts">
+import { YIcon } from '@/components'
+import { rPath } from '@/enums/rPath'
+</script>
 <template>
   <n-tooltip>
     <template #trigger>
@@ -8,10 +17,4 @@
     about me
   </n-tooltip>
 </template>
-
-<script setup lang="ts">
-import YIcon from '@/components/yIcon/index.vue'
-import { rPath } from '@/enums/rPath'
-</script>
-
 <style scoped></style>
