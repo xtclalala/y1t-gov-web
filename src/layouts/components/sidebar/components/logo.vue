@@ -51,7 +51,6 @@ const { projectGithub } = ProjectInfo
 }
 
 .n-layout-sider--collapsed .logo svg {
-  background-color: red;
   margin-right: 0;
 }
 </style>
