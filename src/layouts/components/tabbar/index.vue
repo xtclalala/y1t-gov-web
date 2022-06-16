@@ -7,7 +7,7 @@ export default {
 import { useViewStore } from '@/store/module/views'
 import { useRouter, useRoute } from 'vue-router'
 import { useMessage } from 'naive-ui'
-import { nextTick, ref, watch } from 'vue'
+import { nextTick, onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { YIcon } from '@/components'
 import { AppRouteRecordRaw } from '@r/types'
@@ -21,6 +21,10 @@ const route = useRoute()
 const scrollbar: any = ref(null)
 const leftArrowDisabled = ref<boolean>(false)
 const rightArrowDisabled = ref<boolean>(false)
+
+onMounted(() => {
+  console.log(scrollbar.value)
+})
 
 watch(
   route,
