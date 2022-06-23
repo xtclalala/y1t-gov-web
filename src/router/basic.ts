@@ -21,7 +21,7 @@ export const PAGE_NOT_FOUND_ROUTE: AppRouteRecordRaw = {
     {
       path: rPath.NOT_FOUND,
       name: rName.NOT_FOUND,
-      component: import('@/pages/exception/404.vue'),
+      component: () => import('@/pages/exception/404.vue'),
       meta: {
         title: 'ErrorPage',
         hideBreadcrumb: true,
@@ -47,7 +47,7 @@ export const REDIRECT_ROUTE: AppRouteRecordRaw = {
     {
       path: rPath.REDIRECT_ROUTE,
       name: rName.REDIRECT_ROUTE,
-      component: import('@/pages/redirect/index.vue'),
+      component: () => import('@/pages/redirect/index.vue'),
       meta: {
         title: 'redirect',
         hideBreadcrumb: true,
