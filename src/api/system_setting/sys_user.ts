@@ -6,6 +6,7 @@ import {
   registerUser,
   SearchUser,
   UserId,
+  userPassword,
 } from '@/api/system_setting/types/sys_user'
 
 enum Api {
@@ -34,4 +35,7 @@ export const deleteUser = <T = Result>(params: Pick<UserId, 'id'>, options?: Req
   defHttp.delete<T>({ url: Api.user, params }, options)
 
 export const resetPwd = <T = Result>(params: Pick<UserId, 'id'>, options?: RequestOptions) =>
+  defHttp.put<T>({ url: Api.password, params }, options)
+
+export const changePwd = <T = Result>(params: userPassword, options?: RequestOptions) =>
   defHttp.put<T>({ url: Api.password, params }, options)

@@ -27,3 +27,9 @@ export type PerUser = UserId & {
 }
 
 export type registerUser = BaseUser & PerUser
+
+export type userPassword = Pick<UserId, 'id'> & {
+  oldPassword: string
+  newPassword: string
+  newPasswordAgain: string
+}

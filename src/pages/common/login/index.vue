@@ -31,7 +31,7 @@
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useMessage } from 'naive-ui'
-import { userStore } from '@/store/module/user'
+import { useUserStore } from '@/store/module/user'
 import { LoginParams } from '@/api/common/types/login'
 import { ChooseActiveRole } from './components'
 import { PageEnum } from '@/enums/pageEnum'
@@ -40,7 +40,7 @@ import { useRouteStore } from '@/store/module/router'
 const router = useRouter()
 const rs = useRouteStore()
 const message = useMessage()
-const user = userStore()
+const user = useUserStore()
 const rules = {
   username: {
     required: true,

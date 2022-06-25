@@ -11,7 +11,7 @@ import { payloadRoute } from '@/utils/yRouter/router'
 import projectSetting from '@/settings/projectSetting'
 import { getAuthCache, setAuthCache } from '@/utils/auth'
 import { CACHELIST_CACHE_KEY, MENU_CACHE_KEY, WHITELIST_CACHE_KEY } from '@/enums/cacheEnum'
-import { userStore } from '@/store/module/user'
+import { useUserStore } from '@/store/module/user'
 import { treeToList } from '@/utils/helper/treeHelper'
 
 export interface IAsyncRouteState {
@@ -92,7 +92,7 @@ export const useRouteStore = defineStore({
       switch (permissionMode) {
         case PermissionModeEnum.BACK: {
           this.setDynamicAddedRoute(true)
-          const user = userStore()
+          const user = useUserStore()
           let menus = user.getCurrentRole.menus
           menus = payloadRoute(toRaw(menus))
           accessedMenus.push(...toRaw(addMeta(menus)))

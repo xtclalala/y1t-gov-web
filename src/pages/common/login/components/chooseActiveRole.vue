@@ -5,7 +5,7 @@ export default {
 </script>
 <script setup lang="ts">
 import { ref, toRefs } from 'vue'
-import { userStore } from '@/store/module/user'
+import { useUserStore } from '@/store/module/user'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { useRouteStore } from '@/store/module/router'
@@ -23,7 +23,7 @@ const routeStore = useRouteStore()
 const router = useRouter()
 const emit = defineEmits(['update:show'])
 const currentRole = ref(null)
-const user = userStore()
+const user = useUserStore()
 const { roles } = storeToRefs(user)
 
 // 选择活跃身份

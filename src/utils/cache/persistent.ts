@@ -19,6 +19,7 @@ import {
   MENU_CACHE_KEY,
   WHITELIST_CACHE_KEY,
   CACHELIST_CACHE_KEY,
+  USER_ID,
 } from '@/enums/cacheEnum'
 import { DEFAULT_CACHE_TIME } from '@/settings/encryptionSetting'
 import { toRaw } from 'vue'
@@ -28,6 +29,7 @@ import { Menu } from '@r/types'
 interface BasicStore {
   [TOKEN_KEY]: string | number | null | undefined
   [USER_INFO]: UserInfo
+  [USER_ID]: string
   [ROLES_KEY]: string[]
   [LOCK_INFO_KEY]: LockInfo
   [PROJ_CFG_KEY]: ProjectConfig

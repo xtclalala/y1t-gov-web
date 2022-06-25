@@ -6,6 +6,7 @@ export interface LoginParams {
 }
 
 export interface Information {
+  id: string
   username: string
   roles: IRole[]
   orgs: IOrg[]
