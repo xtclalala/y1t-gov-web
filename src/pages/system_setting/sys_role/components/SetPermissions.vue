@@ -10,7 +10,6 @@ import { BaseMenu, SelectMenu } from '@/api/system_setting/types/sys_menu'
 import { allMenu } from '@/api/system_setting/sys_menu'
 import { list2Tree } from '@/utils/helper/treeHelper'
 import { roleAddMenu, roleAddPer } from '@/api/system_setting/sys_role'
-import { TreeOption } from 'naive-ui'
 
 type PerProps = {
   show: boolean
@@ -18,18 +17,19 @@ type PerProps = {
   defaultMenuData: number[]
   defaultPerData: number[]
 }
-
 const props = withDefaults(defineProps<PerProps>(), {
   show: false,
   currentRole: 0,
 })
-const show = toRef(props, 'show')
 const emit = defineEmits(['update:show', 'afterUpdate'])
-const menuData = ref<SelectMenu[]>([])
-const perData = ref<SelectMenu[]>([])
+
+const currentTab = ref<string>('Menu')
+const show = toRef(props, 'show')
 const menuCheckedKeys = toRef(props, 'defaultMenuData')
 const perCheckedKeys = toRef(props, 'defaultPerData')
-const currentTab = ref<string>('Menu')
+const menuData = ref<SelectMenu[]>([])
+const perData = ref<SelectMenu[]>([])
+
 let menuUpdateKeys = reactive<number[]>(menuCheckedKeys.value)
 let perUpdateKeys = reactive<number[]>(perCheckedKeys.value)
 
@@ -45,11 +45,9 @@ const closeDrawer = () => {
   emit('update:show', false)
 }
 const menuUpdateCheckedKeys = (v: Array<number>) => {
-  console.log(v)
   menuUpdateKeys = [...v]
 }
 const perUpdateCheckedKeys = (v: number[]) => {
-  console.log(v)
   perUpdateKeys = [...v]
 }
 const selectValue = async (v: string) => {

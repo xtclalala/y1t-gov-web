@@ -17,13 +17,11 @@ type PerProps = {
   show: boolean
   menuId: number
 }
-
 const props = withDefaults(defineProps<PerProps>(), {
   show: false,
   menuId: 0,
 })
 const show = toRef(props, 'show')
-const menuId = toRef(props, 'menuId')
 const emit = defineEmits(['update:show'])
 
 const columns = [
@@ -85,16 +83,16 @@ const columns = [
     },
   },
 ]
+// @ts-ignore
 const tableApi = async (page: Page, searchData: any) => {
   return searchPer<Array<registerPer>>(searchData.value, { isMessage: false })
 }
-const [pagination, loading, data, searchData, getData, doSearch, doReset, key2id] =
-  useTable<registerPer>(
-    tableApi,
-    { page: 1, pageSize: 10, desc: false },
-    { menuId: 0 },
-    'Permission'
-  )
+const [, loading, data, searchData, getData, , , key2id] = useTable<registerPer>(
+  tableApi,
+  { page: 1, pageSize: 10, desc: false },
+  { menuId: 0 },
+  'Permission'
+)
 
 const rules: FormRules = {
   title: {
@@ -108,7 +106,6 @@ const rules: FormRules = {
     trigger: ['input', 'blur'],
   },
 }
-
 const registerApi = async (params: registerPer) => {
   return register<string>(params, { isMessage: true })
 }
@@ -119,7 +116,7 @@ const afterApi = async () => {
   loading.value = false
   await getData()
 }
-
+const menuId = toRef(props, 'menuId')
 const [
   isAdd,
   showModal,
@@ -128,7 +125,7 @@ const [
   modalStyle,
   handleRegister,
   submitCallback,
-  clearModel,
+  ,
   openModal,
   cancelCallback,
   modalTitle,
@@ -145,8 +142,8 @@ const [
   {},
   'Permission'
 )
+
 const beforeRegister = () => {
-  console.log(menuId.value)
   perModel.menuId = menuId.value
   handleRegister()
 }

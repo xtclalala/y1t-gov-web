@@ -1,32 +1,8 @@
-<template>
-  <n-h1 style="--font-size: 60px; --font-weight: 100"> 这是什么 </n-h1>
-  <n-card size="large" style="--padding-bottom: 30px">
-    <n-h2 style="--font-weight: 400">Sign-in</n-h2>
-    <n-form size="large" :rules="rules" :model="model">
-      <n-form-item-row label="Username" path="username">
-        <n-input v-model:value="model.username" :placeholder="rules.username.placeholder" />
-      </n-form-item-row>
-      <n-form-item-row label="Password" path="password">
-        <n-input
-          v-model:value="model.password"
-          type="password"
-          :placeholder="rules.password.placeholder"
-        />
-      </n-form-item-row>
-    </n-form>
-    <n-button
-      type="primary"
-      size="large"
-      block
-      :loading="loading"
-      :disabled="disabled"
-      @click="handleLogin"
-      >Sign in</n-button
-    >
-    <choose-active-role v-model:show="show" />
-  </n-card>
-</template>
-
+<script lang="ts">
+export default {
+  name: 'Y1tLogin',
+}
+</script>
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -37,44 +13,41 @@ import { ChooseActiveRole } from './components'
 import { PageEnum } from '@/enums/pageEnum'
 import { useRouteStore } from '@/store/module/router'
 
-const router = useRouter()
-const rs = useRouteStore()
-const message = useMessage()
-const user = useUserStore()
 const rules = {
   username: {
     required: true,
     message: 'Username is required.',
     trigger: 'blur',
-    placeholder: 'Input your username',
   },
   password: {
     required: true,
     message: 'Password is required.',
     trigger: 'blur',
-    placeholder: 'Input your password',
   },
 }
-const show = ref<boolean>(false)
 const model = ref<LoginParams>({
   username: 'admin11',
   password: '123456',
 })
-const loading = ref(false)
-
 const disabled = computed<boolean>(() => model.value.username === '' || model.value.password === '')
 
+const loading = ref(false)
+const router = useRouter()
+const routeStore = useRouteStore()
+const userStore = useUserStore()
+const message = useMessage()
+const show = ref<boolean>(false)
 const handleLogin = async (e: Event): Promise<void> => {
   e.preventDefault()
   loading.value = true
   try {
-    const res = await user.login(model.value)
+    const res = await userStore.login(model.value)
     if (res) {
       // 动态路由 需要选择身份
-      if (rs.isDynamicAddedRoute) {
+      if (routeStore.isDynamicAddedRoute) {
         show.value = res
       } else {
-        await rs.generateMenus()
+        await routeStore.generateMenus()
         await router.push(PageEnum.BASE_HOME)
       }
     }
@@ -85,6 +58,30 @@ const handleLogin = async (e: Event): Promise<void> => {
   }
 }
 </script>
+<template>
+  <n-h1 style="--font-size: 60px; --font-weight: 100"> 这是什么 </n-h1>
+  <n-card size="large" style="--padding-bottom: 30px">
+    <n-h2 style="--font-weight: 400">登录</n-h2>
+    <n-form size="large" :rules="rules" :model="model">
+      <n-form-item-row label="Username" path="username">
+        <n-input v-model:value="model.username" placeholder="请输入用户名" />
+      </n-form-item-row>
+      <n-form-item-row label="Password" path="password">
+        <n-input v-model:value="model.password" type="password" placeholder="请输入密码" />
+      </n-form-item-row>
+    </n-form>
+    <n-button
+      type="primary"
+      size="large"
+      block
+      :loading="loading"
+      :disabled="disabled"
+      @click="handleLogin"
+      >登录</n-button
+    >
+    <choose-active-role v-model:show="show" />
+  </n-card>
+</template>
 
 <style scoped>
 .n-h1 {

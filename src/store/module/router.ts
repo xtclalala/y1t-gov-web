@@ -71,17 +71,16 @@ export const useRouteStore = defineStore({
 
     // 设置白名单
     setWhitelist(menus: Menu[]) {
-      // const w: Menu[] = tree2list<Menu>(menus)
       const w: Menu[] = treeToList<Menu[]>(menus, { children: 'children' })
       const whitelist = w.flatMap((self) => self.name)
-      const cachelist = w
-        .filter((self) => self.meta?.keepAlive)
+      const cacheList = w
+        .filter((self) => self.meta && self.meta.keepAlive)
         .flatMap((self) => self.name)
         .concat('About')
       this.whitelist = whitelist
-      this.cachelist = cachelist
+      this.cachelist = cacheList
       setAuthCache(WHITELIST_CACHE_KEY, whitelist)
-      setAuthCache(CACHELIST_CACHE_KEY, cachelist)
+      setAuthCache(CACHELIST_CACHE_KEY, cacheList)
     },
 
     // 生成菜单

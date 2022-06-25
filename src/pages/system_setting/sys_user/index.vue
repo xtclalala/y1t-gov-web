@@ -1,6 +1,6 @@
 <script lang="ts">
 export default {
-  name: 'SysUser',
+  name: 'Y1tSysUser',
 }
 </script>
 <script setup lang="ts">
@@ -216,7 +216,7 @@ const [
   modalStyle,
   handleRegister,
   submitCallback,
-  clearModel,
+  ,
   openModal,
   cancelCallback,
   modalTitle,

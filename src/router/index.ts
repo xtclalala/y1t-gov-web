@@ -92,7 +92,8 @@ export function setupRouter(app: App<Element>) {
   app.use(router)
 }
 
-router.beforeEach((to, from, next) => {
+// @ts-ignore
+router.beforeEach((to, form, next) => {
   const filter = (to: RouteLocationNormalized): boolean => {
     const rs = useRouteStoreWidthOut()
     if (!rs.getIsDynamicAddedRoute) {

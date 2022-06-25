@@ -1,6 +1,6 @@
 <script lang="ts">
 export default {
-  name: 'SysMenu',
+  name: 'Y1tSysMenu',
 }
 </script>
 <script setup lang="ts">
@@ -16,6 +16,13 @@ import { completeAssign } from '@/utils/helper/objectHelper'
 import { useTable } from '@/hooks/comHooks/useTable'
 import { useModal } from '@/hooks/comHooks/useModal'
 
+const showPermissions = ref<boolean>(false)
+const currentMenuId = ref<number>(0)
+const handleChangeHidden = async (e: Event) => {
+  menuModel.value.hidden = !!(e.target as HTMLInputElement).value
+}
+
+const checkedRowKeys = ref([])
 const columns = [
   {
     type: 'selection',
@@ -163,10 +170,6 @@ const tableApi = async (page: Page, searchData: any) => {
 const [pagination, loading, data, searchData, getData, doSearch, doReset, key2id] =
   useTable<registerMenu>(tableApi, { page: 1, pageSize: 10, desc: false }, sTmpData, 'Menu')
 
-const checkedRowKeys = ref([])
-const showPermissions = ref<boolean>(false)
-const currentMenuId = ref<number>(0)
-
 const rules: FormRules = {
   title: {
     required: true,
@@ -233,9 +236,7 @@ const [
   {},
   'Menu'
 )
-const handleChangeHidden = async (e: Event) => {
-  menuModel.value.hidden = !!(e.target as HTMLInputElement).value
-}
+
 // 操作
 getData({ page: pagination.page, pageSize: pagination.pageSize, desc: false })
 </script>

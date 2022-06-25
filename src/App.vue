@@ -18,7 +18,7 @@
 
 <script lang="ts" setup>
 import { computed, defineComponent, h } from 'vue'
-import { useOsTheme, darkTheme, zhCN, lightTheme } from 'naive-ui'
+import { darkTheme, zhCN, lightTheme } from 'naive-ui'
 import { useLoadingBar, useDialog, useMessage, useNotification, NThemeEditor } from 'naive-ui'
 import { useAppStore } from '@/store/module/app'
 import { ThemeEnum } from '@/enums/appEnum'

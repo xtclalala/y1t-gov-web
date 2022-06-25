@@ -1,6 +1,6 @@
 <script lang="ts">
 export default {
-  name: 'SysRole',
+  name: 'Y1tSysRole',
 }
 </script>
 <script setup lang="ts">
@@ -23,11 +23,13 @@ import { registerMenu } from '@/api/system_setting/types/sys_menu'
 import { BaseOrg } from '@/api/system_setting/types/sys_organization'
 import { selectOrg } from '@/api/system_setting/sys_organize'
 import { SetPermissions } from './components'
+
 const drawerShow = ref<boolean>(false)
 const currentRole = ref<number>(0)
 const defaultMenuData = ref<number[]>([])
 const defaultPerData = ref<number[]>([])
 const options = ref<Array<BaseOrg>>([])
+// @ts-ignore
 const handleUpdateValue = async (value: string | number, option) => {
   roleModel.value.orgName = option.name
   roleModel.value.orgId = option.id
@@ -35,7 +37,7 @@ const handleUpdateValue = async (value: string | number, option) => {
 const allOrganizations = async () => {
   options.value = await selectOrg<Array<BaseOrg>>({ name: '' }, { isMessage: false })
 }
-const setPerAfter = async (roleId: number) => {
+const setPerAfter = async () => {
   await getData({
     page: pagination.page,
     pageSize: pagination.pageSize,
@@ -206,7 +208,7 @@ const [
   modalStyle,
   handleRegister,
   submitCallback,
-  clearModel,
+  ,
   openModal,
   cancelCallback,
   modalTitle,

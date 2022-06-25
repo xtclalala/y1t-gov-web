@@ -29,8 +29,8 @@ onMounted(() => {
 watch(
   route,
   (n) => {
-    router.push({ name: n.name as string })
     const r = router2menu(n as AppRouteRecordRaw)
+    router.push({ name: n.name as string })
     viewStore.routerPush(r)
   },
   { immediate: true }

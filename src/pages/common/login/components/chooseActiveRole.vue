@@ -17,22 +17,21 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   show: false,
 })
-
 const { show } = toRefs(props)
-const routeStore = useRouteStore()
-const router = useRouter()
 const emit = defineEmits(['update:show'])
-const currentRole = ref(null)
-const user = useUserStore()
-const { roles } = storeToRefs(user)
 
+const router = useRouter()
+const currentRole = ref(null)
+const userStores = useUserStore()
+const { roles } = storeToRefs(userStores)
+const routeStore = useRouteStore()
 // 选择活跃身份
 const submitCallback = () => {
   if (currentRole.value === null) {
     window.$message?.warning('请选择身份')
     return
   }
-  user.setCurrentRole(currentRole.value)
+  userStores.setCurrentRole(currentRole.value)
   routeStore.generateMenus()
   emit('update:show', false)
   router.push(PageEnum.BASE_HOME)

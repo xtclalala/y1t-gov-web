@@ -1,7 +1,8 @@
-<template>
-  <div></div>
-</template>
-
+<script lang="ts">
+export default {
+  name: 'Y1tRedirect',
+}
+</script>
 <script setup lang="ts">
 import { unref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -23,3 +24,4 @@ if (_redirect_type === 'name') {
   })
 }
 </script>
+<template></template>

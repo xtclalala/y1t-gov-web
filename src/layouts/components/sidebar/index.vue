@@ -6,7 +6,7 @@ export default {
 <script lang="ts" setup>
 import { SideBarLogo } from './components'
 import { ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { useViewStore } from '@/store/module/views'
 import { Menu } from '@r/types'
 import { useRouteStore } from '@/store/module/router'
@@ -14,7 +14,6 @@ import { useRouteStore } from '@/store/module/router'
 const router = useRouter()
 const uRouter = useRouteStore()
 const collapsed = ref<boolean>(false)
-const route = useRoute()
 const viewStore = useViewStore()
 const options = uRouter.getMenus
 const expandedKeys = ref<string[]>([])

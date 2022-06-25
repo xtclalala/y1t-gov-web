@@ -39,6 +39,7 @@ const rules: FormRules = {
   newPasswordAgain: [
     { required: true, message: '请填写新密码！', trigger: ['input', 'blur'] },
     {
+      // @ts-ignore
       validator: (rule: FormItemRule, value: string) => value === changePwdModel.value.newPassword,
       message: '两次密码不一致',
       trigger: ['input', 'blur'],

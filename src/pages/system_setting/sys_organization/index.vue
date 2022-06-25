@@ -1,6 +1,6 @@
 <script lang="ts">
 export default {
-  name: 'SysMenu',
+  name: 'Y1tSysMenu',
 }
 </script>
 <script setup lang="ts">
@@ -15,6 +15,8 @@ import { deleteOrg, searchOrg, updateOrg, register } from '@/api/system_setting/
 import { BaseOrg, registerOrg, SearchOrg } from '@/api/system_setting/types/sys_organization'
 import { registerMenu } from '@/api/system_setting/types/sys_menu'
 import { useModal } from '@/hooks/comHooks/useModal'
+
+const checkedRowKeys = ref([])
 
 const columns = [
   {
@@ -110,7 +112,6 @@ const tableApi = async (page: Page, searchData: any) => {
 const [pagination, loading, data, searchData, getData, doSearch, doReset, key2id] =
   useTable<registerOrg>(tableApi, { page: 1, pageSize: 10, desc: false }, sTmpData, 'Organize')
 
-const checkedRowKeys = ref([])
 const rules: FormRules = {
   name: {
     required: true,
@@ -137,7 +138,6 @@ const afterApi = async () => {
     desc: false,
   })
 }
-
 const [
   isAdd,
   showModal,

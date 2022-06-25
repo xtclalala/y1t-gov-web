@@ -8,7 +8,7 @@ import ProjectInfo from '@/settings/projectInfo'
 const { projectGithub } = ProjectInfo
 </script>
 <template>
-  <router-link to="/" #="{ navigate, href }" custom>
+  <router-link to="/" #="{ navigate }" custom>
     <n-a class="logo" :href="projectGithub" @click="navigate">
       <svg viewBox="0 0 512 512">
         <path

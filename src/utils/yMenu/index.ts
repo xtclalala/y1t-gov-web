@@ -21,12 +21,12 @@ export const router2menuDeep = (routes: AppRouteRecordRaw[] | Menu[]): Menu[] =>
   return menu
 }
 
-export const router2menu = (routes: AppRouteRecordRaw): AppRouteRecordRaw => {
+export const router2menu = (routes: AppRouteRecordRaw): Menu => {
   const { meta, name, key } = routes
   if (key !== undefined) {
-    return routes
+    return routes as Menu
   }
-  return { ...routes, label: meta.title, key: name }
+  return { ...routes, label: meta.title, key: name } as Menu
 }
 
 export const addMeta = (routes: AppRouteRecordRaw[]): AppRouteRecordRaw[] => {
@@ -38,7 +38,7 @@ export const addMeta = (routes: AppRouteRecordRaw[]): AppRouteRecordRaw[] => {
         hideMenu: route.hidden,
         title: route.title || '11',
       },
-      children: route.children !== null ? addMeta(route.children) : undefined,
+      children: route.children !== undefined ? addMeta(route.children) : undefined,
     }
     m.push(temp)
   }
