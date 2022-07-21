@@ -22,10 +22,6 @@ const scrollbar: any = ref(null)
 const leftArrowDisabled = ref<boolean>(false)
 const rightArrowDisabled = ref<boolean>(false)
 
-onMounted(() => {
-  console.log(scrollbar.value)
-})
-
 watch(
   route,
   (n) => {
@@ -112,7 +108,7 @@ const closeTab = async (name: string) => {
     msg.warning('最后一页不能删除')
     return
   }
-  const index = viewList.value.findIndex((self) => self.key === name)
+  const index = viewList.value.findIndex((self) => self.name === name)
   if (index !== -1) {
     await viewStore.removeTab(index)
     if (currentView.value === name) {
@@ -136,11 +132,11 @@ const closeTab = async (name: string) => {
       <n-scrollbar ref="scrollbar" x-scrollable>
         <n-button
           v-for="item of viewList"
-          :key="item.key"
-          :type="currentView === item.key ? 'primary' : 'default'"
+          :key="item.name"
+          :type="currentView === item.name ? 'primary' : 'default'"
           class="tab-item"
           style="--n-height: 24px; --n-font-weight: 200"
-          @click.self="itemClick(item.key, $event)"
+          @click.self="itemClick(item.name, $event)"
         >
           <template #icon>
             <y-icon class="show-icon-item" icon-type="Aperture" size="15" />
@@ -148,15 +144,15 @@ const closeTab = async (name: string) => {
           <span
             style="font-size: 12px; margin-top: 2px"
             class="text-item"
-            @click.self="itemChildClick(item.key, $event)"
+            @click.self="itemChildClick(item.name, $event)"
           >
-            {{ item.label }}
+            {{ item.title }}
           </span>
           <y-icon
             v-if="true"
             class="close-icon-item"
             icon-type="CloseCircleOutline"
-            @click="iconClick(item.key)"
+            @click="iconClick(item.name)"
           />
         </n-button>
       </n-scrollbar>

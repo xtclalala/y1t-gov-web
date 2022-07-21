@@ -11,7 +11,7 @@ const routeStore = useRouteStore()
   <n-layout-content embedded content-style="padding: 12px; min-height: 80vh">
     <router-view v-slot="{ Component, route }">
       <!--      todo 添加缓存配置 使用的组件需要有 name属性-->
-      <keep-alive :include="routeStore.getCachelist">
+      <keep-alive :include="routeStore.getCacheList">
         <n-card>
           <component :is="Component" :key="route.name" />
         </n-card>

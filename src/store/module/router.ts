@@ -1,13 +1,11 @@
-import { toRaw } from 'vue'
 import { defineStore } from 'pinia'
 import { store } from '@/store'
 import { AfterBusinessRoutes, AfterPublicRoutes } from '@r/index'
-
 // import { useProjectSetting } from '@/hooks/setting/useProjectSetting'
 import { PermissionModeEnum } from '@/enums/appEnum'
-import { addMeta, router2menuDeep } from '@/utils/yMenu'
+import { addMeta, renderMenuIcon } from '@/utils/yMenu'
 import { AppRouteRecordRaw, Menu } from '@r/types'
-import { payloadRoute } from '@/utils/yRouter/router'
+import { buildMenusTree } from '@/utils/yRouter/router'
 import projectSetting from '@/settings/projectSetting'
 import { getAuthCache, setAuthCache } from '@/utils/auth'
 import { CACHELIST_CACHE_KEY, MENU_CACHE_KEY, WHITELIST_CACHE_KEY } from '@/enums/cacheEnum'
@@ -17,7 +15,7 @@ import { treeToList } from '@/utils/helper/treeHelper'
 export interface IAsyncRouteState {
   menus: Menu[] | undefined
   whitelist: string[] | undefined
-  cachelist: string[]
+  cacheList: string[]
   isDynamicAddedRoute: boolean | undefined
 }
 
@@ -26,19 +24,19 @@ export const useRouteStore = defineStore({
   state: (): IAsyncRouteState => ({
     menus: undefined,
     whitelist: undefined,
-    cachelist: [],
+    cacheList: [],
     // Whether the route has been dynamically added
     isDynamicAddedRoute: undefined,
   }),
   getters: {
     getMenus(): Menu[] {
-      return this.menus || toRaw(router2menuDeep(getAuthCache<Menu[]>(MENU_CACHE_KEY)))
+      return this.menus || renderMenuIcon(getAuthCache<Menu[]>(MENU_CACHE_KEY))
     },
     getWhitelist(): string[] {
       return this.whitelist || getAuthCache<string[]>(WHITELIST_CACHE_KEY)
     },
-    getCachelist(): string[] {
-      return this.cachelist || getAuthCache<string[]>(CACHELIST_CACHE_KEY)
+    getCacheList(): string[] {
+      return this.cacheList || getAuthCache<string[]>(CACHELIST_CACHE_KEY)
     },
     getIsDynamicAddedRoute(): boolean {
       if (this.isDynamicAddedRoute === undefined) {
@@ -63,63 +61,74 @@ export const useRouteStore = defineStore({
       this.isDynamicAddedRoute = added
     },
 
-    // 设置动态路由
+    // 设置菜单
     setMenus(menus: Menu[]) {
-      this.menus = menus
       setAuthCache(MENU_CACHE_KEY, menus)
+      this.menus = renderMenuIcon(menus)
     },
-
     // 设置白名单
-    setWhitelist(menus: Menu[]) {
+    setCacheList(menus: Menu[]) {
+      // const w: Menu[] = tree2list<Menu>(menus)
       const w: Menu[] = treeToList<Menu[]>(menus, { children: 'children' })
       const whitelist = w.flatMap((self) => self.name)
       const cacheList = w
-        .filter((self) => self.meta && self.meta.keepAlive)
+        .filter((self) => self.keepAlive)
         .flatMap((self) => self.name)
         .concat('About')
       this.whitelist = whitelist
-      this.cachelist = cacheList
+      this.cacheList = cacheList
       setAuthCache(WHITELIST_CACHE_KEY, whitelist)
       setAuthCache(CACHELIST_CACHE_KEY, cacheList)
     },
-
     // 生成菜单
     async generateMenus() {
-      let accessedMenus: AppRouteRecordRaw[] = [...AfterPublicRoutes]
-
+      let buildMenus: Menu[] = []
       const { permissionMode } = projectSetting
       switch (permissionMode) {
         case PermissionModeEnum.BACK: {
           this.setDynamicAddedRoute(true)
           const user = useUserStore()
           let menus = user.getCurrentRole.menus
-          menus = payloadRoute(toRaw(menus))
-          accessedMenus.push(...toRaw(addMeta(menus)))
+          this.setCacheList(menus)
+          menus = buildMenusTree(menus)
+          buildMenus.push(...menus)
           break
         }
-        // case PermissionModeEnum.ROLE:
-        //   const routeFilter = (route) => {
-        //     const { meta } = route
-        //     const { permissions } = meta || {}
-        //     if (!permissions) {
-        //       return true
-        //     }
-        //     return permissionsList.some((item) => permissions.includes(item.value))
-        //   }
-        //   accessedMenus = accessedMenus.filter(routeFilter)
-        //   break
         case PermissionModeEnum.ROUTE_MAPPING: {
           this.setDynamicAddedRoute(false)
-          accessedMenus.push(...AfterBusinessRoutes)
           break
         }
         default: {
-          accessedMenus.push(...AfterBusinessRoutes)
+          this.setDynamicAddedRoute(false)
         }
       }
-      const m = toRaw(router2menuDeep(accessedMenus))
-      this.setMenus(m)
-      this.setWhitelist(m)
+      this.setMenus(buildMenus)
+      return
+    },
+    // 生成路由
+    async generateRoute(): Promise<AppRouteRecordRaw[]> {
+      let accessedMenus: AppRouteRecordRaw[] = [...AfterPublicRoutes]
+      let buildRoute: AppRouteRecordRaw[]
+      const { permissionMode } = projectSetting
+      switch (permissionMode) {
+        case PermissionModeEnum.BACK: {
+          this.setDynamicAddedRoute(true)
+          const user = useUserStore()
+          let menus = user.getCurrentRole.menus
+          menus = buildMenusTree(menus)
+          buildRoute = addMeta(menus)
+          break
+        }
+        case PermissionModeEnum.ROUTE_MAPPING: {
+          this.setDynamicAddedRoute(false)
+          buildRoute = AfterBusinessRoutes
+          break
+        }
+        default: {
+          buildRoute = AfterBusinessRoutes
+        }
+      }
+      accessedMenus.push(...buildRoute)
       return accessedMenus
     },
   },

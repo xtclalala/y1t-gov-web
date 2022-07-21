@@ -35,7 +35,8 @@
     "src/**/*.d.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
-    "types/*.d.ts"
+    "types/*.d.ts",
+    "node_modules/@types/node/globals.d.ts"
   ],
   "exclude": ["node_modules", "dist", "**/*.js"]
 }

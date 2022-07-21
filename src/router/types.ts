@@ -1,66 +1,48 @@
 import type { RouteRecordRaw, RouteMeta } from 'vue-router'
 import { RoleEnum } from '@/enums/roleEnum'
-import { defineComponent } from 'vue'
+import { defineComponent, VNode } from 'vue'
 
 export type Component<T = any> = ReturnType<typeof defineComponent> | (() => Promise<T>)
 
 // @ts-ignore
 export interface AppRouteRecordRaw extends Omit<RouteRecordRaw, 'meta'> {
-  hidden?: boolean
   name: string
-  title?: string
   meta: RouteMeta
   component?: Component | string
   children?: AppRouteRecordRaw[]
   props?: Recordable
   fullPath?: string
-  label?: string
-  key?: string
-  disabled?: boolean
-  icon?: any
-  pid?: number
-  ID?: number
-  sort?: number
-}
-
-export interface MenuTag {
-  type?: 'primary' | 'error' | 'warn' | 'success'
-  content?: string
-  dot?: boolean
 }
 
 export interface Menu {
-  label: string
+  id: number
 
-  key: string
+  pid: number
 
+  // menu route name
   name: string
 
-  icon?: any
-
+  // menu route path
   path: string
 
-  // path contains param, auto assignment.
-  paramPath?: string
+  // menu route title
+  title: string
 
-  disabled?: boolean
+  icon: string | (() => VNode)
 
-  children?: Menu[] | undefined
+  permissions?: [] | null
 
-  orderNo?: number
+  sort: number
+
+  children: Menu[] | null
+
+  // component path
+  component?: string
 
   roles?: RoleEnum[]
 
-  meta?: Partial<RouteMeta>
+  // hidden menu
+  hidden: boolean
 
-  tag?: MenuTag
-
-  hideMenu?: boolean
+  keepAlive: boolean
 }
-
-export interface MenuModule {
-  orderNo?: number
-  menu: Menu
-}
-
-export type AppRouteModule = AppRouteRecordRaw

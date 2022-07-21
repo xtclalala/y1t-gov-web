@@ -10,12 +10,16 @@ import { useRouter } from 'vue-router'
 import { useViewStore } from '@/store/module/views'
 import { Menu } from '@r/types'
 import { useRouteStore } from '@/store/module/router'
+import { getAuthCache } from '@/utils/auth'
+import { MENU_CACHE_KEY } from '@/enums/cacheEnum'
+import { MenuOption } from 'naive-ui'
+import { renderIcon } from '@/utils/yIcon'
 
 const router = useRouter()
-const uRouter = useRouteStore()
+const routeStore = useRouteStore()
 const collapsed = ref<boolean>(false)
 const viewStore = useViewStore()
-const options = uRouter.getMenus
+const options = routeStore.getMenus
 const expandedKeys = ref<string[]>([])
 
 // 菜单跳转
@@ -39,6 +43,8 @@ const handleAlt = (key: string, item: Menu) => {
     <n-menu
       :value="viewStore.currentView"
       :collapsed="collapsed"
+      key-field="name"
+      label-field="title"
       :default-expanded-keys="expandedKeys"
       :options="options"
       :indent="24"

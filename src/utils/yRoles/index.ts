@@ -1,5 +1,5 @@
 import { IRole } from '@/api/common/types/login'
-import { AppRouteRecordRaw } from '@r/types'
+import { Menu } from '@r/types'
 
 export interface IRoleSelect {
   name: string
@@ -9,7 +9,7 @@ export interface IRoleSelect {
   pid?: number
   sort?: number
   organizeId?: number
-  menus: AppRouteRecordRaw[]
+  menus: Menu[]
 }
 
 export const roles2Select = (roles: IRole[]): IRoleSelect[] => {

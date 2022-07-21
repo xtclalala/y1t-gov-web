@@ -61,7 +61,7 @@ export const REDIRECT_ROUTE: AppRouteRecordRaw = {
 export const LOGIN_ROUTE: AppRouteRecordRaw = {
   path: rPath.LOGIN,
   name: rName.LOGIN,
-  component: () => import('@/pages/common/login/index.vue'),
+  component: () => import('@/pages/login/index.vue'),
   meta: {
     title: '登录',
     white: true,

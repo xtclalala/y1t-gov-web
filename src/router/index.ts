@@ -4,10 +4,10 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import type { App } from 'vue'
 import { LOGIN_ROUTE, PAGE_NOT_FOUND_ROUTE, REDIRECT_ROUTE } from '@r/basic'
 import { PageEnum } from '@/enums/pageEnum'
-import { LAYOUT } from '@r/constant'
+import { LAYOUT, PAGE } from '@r/constant'
 import { rPath } from '@/enums/rPath'
 import { rName } from '@/enums/rName'
-import { useRouteStoreWidthOut } from '@/store/module/router'
+import { useRouteStore, useRouteStoreWidthOut } from '@/store/module/router'
 
 // 获取 modules 下的路由
 const modules = import.meta.globEager('./modules/*.ts')
@@ -52,7 +52,8 @@ export const ViewRoute: AppRouteRecordRaw = {
   meta: {
     title: 'tab',
   },
-  children: [...routeModuleList, ...routeWhiteList],
+  // children: [...routeModuleList, ...routeWhiteList],
+  children: [...routeWhiteList],
 }
 
 // Basic routing without permission
@@ -114,3 +115,39 @@ router.beforeEach((to, form, next) => {
 router.afterEach(() => {
   window.$loadingBar?.finish()
 })
+
+router.beforeResolve(async (to, from, next) => {
+  if (!hasRoute(to)) {
+    const routeStore = useRouteStoreWidthOut()
+    const routeList = await routeStore.generateRoute()
+    await addRouters(rName.TAB_VIEW, routeList)
+    console.log(router.getRoutes())
+    next(to.fullPath)
+  } else {
+    next()
+  }
+})
+function hasRoute(to) {
+  let find = router.getRoutes().find((item) => item.name === to.name)
+  return !!find
+}
+const addRouters = async (pName: string, routeList: AppRouteRecordRaw[]): Promise<void> => {
+  routeList.forEach((item) => {
+    if (typeof item.component === 'string') {
+      if (item.component === 'PAGE') {
+        item.component = PAGE
+      } else {
+        item.component = () => import('../' + item.component)
+      }
+    }
+    const r = {
+      name: item.name,
+      path: item.path,
+      component: item.component,
+    }
+    router.addRoute(pName, r)
+    if (item.children !== undefined) {
+      addRouters(item.name, item.children)
+    }
+  })
+}

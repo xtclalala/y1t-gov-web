@@ -1,12 +1,12 @@
-import { AppRouteRecordRaw } from '@r/types'
+import { Menu } from '@r/types'
 import { list2Tree } from '@/utils/helper/treeHelper'
 
-export const payloadRoute = (routes: AppRouteRecordRaw[]): AppRouteRecordRaw[] => {
+export const buildMenusTree = (routes: Menu[]): Menu[] => {
   sortRoute(routes)
   return list2Tree(routes)
 }
 
-export const sortRoute = (routes: AppRouteRecordRaw[]) => {
+export const sortRoute = (routes: Menu[]) => {
   routes.sort((a, b) => {
     return (a.pid || 0) - (b.pid || 0)
   })

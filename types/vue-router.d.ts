@@ -1,3 +1,5 @@
+import {RoleEnum} from "@/enums/roleEnum";
+
 export {};
 
 declare module 'vue-router' {
@@ -44,5 +46,7 @@ declare module 'vue-router' {
     disabled?: boolean
     white?: boolean
     keepAlive?: boolean;
+    id?: numer;
+    pid?: number;
   }
 }

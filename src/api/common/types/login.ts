@@ -1,4 +1,4 @@
-import { AppRouteRecordRaw } from '@r/types'
+import { Menu } from '@r/types'
 
 export interface LoginParams {
   username: string
@@ -18,7 +18,7 @@ export interface IRole {
   pid?: number
   sort?: number
   organizeId?: number
-  menus: AppRouteRecordRaw[]
+  menus: Menu[]
 }
 
 export interface IOrg {

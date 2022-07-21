@@ -28,8 +28,6 @@ const { projectGithub } = ProjectInfo
   display: flex;
   align-items: center;
   padding: 12px 20px;
-  /* border-bottom: 1px solid var(--border-color); */
-  background: var(--color);
   font-size: 1.8em;
   font-weight: 600;
   line-height: 1;

@@ -26,13 +26,13 @@ const userStores = useUserStore()
 const { roles } = storeToRefs(userStores)
 const routeStore = useRouteStore()
 // 选择活跃身份
-const submitCallback = () => {
+const submitCallback = async () => {
   if (currentRole.value === null) {
     window.$message?.warning('请选择身份')
     return
   }
   userStores.setCurrentRole(currentRole.value)
-  routeStore.generateMenus()
+  await routeStore.generateMenus()
   emit('update:show', false)
   router.push(PageEnum.BASE_HOME)
 }
