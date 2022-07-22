@@ -4,22 +4,16 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import { ref, toRefs } from 'vue'
+import { ref } from 'vue'
 import { useUserStore } from '@/store/module/user'
 import { storeToRefs } from 'pinia'
-import { useRouter } from 'vue-router'
+import { useRouter, RouteRecordRaw } from 'vue-router'
 import { useRouteStore } from '@/store/module/router'
 import { PageEnum } from '@/enums/pageEnum'
+import { buildDynamicRoute } from '@/utils/yRouter/router'
+import { rName } from '@/enums/rName'
 
-interface Props {
-  show: boolean
-}
-const props = withDefaults(defineProps<Props>(), {
-  show: false,
-})
-const { show } = toRefs(props)
-const emit = defineEmits(['update:show'])
-
+const show = ref<boolean>(false)
 const router = useRouter()
 const currentRole = ref(null)
 const userStores = useUserStore()
@@ -32,10 +26,27 @@ const submitCallback = async () => {
     return
   }
   userStores.setCurrentRole(currentRole.value)
-  await routeStore.generateMenus()
-  emit('update:show', false)
+  await generate()
+  show.value = false
   router.push(PageEnum.BASE_HOME)
 }
+
+const open = () => (show.value = true)
+
+const generate = async () => {
+  await routeStore.generateMenus()
+  const routeList = await routeStore.generateRoute()
+  await buildDynamicRoute(routeList)
+  routeList.forEach((route) => {
+    router.addRoute(rName.TAB_VIEW, route as RouteRecordRaw)
+  })
+  // router.addRoute()
+}
+
+defineExpose({
+  generate,
+  open,
+})
 </script>
 <template>
   <n-modal :show="show">

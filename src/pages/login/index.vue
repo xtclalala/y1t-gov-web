@@ -30,13 +30,14 @@ const model = ref<LoginParams>({
   password: '123456',
 })
 const disabled = computed<boolean>(() => model.value.username === '' || model.value.password === '')
-
 const loading = ref(false)
 const router = useRouter()
 const routeStore = useRouteStore()
 const userStore = useUserStore()
 const message = useMessage()
-const show = ref<boolean>(false)
+// @ts-ignore
+const chooseRoleRef = ref<InstanceType<typeof ChooseActiveRole> | null>(null)
+
 const handleLogin = async (e: Event): Promise<void> => {
   e.preventDefault()
   loading.value = true
@@ -45,9 +46,9 @@ const handleLogin = async (e: Event): Promise<void> => {
     if (res) {
       // 动态路由 需要选择身份
       if (routeStore.isDynamicAddedRoute) {
-        show.value = res
+        chooseRoleRef.value.open()
       } else {
-        await routeStore.generateMenus()
+        await chooseRoleRef.value.generate()
         await router.push(PageEnum.BASE_HOME)
       }
     }
@@ -79,7 +80,7 @@ const handleLogin = async (e: Event): Promise<void> => {
       @click="handleLogin"
       >登录</n-button
     >
-    <choose-active-role v-model:show="show" />
+    <choose-active-role ref="chooseRoleRef" />
   </n-card>
 </template>
 

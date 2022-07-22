@@ -1,13 +1,13 @@
 import type { AppRouteRecordRaw } from '@r/types'
-import type { RouteLocationNormalized, RouteRecordRaw } from 'vue-router'
+import type { RouteLocationNormalized, RouteRecordRaw, RouteRecordName } from 'vue-router'
 import { createRouter, createWebHashHistory } from 'vue-router'
 import type { App } from 'vue'
 import { LOGIN_ROUTE, PAGE_NOT_FOUND_ROUTE, REDIRECT_ROUTE } from '@r/basic'
 import { PageEnum } from '@/enums/pageEnum'
-import { LAYOUT, PAGE } from '@r/constant'
+import { LAYOUT } from '@r/constant'
 import { rPath } from '@/enums/rPath'
 import { rName } from '@/enums/rName'
-import { useRouteStore, useRouteStoreWidthOut } from '@/store/module/router'
+import { useRouteStoreWidthOut } from '@/store/module/router'
 
 // 获取 modules 下的路由
 const modules = import.meta.globEager('./modules/*.ts')
@@ -94,18 +94,36 @@ export function setupRouter(app: App<Element>) {
 }
 
 // @ts-ignore
-router.beforeEach((to, form, next) => {
-  const filter = (to: RouteLocationNormalized): boolean => {
-    const rs = useRouteStoreWidthOut()
-    if (!rs.getIsDynamicAddedRoute) {
-      return true
+router.beforeEach(async (to, form, next) => {
+  const addRoutes = async (
+    to: RouteLocationNormalized,
+    pName: string,
+    routeList: AppRouteRecordRaw[]
+  ): Promise<void> => {
+    console.log(router.hasRoute(to.name as RouteRecordName))
+    console.log(to)
+    console.log(router.getRoutes())
+    if (router.hasRoute(to.name as RouteRecordName)) {
+      return
     }
-    const f = rs.getWhitelist?.includes(to.name as string)
-    const res = f === undefined ? false : f
-    return WHITE_NAME_LIST.includes(to.name as string) || res
+    routeList.forEach((item) => {
+      router.addRoute(pName, item as RouteRecordRaw)
+      if (item.children) {
+        addRoutes(to, item.name, item.children)
+      }
+    })
+    next({ ...to, replace: true })
+    // const f = routeStoreWidthOut.getWhitelist?.includes(to.name as string)
+    // const res = f === undefined ? false : f
+    // return WHITE_NAME_LIST.includes(to.name as string) || res
   }
   window.$loadingBar?.start()
-  if (filter(to)) {
+
+  // 判断是否登录
+  if (true) {
+    const routeStoreWidthOut = useRouteStoreWidthOut()
+    const routeList = await routeStoreWidthOut.generateRoute()
+    await addRoutes(to, rName.TAB_VIEW, routeList)
     next()
   } else {
     next({ name: rName.LOGIN })
@@ -115,39 +133,3 @@ router.beforeEach((to, form, next) => {
 router.afterEach(() => {
   window.$loadingBar?.finish()
 })
-
-router.beforeResolve(async (to, from, next) => {
-  if (!hasRoute(to)) {
-    const routeStore = useRouteStoreWidthOut()
-    const routeList = await routeStore.generateRoute()
-    await addRouters(rName.TAB_VIEW, routeList)
-    console.log(router.getRoutes())
-    next(to.fullPath)
-  } else {
-    next()
-  }
-})
-function hasRoute(to) {
-  let find = router.getRoutes().find((item) => item.name === to.name)
-  return !!find
-}
-const addRouters = async (pName: string, routeList: AppRouteRecordRaw[]): Promise<void> => {
-  routeList.forEach((item) => {
-    if (typeof item.component === 'string') {
-      if (item.component === 'PAGE') {
-        item.component = PAGE
-      } else {
-        item.component = () => import('../' + item.component)
-      }
-    }
-    const r = {
-      name: item.name,
-      path: item.path,
-      component: item.component,
-    }
-    router.addRoute(pName, r)
-    if (item.children !== undefined) {
-      addRouters(item.name, item.children)
-    }
-  })
-}

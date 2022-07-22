@@ -3,7 +3,7 @@ import { store } from '@/store'
 import { AfterBusinessRoutes, AfterPublicRoutes } from '@r/index'
 // import { useProjectSetting } from '@/hooks/setting/useProjectSetting'
 import { PermissionModeEnum } from '@/enums/appEnum'
-import { addMeta, renderMenuIcon } from '@/utils/yMenu'
+import { addMeta, renderMenuIcon, router2menuDeep } from '@/utils/yMenu'
 import { AppRouteRecordRaw, Menu } from '@r/types'
 import { buildMenusTree } from '@/utils/yRouter/router'
 import projectSetting from '@/settings/projectSetting'
@@ -113,19 +113,20 @@ export const useRouteStore = defineStore({
       switch (permissionMode) {
         case PermissionModeEnum.BACK: {
           this.setDynamicAddedRoute(true)
-          const user = useUserStore()
-          let menus = user.getCurrentRole.menus
-          menus = buildMenusTree(menus)
-          buildRoute = addMeta(menus)
+          buildRoute = addMeta(this.getMenus)
           break
         }
         case PermissionModeEnum.ROUTE_MAPPING: {
           this.setDynamicAddedRoute(false)
           buildRoute = AfterBusinessRoutes
+          const menus = router2menuDeep(buildRoute)
+          this.setMenus(menus)
           break
         }
         default: {
           buildRoute = AfterBusinessRoutes
+          const menus = router2menuDeep(buildRoute)
+          this.setMenus(menus)
         }
       }
       accessedMenus.push(...buildRoute)
