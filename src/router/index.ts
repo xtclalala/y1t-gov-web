@@ -8,6 +8,9 @@ import { LAYOUT } from '@r/constant'
 import { rPath } from '@/enums/rPath'
 import { rName } from '@/enums/rName'
 import { useRouteStoreWidthOut } from '@/store/module/router'
+import { useUserStore } from '@/store/module/user'
+import { isEmpty } from '@/utils/is'
+import { buildDynamicRoute } from '@/utils/yRouter/router'
 
 // 获取 modules 下的路由
 const modules = import.meta.globEager('./modules/*.ts')
@@ -100,33 +103,34 @@ router.beforeEach(async (to, form, next) => {
     pName: string,
     routeList: AppRouteRecordRaw[]
   ): Promise<void> => {
-    console.log(router.hasRoute(to.name as RouteRecordName))
-    console.log(to)
-    console.log(router.getRoutes())
-    if (router.hasRoute(to.name as RouteRecordName)) {
-      return
+    if (routeStoreWidthOut.getIsDynamicAddedRoute) {
+      await buildDynamicRoute(routeList)
     }
     routeList.forEach((item) => {
-      router.addRoute(pName, item as RouteRecordRaw)
-      if (item.children) {
-        addRoutes(to, item.name, item.children)
+      if (router.hasRoute(item.name as RouteRecordName)) {
+        return
       }
+      router.addRoute(pName, item as RouteRecordRaw)
+      router.push({ path: to.path })
     })
-    next({ ...to, replace: true })
-    // const f = routeStoreWidthOut.getWhitelist?.includes(to.name as string)
-    // const res = f === undefined ? false : f
-    // return WHITE_NAME_LIST.includes(to.name as string) || res
   }
   window.$loadingBar?.start()
+  const userStore = useUserStore()
+  const routeStoreWidthOut = useRouteStoreWidthOut()
 
   // 判断是否登录
-  if (true) {
-    const routeStoreWidthOut = useRouteStoreWidthOut()
+  if (!isEmpty(userStore.getToken)) {
     const routeList = await routeStoreWidthOut.generateRoute()
     await addRoutes(to, rName.TAB_VIEW, routeList)
     next()
   } else {
-    next({ name: rName.LOGIN })
+    if (to.name !== rName.LOGIN) {
+      next({ name: rName.LOGIN })
+    } else {
+      next()
+    }
+
+    // next()
   }
 })
 
