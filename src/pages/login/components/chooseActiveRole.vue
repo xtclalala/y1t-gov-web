@@ -1,9 +1,4 @@
-<script lang="ts">
-export default {
-  name: 'ChooseActiveRole',
-}
-</script>
-<script setup lang="ts">
+<script setup lang="ts" name="ChooseActiveRole">
 import { ref } from 'vue'
 import { useUserStore } from '@/store/module/user'
 import { storeToRefs } from 'pinia'
@@ -28,7 +23,7 @@ const submitCallback = async () => {
   userStores.setCurrentRole(currentRole.value)
   await generate()
   show.value = false
-  router.push(PageEnum.BASE_HOME)
+  await router.push(PageEnum.BASE_HOME)
 }
 
 const open = () => (show.value = true)

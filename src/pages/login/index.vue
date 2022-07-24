@@ -35,7 +35,7 @@ const router = useRouter()
 const routeStore = useRouteStore()
 const userStore = useUserStore()
 const message = useMessage()
-// @ts-ignore
+
 const chooseRoleRef = ref<InstanceType<typeof ChooseActiveRole> | null>(null)
 
 const handleLogin = async (e: Event): Promise<void> => {
@@ -46,9 +46,11 @@ const handleLogin = async (e: Event): Promise<void> => {
     if (res) {
       // 动态路由 需要选择身份
       if (routeStore.isDynamicAddedRoute) {
-        chooseRoleRef.value.open()
+        // @ts-ignore
+        chooseRoleRef.value?.open()
       } else {
-        await chooseRoleRef.value.generate()
+        // @ts-ignore
+        await chooseRoleRef.value?.generate()
         await router.push(PageEnum.BASE_HOME)
       }
     }

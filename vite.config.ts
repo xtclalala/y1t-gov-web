@@ -1,6 +1,7 @@
 import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
+import VueSetupExtend from 'vite-plugin-vue-setup-extend'
 import { resolve } from 'path'
 
 const NODE_ENV = process.env.VITE_USER_NODE_ENV || 'development'
@@ -8,7 +9,7 @@ const config = loadEnv(NODE_ENV, './')
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue(), vueJsx()],
+  plugins: [vue(), vueJsx(), VueSetupExtend()],
   resolve: {
     alias: {
       // 配置导包使用的快捷方式

@@ -10,10 +10,6 @@ import { useRouter } from 'vue-router'
 import { useViewStore } from '@/store/module/views'
 import { Menu } from '@r/types'
 import { useRouteStore } from '@/store/module/router'
-import { getAuthCache } from '@/utils/auth'
-import { MENU_CACHE_KEY } from '@/enums/cacheEnum'
-import { MenuOption } from 'naive-ui'
-import { renderIcon } from '@/utils/yIcon'
 
 const router = useRouter()
 const routeStore = useRouteStore()
