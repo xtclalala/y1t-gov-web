@@ -29,6 +29,10 @@ export function isEmpty<T = unknown>(val: T): val is T {
     return Object.keys(val).length === 0
   }
 
+  if (isNullOrUnDef(val)) {
+    return true
+  }
+
   return false
 }
 

@@ -24,7 +24,6 @@ export const buildDynamicRoute = async (routeList: AppRouteRecordRaw[]): Promise
       if (item.component === 'PAGE') {
         item.component = PAGE
       } else {
-        console.log(modules[`../../${item.component}`])
         item.component = modules[`../../${item.component}`]
       }
     }

@@ -13,7 +13,7 @@ export interface Information {
 }
 
 export interface IRole {
-  ID: number
+  id: number
   name: string
   pid?: number
   sort?: number

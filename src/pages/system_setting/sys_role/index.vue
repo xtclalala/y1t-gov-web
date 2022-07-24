@@ -137,7 +137,6 @@ const columns = [
                 NButton,
                 {
                   onClick: () => {
-                    console.log(row)
                     currentRole.value = row.id
                     defaultMenuData.value = row.menus.flatMap((item) => item.id)
                     defaultPerData.value = row.permissions.flatMap((item) => item.id)

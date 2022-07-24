@@ -118,7 +118,7 @@ router.beforeEach(async (to, form, next) => {
   const userStore = useUserStore()
   const routeStoreWidthOut = useRouteStoreWidthOut()
 
-  // 判断是否登录
+  // 判断是否登录成功
   if (!isEmpty(userStore.getToken)) {
     const routeList = await routeStoreWidthOut.generateRoute()
     await addRoutes(to, rName.TAB_VIEW, routeList)

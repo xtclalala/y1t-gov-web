@@ -11,15 +11,14 @@ import {
   USER_INFO,
 } from '@/enums/cacheEnum'
 
-import { IRoleSelect, roles2Select } from '@/utils/yRoles'
 import { store } from '@/store'
 
 interface IUser {
   id: string
   username: string
   token: string
-  currentRole: IRoleSelect | undefined
-  roles: IRoleSelect[] | undefined
+  currentRole: IRole | undefined
+  roles: IRole[] | undefined
   organization: IOrg[] | undefined
 }
 
@@ -36,14 +35,14 @@ export const useUserStore = defineStore('user', {
     }
   },
   getters: {
-    getCurrentRole(): IRoleSelect {
-      return this.currentRole || getAuthCache<IRoleSelect>(CURRENT_ROLE)
+    getCurrentRole(): IRole {
+      return this.currentRole || getAuthCache<IRole>(CURRENT_ROLE)
     },
     getToken(): string {
       return this.token || getAuthCache<string>(TOKEN_KEY)
     },
-    getRoles(): IRoleSelect[] {
-      return this.roles || getAuthCache<IRoleSelect[]>(ROLES_KEY)
+    getRoles(): IRole[] {
+      return this.roles || getAuthCache<IRole[]>(ROLES_KEY)
     },
     getOrganization(): IOrg[] {
       return this.organization || getAuthCache<IOrg[]>(ORGANIZATIONS_KEY)
@@ -74,9 +73,8 @@ export const useUserStore = defineStore('user', {
       setAuthCache(TOKEN_KEY, token)
     },
     setRoles(roles: IRole[]) {
-      const s = roles2Select(roles)
-      this.roles = s
-      setAuthCache(ROLES_KEY, s)
+      this.roles = roles
+      setAuthCache(ROLES_KEY, roles)
     },
     setOrganizations(organization: IOrg[]) {
       this.organization = organization
@@ -90,8 +88,8 @@ export const useUserStore = defineStore('user', {
       this.id = id
       setAuthCache(USER_ID, id)
     },
-    setCurrentRole(value: number) {
-      const current = this.roles?.find((self) => self.value === value)
+    setCurrentRole(id: number) {
+      const current = this.roles?.find((self) => self.id === id)
       this.currentRole = current
       setAuthCache(CURRENT_ROLE, current)
     },

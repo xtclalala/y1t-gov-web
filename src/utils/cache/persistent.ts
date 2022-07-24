@@ -17,7 +17,6 @@ import {
   PERMISSIONS_KEY,
   CURRENT_ROLE,
   MENU_CACHE_KEY,
-  WHITELIST_CACHE_KEY,
   CACHELIST_CACHE_KEY,
   USER_ID,
 } from '@/enums/cacheEnum'
@@ -38,7 +37,6 @@ interface BasicStore {
   [PERMISSIONS_KEY]: []
   [CURRENT_ROLE]: Object
   [MENU_CACHE_KEY]: Menu[]
-  [WHITELIST_CACHE_KEY]: Menu[]
   [CACHELIST_CACHE_KEY]: string[]
 }
 
