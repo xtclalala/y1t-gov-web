@@ -1,3 +1,7 @@
+/**
+ * 合并传入对象的所有属性
+ * @param sources Array<object>
+ */
 export function completeAssign<T>(...sources): T {
   const target = {}
   sources.forEach((item) => {

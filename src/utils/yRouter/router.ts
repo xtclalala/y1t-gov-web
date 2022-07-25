@@ -1,23 +1,34 @@
 import { AppRouteRecordRaw, Menu } from '@r/types'
 import { list2Tree } from '@/utils/helper/treeHelper'
 import { PAGE } from '@r/constant'
+import { listSort } from '@/utils/helper/listHelper'
 
+/**
+ * 构建侧边菜单兰内容
+ * @param routes 用户可以使用的菜单
+ */
 export const buildMenusTree = (routes: Menu[]): Menu[] => {
   sortRoute(routes)
   return list2Tree(routes)
 }
 
+/**
+ * 路由排序
+ * @param routes 需要排序的路由
+ */
 export const sortRoute = (routes: Menu[]) => {
-  routes.sort((a, b) => {
-    return (a.pid || 0) - (b.pid || 0)
-  })
-  routes.sort((a, b) => {
-    return (a.sort || 100) - (b.sort || 100)
-  })
+  listSort(routes, 'pid', 0)
+  listSort(routes, 'sort', 100)
 }
-
+/**
+ * 引入 pages 下的 sfc
+ */
 const modules = import.meta.glob('../../pages/**/*.vue')
 
+/**
+ * 动态导入 sfc
+ * @param routeList
+ */
 export const buildDynamicRoute = async (routeList: AppRouteRecordRaw[]): Promise<void> => {
   routeList.forEach((item) => {
     if (typeof item.component === 'string') {
