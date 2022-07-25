@@ -88,7 +88,7 @@ export const useUserStore = defineStore('user', {
       this.id = id
       setAuthCache(USER_ID, id)
     },
-    setCurrentRole(id: number) {
+    async setCurrentRole(id: number): Promise<void> {
       const current = this.roles?.find((self) => self.id === id)
       this.currentRole = current
       setAuthCache(CURRENT_ROLE, current)

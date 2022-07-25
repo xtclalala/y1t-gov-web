@@ -9,7 +9,6 @@ import projectSetting from '@/settings/projectSetting'
 import { getAuthCache, setAuthCache } from '@/utils/auth'
 import { CACHELIST_CACHE_KEY, MENU_CACHE_KEY } from '@/enums/cacheEnum'
 import { useUserStore } from '@/store/module/user'
-import { treeToList } from '@/utils/helper/treeHelper'
 
 export interface IAsyncRouteState {
   menus: Menu[] | undefined
@@ -64,17 +63,15 @@ export const useRouteStore = defineStore({
     },
     // 设置白名单
     setCacheList(menus: Menu[]) {
-      const w: Menu[] = treeToList<Menu[]>(menus, { children: 'children' })
-      const cacheList = w
+      const cacheList = menus
         .filter((self) => self.keepAlive)
         .flatMap((self) => self.name)
         .concat('About')
-
       this.cacheList = cacheList
       setAuthCache(CACHELIST_CACHE_KEY, cacheList)
     },
     // 生成菜单
-    async generateMenus() {
+    async generateMenus(): Promise<void> {
       const buildMenus: Menu[] = []
       const { permissionMode } = projectSetting
 
@@ -94,7 +91,6 @@ export const useRouteStore = defineStore({
           this.setDynamicAddedRoute(false)
         }
       }
-
       this.setMenus(buildMenus)
     },
     // 生成路由

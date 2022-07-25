@@ -31,8 +31,6 @@ Object.keys(common).forEach((key) => {
   const modList = Array.isArray(mod) ? [...mod] : [mod]
   routeWhiteList.push(...modList)
 })
-// 登录以后的公共路由
-export const AfterPublicRoutes: AppRouteRecordRaw[] = [...routeWhiteList]
 
 export const RootRoute: AppRouteRecordRaw = {
   path: rPath.ROOT,
@@ -103,9 +101,12 @@ router.beforeEach(async (to, form, next) => {
     pName: string,
     routeList: AppRouteRecordRaw[]
   ): Promise<void> => {
+    window.$loadingBar?.start()
+
     if (routeStoreWidthOut.getIsDynamicAddedRoute) {
       await buildDynamicRoute(routeList)
     }
+
     routeList.forEach((item) => {
       if (router.hasRoute(item.name as RouteRecordName)) {
         return
@@ -114,7 +115,6 @@ router.beforeEach(async (to, form, next) => {
       router.push({ path: to.path })
     })
   }
-  window.$loadingBar?.start()
   const userStore = useUserStore()
   const routeStoreWidthOut = useRouteStoreWidthOut()
 
@@ -123,14 +123,10 @@ router.beforeEach(async (to, form, next) => {
     const routeList = await routeStoreWidthOut.generateRoute()
     await addRoutes(to, rName.TAB_VIEW, routeList)
     next()
+  } else if (to.name !== rName.LOGIN) {
+    next({ name: rName.LOGIN })
   } else {
-    if (to.name !== rName.LOGIN) {
-      next({ name: rName.LOGIN })
-    } else {
-      next()
-    }
-
-    // next()
+    next()
   }
 })
 

@@ -45,7 +45,7 @@ const handleLogin = async (e: Event): Promise<void> => {
     const res = await userStore.login(model.value)
     if (res) {
       // 动态路由 需要选择身份
-      if (routeStore.isDynamicAddedRoute) {
+      if (routeStore.getIsDynamicAddedRoute) {
         // @ts-ignore
         chooseRoleRef.value?.open()
       } else {

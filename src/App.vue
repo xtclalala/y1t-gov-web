@@ -1,25 +1,25 @@
 <template>
   <n-config-provider :theme="theme" :locale="zhCN">
-    <n-theme-editor>
-      <n-global-style />
-      <n-loading-bar-provider>
-        <n-message-provider>
-          <n-dialog-provider>
-            <n-notification-provider>
-              <naive-provider-content />
-              <RouterView />
-            </n-notification-provider>
-          </n-dialog-provider>
-        </n-message-provider>
-      </n-loading-bar-provider>
-    </n-theme-editor>
+    <!--    <n-theme-editor>-->
+    <n-global-style />
+    <n-loading-bar-provider>
+      <n-message-provider>
+        <n-dialog-provider>
+          <n-notification-provider>
+            <naive-provider-content />
+            <RouterView />
+          </n-notification-provider>
+        </n-dialog-provider>
+      </n-message-provider>
+    </n-loading-bar-provider>
+    <!--    </n-theme-editor>-->
   </n-config-provider>
 </template>
 
 <script lang="ts" setup>
 import { computed, defineComponent, h } from 'vue'
 import { darkTheme, zhCN, lightTheme } from 'naive-ui'
-import { useLoadingBar, useDialog, useMessage, useNotification, NThemeEditor } from 'naive-ui'
+import { useLoadingBar, useDialog, useMessage, useNotification } from 'naive-ui'
 import { useAppStore } from '@/store/module/app'
 import { ThemeEnum } from '@/enums/appEnum'
 

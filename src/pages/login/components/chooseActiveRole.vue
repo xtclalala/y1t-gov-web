@@ -17,12 +17,11 @@ const { roles } = storeToRefs(userStore)
 const routeStore = useRouteStore()
 // 选择活跃身份
 const submitCallback = async () => {
-  console.log(currentRole.value)
   if (isNull(currentRole.value)) {
     window.$message?.warning('请选择身份')
     return
   }
-  userStore.setCurrentRole(currentRole.value)
+  await userStore.setCurrentRole(currentRole.value)
   await generate()
   show.value = false
   await router.push(PageEnum.BASE_HOME)
@@ -38,7 +37,6 @@ const generate = async () => {
   routeList.forEach((route) => {
     router.addRoute(rName.TAB_VIEW, route as RouteRecordRaw)
   })
-  // router.addRoute()
 }
 defineExpose({
   generate,
