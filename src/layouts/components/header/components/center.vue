@@ -11,14 +11,12 @@ import { NButton, useMessage } from 'naive-ui'
 import { useUserStore } from '@/store/module/user'
 import { rPath } from '@/enums/rPath'
 import { rName } from '@/enums/rName'
-import { useRouteStore } from '@/store/module/router'
-import { useViewStore } from '@/store/module/views'
+import { useAppStore } from '@/store/module/app'
 
 const router = useRouter()
 const message = useMessage()
 const userStores = useUserStore()
-const routeStore = useRouteStore()
-const viewStore = useViewStore()
+
 // 选中下拉框中的回调
 const handleOptionsSelect = async (key: unknown): Promise<void> => {
   if ((key as string) === 'me') {
@@ -27,10 +25,8 @@ const handleOptionsSelect = async (key: unknown): Promise<void> => {
 }
 
 // 退出登录
-const logout = () => {
-  userStores.$reset()
-  routeStore.$reset()
-  viewStore.$reset()
+const logout = async () => {
+  await useAppStore().clearOtherStore()
   router.push({ name: rName.LOGIN })
 }
 

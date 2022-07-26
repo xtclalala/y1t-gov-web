@@ -14,7 +14,7 @@ import { AppRouteRecordRaw } from '@r/types'
 import { router2menu } from '@/utils/yMenu'
 
 const viewStore = useViewStore()
-const msg = useMessage()
+const message = useMessage()
 const { viewList, currentView } = storeToRefs(viewStore)
 const router = useRouter()
 const route = useRoute()
@@ -22,6 +22,9 @@ const scrollbar: any = ref(null)
 const leftArrowDisabled = ref<boolean>(false)
 const rightArrowDisabled = ref<boolean>(false)
 
+/**
+ * 监听路由跳转时将视图添加进视图列表
+ */
 watch(
   route,
   (n) => {
@@ -32,6 +35,10 @@ watch(
   { immediate: true }
 )
 
+/**
+ * 监听视图列表的长度是否超过显示长度，
+ * 超出则显示右移或左移图标
+ */
 watch(
   viewList,
   async () => {
@@ -43,20 +50,43 @@ watch(
   { deep: true }
 )
 
+/**
+ * 点击关闭视图图标
+ * @param name
+ */
 const iconClick = (name: string) => {
+  if (viewList.value.length === 1) {
+    message.warning('最后一页不能删除')
+    return
+  }
   closeTab(name)
 }
 
+/**
+ * 点击视图，并跳转
+ * @param name
+ * @param e
+ */
 const itemClick = (name: string, e: MouseEvent) => {
   currentView.value = name
   tabClick(e.target as HTMLElement, name)
 }
 
+/**
+ * 点击视图，并跳转
+ * @param name
+ * @param e
+ */
 const itemChildClick = (name: string, e: MouseEvent) => {
   currentView.value = name
   tabClick(e.target as HTMLElement, name)
 }
 
+/**
+ * 点击视图，并跳转
+ * @param el
+ * @param name
+ */
 const tabClick = (el: HTMLElement, name: string) => {
   scrollbar.value.scrollTo(
     {
@@ -69,6 +99,9 @@ const tabClick = (el: HTMLElement, name: string) => {
   router.push({ name })
 }
 
+/**
+ * 点击左移图标
+ */
 const leftArrowClick = () => {
   const scrollX = scrollbar.value.$el.nextElementSibling.firstChild.scrollLeft || 0
   scrollbar.value.scrollTo({
@@ -79,6 +112,9 @@ const leftArrowClick = () => {
   isDisabledArrow()
 }
 
+/**
+ * 点击右移图标
+ */
 const rightArrowClick = () => {
   const scrollX = scrollbar.value.$el.nextElementSibling.firstElementChild.scrollLeft || 0
   scrollbar.value.scrollTo(
@@ -92,6 +128,9 @@ const rightArrowClick = () => {
   isDisabledArrow()
 }
 
+/**
+ * 移动tab栏
+ */
 const isDisabledArrow = () => {
   setTimeout(() => {
     nextTick(() => {
@@ -103,16 +142,16 @@ const isDisabledArrow = () => {
   }, 100)
 }
 
+/**
+ * 关闭视图，如果关闭当前页，将自动跳转到最后一页
+ * @param name
+ */
 const closeTab = async (name: string) => {
-  if (viewList.value.length === 1) {
-    msg.warning('最后一页不能删除')
-    return
-  }
-  const index = viewList.value.findIndex((self) => self.name === name)
+  const index = viewStore.findTabIndexByName(name)
   if (index !== -1) {
     await viewStore.removeTab(index)
     if (currentView.value === name) {
-      currentView.value = viewStore.listSliceEnd[0].name
+      currentView.value = viewStore.viewListLast.name
       await router.push({ name: currentView.value })
     }
   }

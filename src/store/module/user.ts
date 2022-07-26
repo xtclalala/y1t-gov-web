@@ -1,3 +1,8 @@
+/**
+ * @Description: src\store\module\user.ts
+ * @author: y1t
+ * @date 2022/7/26
+ **/
 import { defineStore } from 'pinia'
 import { Information, IOrg, IRole, LoginParams } from '@/api/common/types/login'
 import { doLogin, getInformation } from '@/api/common/login'
@@ -55,6 +60,10 @@ export const useUserStore = defineStore('user', {
     },
   },
   actions: {
+    /**
+     * 登录操作
+     * @param params
+     */
     login: async function (params: LoginParams): Promise<boolean> {
       const token = await doLogin<string>(params)
       if (token === undefined) {
