@@ -10,7 +10,7 @@ import { rName } from '@/enums/rName'
 import { useRouteStoreWidthOut } from '@/store/module/router'
 import { useUserStore } from '@/store/module/user'
 import { isEmpty } from '@/utils/is'
-import { buildDynamicRoute } from '@/utils/yRouter/router'
+import { buildDynamicRoute } from '@/utils/yRouter'
 
 // 获取 modules 下的路由
 const modules = import.meta.globEager('./modules/*.ts')

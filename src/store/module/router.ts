@@ -2,13 +2,13 @@ import { defineStore } from 'pinia'
 import { store } from '@/store'
 import { AfterBusinessRoutes } from '@r/index'
 import { PermissionModeEnum } from '@/enums/appEnum'
-import { addMeta, renderMenuIcon, router2menuDeep } from '@/utils/yMenu'
+import { buildMenusTree, renderMenuIcon, router2menuDeep } from '@/utils/yMenu'
 import { AppRouteRecordRaw, Menu } from '@r/types'
-import { buildMenusTree } from '@/utils/yRouter/router'
 import projectSetting from '@/settings/projectSetting'
 import { getAuthCache, setAuthCache } from '@/utils/auth'
 import { CACHELIST_CACHE_KEY, MENU_CACHE_KEY } from '@/enums/cacheEnum'
 import { useUserStore } from '@/store/module/user'
+import { buildRoute } from '@/utils/yRouter'
 
 export interface IAsyncRouteState {
   menus: Menu[] | undefined
@@ -95,26 +95,26 @@ export const useRouteStore = defineStore({
     },
     // 生成路由
     async generateRoute(): Promise<AppRouteRecordRaw[]> {
-      let buildRoute: AppRouteRecordRaw[]
+      let buildRoutes: AppRouteRecordRaw[]
       const { permissionMode } = projectSetting
 
       switch (permissionMode) {
         case PermissionModeEnum.BACK: {
           this.setDynamicAddedRoute(true)
-          buildRoute = addMeta(this.getMenus)
+          buildRoutes = buildRoute(this.getMenus)
           break
         }
 
         case PermissionModeEnum.ROUTE_MAPPING:
         default: {
           this.setDynamicAddedRoute(false)
-          buildRoute = AfterBusinessRoutes
-          const menus = router2menuDeep(buildRoute)
+          buildRoutes = AfterBusinessRoutes
+          const menus = router2menuDeep(buildRoutes)
           this.setMenus(menus)
         }
       }
 
-      return buildRoute
+      return buildRoutes
     },
   },
 })

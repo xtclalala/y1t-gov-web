@@ -5,7 +5,7 @@ export default {
 </script>
 <script setup lang="ts">
 import { computed, h } from 'vue'
-import { renderIcon } from '@/utils/yIcon'
+import { renderIcon } from '@/utils/render'
 import { RouterLink, useRouter } from 'vue-router'
 import { NButton, useMessage } from 'naive-ui'
 import { useUserStore } from '@/store/module/user'

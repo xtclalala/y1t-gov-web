@@ -1,6 +1,17 @@
+/**
+ * @Description: src\utils\yMenu\index.ts
+ * @author: y1t
+ * @date 2022/7/26
+ **/
 import { AppRouteRecordRaw, Menu } from '@r/types'
-import { renderIcon } from '@/utils/yIcon'
+import { renderIcon } from '@/utils/render'
+import { list2Tree } from '@/utils/helper/treeHelper'
+import { listSort } from '@/utils/helper/listHelper'
 
+/**
+ * 把路由构建成菜单
+ * @param routes
+ */
 export const router2menuDeep = (routes: AppRouteRecordRaw[]): Menu[] => {
   const menu: Menu[] = []
   for (const item of routes) {
@@ -25,27 +36,19 @@ export const router2menuDeep = (routes: AppRouteRecordRaw[]): Menu[] => {
   return menu
 }
 
+/**
+ * 路由转化成菜单
+ * @param routes
+ */
 export const router2menu = (routes: AppRouteRecordRaw): Menu => {
   const { name, meta } = routes
   return { name, title: meta.title } as Menu
 }
 
-export const addMeta = (routes: Menu[]): AppRouteRecordRaw[] => {
-  const m: AppRouteRecordRaw[] = []
-  for (const route of routes) {
-    const temp: AppRouteRecordRaw = {
-      ...route,
-      meta: {
-        hideMenu: route.hidden,
-        title: route.title,
-      },
-      children: route.children !== null ? addMeta(route.children) : undefined,
-    }
-    m.push(temp)
-  }
-  return m
-}
-
+/**
+ * 菜单渲染图标
+ * @param menu
+ */
 export const renderMenuIcon = (menu: Menu[]): Menu[] => {
   menu.flatMap((item) => {
     if (typeof item.icon === 'string') {
@@ -57,4 +60,22 @@ export const renderMenuIcon = (menu: Menu[]): Menu[] => {
     return item
   })
   return menu
+}
+
+/**
+ * 构建侧边菜单兰内容
+ * @param routes 用户可以使用的菜单
+ */
+export const buildMenusTree = (routes: Menu[]): Menu[] => {
+  sortMenu(routes)
+  return list2Tree(routes)
+}
+
+/**
+ * 路由排序
+ * @param routes 需要排序的路由
+ */
+export const sortMenu = (routes: Menu[]) => {
+  listSort(routes, 'pid', 0)
+  listSort(routes, 'sort', 100)
 }

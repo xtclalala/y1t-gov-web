@@ -1,25 +1,6 @@
 import { AppRouteRecordRaw, Menu } from '@r/types'
-import { list2Tree } from '@/utils/helper/treeHelper'
 import { PAGE } from '@r/constant'
-import { listSort } from '@/utils/helper/listHelper'
 
-/**
- * 构建侧边菜单兰内容
- * @param routes 用户可以使用的菜单
- */
-export const buildMenusTree = (routes: Menu[]): Menu[] => {
-  sortRoute(routes)
-  return list2Tree(routes)
-}
-
-/**
- * 路由排序
- * @param routes 需要排序的路由
- */
-export const sortRoute = (routes: Menu[]) => {
-  listSort(routes, 'pid', 0)
-  listSort(routes, 'sort', 100)
-}
 /**
  * 引入 pages 下的 sfc
  */
@@ -42,4 +23,24 @@ export const buildDynamicRoute = async (routeList: AppRouteRecordRaw[]): Promise
       buildDynamicRoute(item.children)
     }
   })
+}
+
+/**
+ * 菜单构建路由
+ * @param routes
+ */
+export const buildRoute = (routes: Menu[]): AppRouteRecordRaw[] => {
+  const m: AppRouteRecordRaw[] = []
+  for (const route of routes) {
+    const temp: AppRouteRecordRaw = {
+      ...route,
+      meta: {
+        hideMenu: route.hidden,
+        title: route.title,
+      },
+      children: route.children !== null ? buildRoute(route.children) : undefined,
+    }
+    m.push(temp)
+  }
+  return m
 }
