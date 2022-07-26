@@ -7,7 +7,7 @@ export default {
 import { h, ref } from 'vue'
 import { YIcon } from '@/components'
 import { FormRules, NButton, NDivider, NPopconfirm, NSpace } from 'naive-ui'
-import { completeAssign } from '@/utils/helper/objectHelper'
+import { completeMerger } from '@/utils/helper/objectHelper'
 
 import { BaseRole, Page } from '@/api/system_setting/types/sys_role'
 import { PageResult } from '#axios'
@@ -160,7 +160,7 @@ const sTmpData = {
 }
 const tableApi = async (page: Page, searchData: any) => {
   return searchUser<PageResult<Array<registerUser>>>(
-    completeAssign<SearchUser>(page, searchData.value),
+    completeMerger<SearchUser>(page, searchData.value),
     { isMessage: false }
   )
 }

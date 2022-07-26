@@ -12,7 +12,7 @@ import { FormRules, NButton, NDivider, NPopconfirm, NSpace } from 'naive-ui'
 import { Page } from '@/api/system_setting/types/sys_role'
 import { YIcon } from '@/components'
 import { YPermission } from './components'
-import { completeAssign } from '@/utils/helper/objectHelper'
+import { completeMerger } from '@/utils/helper/objectHelper'
 import { useTable } from '@/hooks/comHooks/useTable'
 import { useModal } from '@/hooks/comHooks/useModal'
 
@@ -163,7 +163,7 @@ const sTmpData = {
 }
 const tableApi = async (page: Page, searchData: any) => {
   return searchMenu<PageResult<Array<registerMenu>>>(
-    completeAssign<SearchMenu>(page, searchData.value),
+    completeMerger<SearchMenu>(page, searchData.value),
     { isMessage: false }
   )
 }

@@ -1,25 +1,32 @@
+/**
+ * @Description: treeHelper
+ * @author: y1t
+ * @Date: 2022/7/25
+ **/
+
 interface TreeHelperConfig {
   id: string
   children: string
   pid: string
 }
+
 const DEFAULT_CONFIG: TreeHelperConfig = {
   id: 'id',
   children: 'children',
   pid: 'pid',
 }
 
-const getConfig = (config: Partial<TreeHelperConfig>) => Object.assign({}, DEFAULT_CONFIG, config)
+const getConfig = (config: Partial<TreeHelperConfig>): TreeHelperConfig =>
+  Object.assign({}, DEFAULT_CONFIG, config)
 
 // tree from list
-export function listToTree<T = any>(list: any[], config: Partial<TreeHelperConfig> = {}): T[] {
-  const conf = getConfig(config) as TreeHelperConfig
+export function listToTree<T = any>(list: T[], config: Partial<TreeHelperConfig> = {}): T[] {
+  const conf = getConfig(config)
   const nodeMap = new Map()
   const result: T[] = []
   const { id, children, pid } = conf
 
   for (const node of list) {
-    node[children] = node[children] || []
     nodeMap.set(node[id], node)
   }
   for (const node of list) {

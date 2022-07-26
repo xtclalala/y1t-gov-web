@@ -8,7 +8,7 @@ import { h, ref } from 'vue'
 import { FormRules, NButton, NDivider, NPopconfirm, NSpace } from 'naive-ui'
 import type { BaseRole, Page, registerRole, SearchRole } from '@/api/system_setting/types/sys_role'
 import { PageResult } from '#axios'
-import { completeAssign } from '@/utils/helper/objectHelper'
+import { completeMerger } from '@/utils/helper/objectHelper'
 import { useTable } from '@/hooks/comHooks/useTable'
 import {
   copyRole,
@@ -87,7 +87,7 @@ const columns = [
                 {
                   onClick: () => {
                     isAdd.value = false
-                    roleModel.value = completeAssign(row)
+                    roleModel.value = completeMerger(row)
                     roleModel.value.orgId = row.organize.id
                     roleModel.value.orgName = row.organize.name
                     openModal()
@@ -160,7 +160,7 @@ const sTmpData = {
 }
 const tableApi = async (page: Page, searchData: any) => {
   return searchRole<PageResult<Array<registerRole>>>(
-    completeAssign<SearchRole>(page, searchData.value),
+    completeMerger<SearchRole>(page, searchData.value),
     { isMessage: false }
   )
 }

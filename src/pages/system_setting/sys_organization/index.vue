@@ -9,7 +9,7 @@ import { YIcon } from '@/components'
 import { FormRules, NButton, NDivider, NPopconfirm, NSpace } from 'naive-ui'
 import { Page } from '@/api/system_setting/types/sys_role'
 import { PageResult } from '#axios'
-import { completeAssign } from '@/utils/helper/objectHelper'
+import { completeMerger } from '@/utils/helper/objectHelper'
 import { useTable } from '@/hooks/comHooks/useTable'
 import { deleteOrg, searchOrg, updateOrg, register } from '@/api/system_setting/sys_organize'
 import { BaseOrg, registerOrg, SearchOrg } from '@/api/system_setting/types/sys_organization'
@@ -105,7 +105,7 @@ const sTmpData = {
   name: '',
 }
 const tableApi = async (page: Page, searchData: any) => {
-  return searchOrg<PageResult<Array<BaseOrg>>>(completeAssign<SearchOrg>(page, searchData.value), {
+  return searchOrg<PageResult<Array<BaseOrg>>>(completeMerger<SearchOrg>(page, searchData.value), {
     isMessage: false,
   })
 }
