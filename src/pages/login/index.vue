@@ -1,17 +1,14 @@
-<script lang="ts">
-export default {
-  name: 'Y1tLogin',
-}
-</script>
-<script setup lang="ts">
+<script setup lang="ts" name="Y1tLogin">
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useMessage } from 'naive-ui'
 import { useUserStore } from '@/store/module/user'
 import { LoginParams } from '@/api/common/types/login'
-import { ChooseActiveRole } from './components'
 import { PageEnum } from '@/enums/pageEnum'
 import { useRouteStore } from '@/store/module/router'
+import { usePagesAsyncComponent } from '@/hooks/comHooks/useAsyncComponent'
+
+const ChooseActiveRole = usePagesAsyncComponent('/login', 'ChooseActiveRole')
 
 const rules = {
   username: {
@@ -30,7 +27,7 @@ const model = ref<LoginParams>({
   password: '123456',
 })
 const disabled = computed<boolean>(() => model.value.username === '' || model.value.password === '')
-const loading = ref(false)
+const loading = ref<boolean>(false)
 const router = useRouter()
 const routeStore = useRouteStore()
 const userStore = useUserStore()
@@ -62,7 +59,7 @@ const handleLogin = async (e: Event): Promise<void> => {
 }
 </script>
 <template>
-  <n-h1 style="--font-size: 60px; --font-weight: 100"> 这是什么 </n-h1>
+  <n-h1 style="--font-size: 60px; --font-weight: 100"> PenetrationHub </n-h1>
   <n-card size="large" style="--padding-bottom: 30px">
     <n-h2 style="--font-weight: 400">登录</n-h2>
     <n-form size="large" :rules="rules" :model="model">

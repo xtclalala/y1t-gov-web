@@ -1,9 +1,4 @@
-<script lang="ts">
-export default {
-  name: 'UserCenter',
-}
-</script>
-<script setup lang="ts">
+<script setup lang="ts" name="UserCenter">
 import { FormItemRule, FormRules, useMessage } from 'naive-ui'
 import { useModal } from '@/hooks/comHooks/useModal'
 import { changePwd } from '@/api/system_setting/sys_user'
