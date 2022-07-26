@@ -1,3 +1,8 @@
+/**
+ * @Description: src\store\module\errorLog.ts
+ * @author: y1t
+ * @date 2022/7/26
+ **/
 import type { ErrorLogInfo } from '#/store'
 
 import { defineStore } from 'pinia'

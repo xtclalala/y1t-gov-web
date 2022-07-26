@@ -1,3 +1,8 @@
+/**
+ * @Description: src\store\module\app.ts
+ * @author: y1t
+ * @date 2022/7/26
+ **/
 import type { BeforeMiniState } from '#/store'
 
 import { defineStore } from 'pinia'
@@ -7,8 +12,12 @@ import { ThemeEnum } from '@/enums/appEnum'
 import { APP_DARK_MODE_KEY_ } from '@/enums/cacheEnum'
 import { Persistent } from '@/utils/cache/persistent'
 import { resetRouter } from '@r/index'
+import { useUserStore } from '@/store/module/user'
+import { useRouteStore } from '@/store/module/router'
+import { useViewStore } from '@/store/module/views'
 
 interface AppState {
+  // 模式
   darkMode: ThemeEnum | undefined
   // Page loading status
   pageLoading: boolean
@@ -27,10 +36,12 @@ export const useAppStore = defineStore({
     getPageLoading(): boolean {
       return this.pageLoading
     },
+    /**
+     * 获取模式，默认明亮模式
+     */
     getDarkMode(): 'light' | 'dark' | string {
       return this.darkMode || localStorage.getItem(APP_DARK_MODE_KEY_) || ThemeEnum.LIGHT
     },
-
     getBeforeMiniInfo(): BeforeMiniState {
       return this.beforeMiniInfo
     },
@@ -39,16 +50,17 @@ export const useAppStore = defineStore({
     setPageLoading(loading: boolean): void {
       this.pageLoading = loading
     },
-
+    /**
+     * 设置模式
+     * @param mode
+     */
     setDarkMode(mode: ThemeEnum): void {
       this.darkMode = mode
       localStorage.setItem(APP_DARK_MODE_KEY_, mode)
     },
-
     setBeforeMiniInfo(state: BeforeMiniState): void {
       this.beforeMiniInfo = state
     },
-
     async resetAllState() {
       resetRouter()
       Persistent.clearAll()
@@ -64,6 +76,14 @@ export const useAppStore = defineStore({
         this.setPageLoading(loading)
         clearTimeout(timeId)
       }
+    },
+    /**
+     * 清空其他store
+     */
+    async clearOtherStore(): Promise<void> {
+      useUserStore().$reset()
+      useRouteStore().$reset()
+      useViewStore().$reset()
     },
   },
 })

@@ -5,7 +5,7 @@ import { storeToRefs } from 'pinia'
 import { useRouter, RouteRecordRaw } from 'vue-router'
 import { useRouteStore } from '@/store/module/router'
 import { PageEnum } from '@/enums/pageEnum'
-import { buildDynamicRoute } from '@/utils/yRouter/router'
+import { buildDynamicRoute } from '@/utils/yRouter'
 import { rName } from '@/enums/rName'
 import { isNull } from '@/utils/is'
 

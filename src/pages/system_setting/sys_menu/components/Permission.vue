@@ -1,9 +1,4 @@
-<script lang="ts">
-export default {
-  name: 'YPermission',
-}
-</script>
-<script setup lang="ts">
+<script setup lang="ts" name="YPermission">
 import { h, toRef } from 'vue'
 import { YIcon } from '@/components'
 import { BasePer, registerPer } from '@/api/system_setting/types/sys_permission'

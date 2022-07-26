@@ -1,14 +1,19 @@
+/**
+ * @Description: src\store\module\router.ts
+ * @author: y1t
+ * @date 2022/7/26
+ **/
 import { defineStore } from 'pinia'
 import { store } from '@/store'
 import { AfterBusinessRoutes } from '@r/index'
 import { PermissionModeEnum } from '@/enums/appEnum'
-import { addMeta, renderMenuIcon, router2menuDeep } from '@/utils/yMenu'
+import { buildMenusTree, renderMenuIcon, router2menuDeep } from '@/utils/yMenu'
 import { AppRouteRecordRaw, Menu } from '@r/types'
-import { buildMenusTree } from '@/utils/yRouter/router'
 import projectSetting from '@/settings/projectSetting'
 import { getAuthCache, setAuthCache } from '@/utils/auth'
 import { CACHELIST_CACHE_KEY, MENU_CACHE_KEY } from '@/enums/cacheEnum'
 import { useUserStore } from '@/store/module/user'
+import { buildRoute } from '@/utils/yRouter'
 
 export interface IAsyncRouteState {
   menus: Menu[] | undefined
@@ -48,7 +53,6 @@ export const useRouteStore = defineStore({
             this.isDynamicAddedRoute = undefined
         }
       }
-
       return this.isDynamicAddedRoute || false
     },
   },
@@ -56,12 +60,17 @@ export const useRouteStore = defineStore({
     setDynamicAddedRoute(added: boolean) {
       this.isDynamicAddedRoute = added
     },
-    // 设置菜单
+    /**
+     * 设置菜单
+     * @param menus
+     */
     setMenus(menus: Menu[]) {
       setAuthCache(MENU_CACHE_KEY, menus)
       this.menus = renderMenuIcon(menus)
     },
-    // 设置白名单
+    /**
+     * 设置缓存组件
+     */
     setCacheList(menus: Menu[]) {
       const cacheList = menus
         .filter((self) => self.keepAlive)
@@ -70,7 +79,9 @@ export const useRouteStore = defineStore({
       this.cacheList = cacheList
       setAuthCache(CACHELIST_CACHE_KEY, cacheList)
     },
-    // 生成菜单
+    /**
+     * 生成菜单
+     */
     async generateMenus(): Promise<void> {
       const buildMenus: Menu[] = []
       const { permissionMode } = projectSetting
@@ -93,28 +104,30 @@ export const useRouteStore = defineStore({
       }
       this.setMenus(buildMenus)
     },
-    // 生成路由
+    /**
+     * 生成路由
+     */
     async generateRoute(): Promise<AppRouteRecordRaw[]> {
-      let buildRoute: AppRouteRecordRaw[]
+      let buildRoutes: AppRouteRecordRaw[]
       const { permissionMode } = projectSetting
 
       switch (permissionMode) {
         case PermissionModeEnum.BACK: {
           this.setDynamicAddedRoute(true)
-          buildRoute = addMeta(this.getMenus)
+          buildRoutes = buildRoute(this.getMenus)
           break
         }
 
         case PermissionModeEnum.ROUTE_MAPPING:
         default: {
           this.setDynamicAddedRoute(false)
-          buildRoute = AfterBusinessRoutes
-          const menus = router2menuDeep(buildRoute)
+          buildRoutes = AfterBusinessRoutes
+          const menus = router2menuDeep(buildRoutes)
           this.setMenus(menus)
         }
       }
 
-      return buildRoute
+      return buildRoutes
     },
   },
 })

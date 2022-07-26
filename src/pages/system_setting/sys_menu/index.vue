@@ -10,11 +10,15 @@ import { PageResult } from '#axios'
 import { BaseMenu, registerMenu, SearchMenu } from '@/api/system_setting/types/sys_menu'
 import { FormRules, NButton, NDivider, NPopconfirm, NSpace } from 'naive-ui'
 import { Page } from '@/api/system_setting/types/sys_role'
-import { YIcon } from '@/components'
-import { YPermission } from './components'
 import { completeMerger } from '@/utils/helper/objectHelper'
 import { useTable } from '@/hooks/comHooks/useTable'
 import { useModal } from '@/hooks/comHooks/useModal'
+import {
+  useComponentsAsyncComponent,
+  usePagesAsyncComponent,
+} from '@/hooks/comHooks/useAsyncComponent'
+const YIcon = useComponentsAsyncComponent('YIcon')
+const YPermission = usePagesAsyncComponent('/system_setting/sys_menu', 'YPermission')
 
 const showPermissions = ref<boolean>(false)
 const currentMenuId = ref<number>(0)

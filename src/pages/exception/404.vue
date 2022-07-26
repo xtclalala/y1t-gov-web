@@ -1,9 +1,4 @@
-<script lang="ts">
-export default {
-  name: 'Y1tNotFound',
-}
-</script>
-<script setup lang="ts">
+<script setup lang="ts" name="Y1tNotFound">
 import { ref } from 'vue'
 
 const msg = ref<string>('not found 404')

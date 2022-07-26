@@ -24,4 +24,3 @@ if (_redirect_type === 'name') {
   })
 }
 </script>
-<template></template>

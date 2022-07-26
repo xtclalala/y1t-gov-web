@@ -1,3 +1,8 @@
+/**
+ * @Description: src\store\module\views.ts
+ * @author: y1t
+ * @date 2022/7/26
+ **/
 import { defineStore } from 'pinia'
 import { Menu } from '@r/types'
 import { rName } from '@/enums/rName'
@@ -17,22 +22,41 @@ export const useViewStore = defineStore('tabsView', {
     }
   },
   getters: {
-    listSliceEnd(): Menu[] {
-      return this.viewList.slice(-1)
+    /**
+     * 返回视图页面最后一个
+     */
+    viewListLast(): Menu {
+      return this.viewList.slice(-1)[0]
     },
   },
   actions: {
+    /**
+     * 删除指定视图
+     * @param index
+     */
     removeTab(index: number) {
       this.viewList.splice(index, 1)
     },
-    findTab(route: Menu): boolean {
-      for (const item of this.viewList) {
-        if (item.name === route.name) {
-          return true
-        }
-      }
-      return false
+    /**
+     * 找到指定视图
+     * @param menu
+     */
+    findTab(menu: Menu): boolean {
+      return this.findTabIndex(menu) >= 0
     },
+    findTabByName(name: string): boolean {
+      return this.findTab({ name } as Menu)
+    },
+    findTabIndex(menu: Menu): number {
+      return this.viewList.findIndex((item) => item.name === menu.name)
+    },
+    findTabIndexByName(name: string): number {
+      return this.findTabIndex({ name } as Menu)
+    },
+    /**
+     * 通过点击侧边菜单栏方式，跳转指定视图
+     * @param to
+     */
     routerPush(to: Menu) {
       this.currentView = to.name
       if (this.findTab(to)) {
