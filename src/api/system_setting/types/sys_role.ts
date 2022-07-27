@@ -7,16 +7,13 @@ export type Page = {
   desc: boolean
 }
 
-export type SearchRole = Page & {
-  name: string | undefined
-  pid: number | undefined
-}
+export type SearchRole = Page & Pick<BaseRole, 'name' | 'pid'>
 
 export type RoleId = {
-  id?: number
+  id: number
 }
 
-export type BaseRole = RoleId & {
+export type BaseRole = Partial<RoleId> & {
   name: string
   code: string
   orgId: number
@@ -24,12 +21,12 @@ export type BaseRole = RoleId & {
   pid?: number
 }
 
-export type RoleMenu = RoleId & {
+export type RoleMenu = Partial<RoleId> & {
   menus: Array<BaseMenu>
   menuIds?: Array<number>
 }
 
-export type RolePer = RoleId & {
+export type RolePer = Partial<RoleId> & {
   permissions: Array<BasePer>
   permissionIds?: Array<number>
 }

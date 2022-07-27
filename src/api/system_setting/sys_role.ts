@@ -53,7 +53,5 @@ export const deleteRole = <T = Result>(params: RoleId, options?: RequestOptions)
 export const searchRole = <T = PageResult>(params: SearchRole, options?: RequestOptions) =>
   defHttp.get<T>({ url: Api.role, params }, options)
 
-export const rolesByOrg = <T = Result>(
-  params: Required<Pick<OrgId, 'ids'>>,
-  options?: RequestOptions
-) => defHttp.get<T>({ url: Api.getRolesByOrg, params }, options)
+export const rolesByOrg = <T = Result>(params: Pick<OrgId, 'ids'>, options?: RequestOptions) =>
+  defHttp.get<T>({ url: Api.getRolesByOrg, params }, options)

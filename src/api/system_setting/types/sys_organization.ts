@@ -1,20 +1,17 @@
 import { Page } from '@/api/system_setting/types/sys_role'
 
 export type OrgId = {
-  id?: number
-  ids?: number[]
+  id: number
+  ids: number[]
 }
 
-export type SearchOrg = Page & {
-  name: string
-  code: string
-}
+export type SearchOrg = Page & Pick<BaseOrg, 'name' | 'code'>
 
-export type BaseOrg = OrgId & {
+export type BaseOrg = Partial<OrgId> & {
   name: string
   code: string
   sort: number
   pid: number
 }
 
-export type registerOrg = Omit<BaseOrg, 'id'>
+export type registerOrg = Omit<BaseOrg, 'id' | 'ids'>

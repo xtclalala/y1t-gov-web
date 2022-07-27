@@ -1,10 +1,16 @@
 import { Menu } from '@r/types'
 
+/**
+ * 登录接口参数
+ */
 export interface LoginParams {
   username: string
   password: string
 }
 
+/**
+ * 获取登录用户接口的返回
+ */
 export interface Information {
   id: string
   username: string
@@ -27,16 +33,4 @@ export interface IOrg {
   pid?: number
   sort?: number
   children?: IOrg[]
-}
-
-export interface IMenu {
-  ID: number
-  name: string
-  path: string
-  component: string
-  hidden: boolean
-  icon?: string
-  pid?: number
-  sort?: number
-  children?: IMenu[]
 }

@@ -13,7 +13,7 @@ export const register = <T = Result>(params: registerOrg, options?: RequestOptio
 export const updateOrg = <T = Result>(params: BaseOrg, options?: RequestOptions) =>
   defHttp.put<T>({ url: Api.organize, params }, options)
 
-export const deleteOrg = <T = Result>(params: OrgId, options?: RequestOptions) =>
+export const deleteOrg = <T = Result>(params: Pick<OrgId, 'id'>, options?: RequestOptions) =>
   defHttp.delete<T>({ url: Api.organize, params }, options)
 
 export const searchOrg = <T = Result>(params: SearchOrg, options?: RequestOptions) =>
