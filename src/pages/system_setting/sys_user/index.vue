@@ -19,7 +19,12 @@ import {
   searchUser,
   updateUser,
 } from '@/api/system_setting/sys_user'
-import { BaseUser, registerUser, SearchUser } from '@/api/system_setting/types/sys_user'
+import {
+  BaseUser,
+  registerUser,
+  SearchUser,
+  SearchUserWithPage,
+} from '@/api/system_setting/types/sys_user'
 import { useModal } from '@/hooks/comHooks/useModal'
 import { registerMenu } from '@/api/system_setting/types/sys_menu'
 import { selectOrg } from '@/api/system_setting/sys_organize'
@@ -154,18 +159,20 @@ const columns = [
 ]
 const sTmpData = {
   username: '',
-  name: '',
+  loginName: '',
   roleIds: [],
   orgIds: [],
 }
 const tableApi = async (page: Page, searchData: any) => {
   return searchUser<PageResult<Array<registerUser>>>(
-    completeMerger<SearchUser>(page, searchData.value),
+    completeMerger<SearchUserWithPage>(page, searchData.value),
     { isMessage: false }
   )
 }
-const [pagination, loading, data, searchData, getData, doSearch, doReset, key2id] =
-  useTable<registerUser>(tableApi, { page: 1, pageSize: 10, desc: false }, sTmpData, 'User')
+const [pagination, loading, data, searchData, getData, doSearch, doReset, key2id] = useTable<
+  registerUser,
+  SearchUser
+>(tableApi, { page: 1, pageSize: 10, desc: false }, sTmpData, 'User')
 const checkedRowKeys = ref([])
 
 const rules: FormRules = {

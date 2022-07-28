@@ -1,7 +1,7 @@
 <script setup lang="ts" name="YPermission">
-import { h, toRef } from 'vue'
+import { h, toRef, Ref } from 'vue'
 import { YIcon } from '@/components'
-import { BasePer, registerPer } from '@/api/system_setting/types/sys_permission'
+import { BasePer, registerPer, SearchPer } from '@/api/system_setting/types/sys_permission'
 import { deletePer, register, searchPer, updatePer } from '@/api/system_setting/sys_permission'
 import { FormRules, NButton, NDivider, NPopconfirm, NSpace } from 'naive-ui'
 import { Page } from '@/api/system_setting/types/sys_role'
@@ -78,11 +78,11 @@ const columns = [
     },
   },
 ]
-// @ts-ignore
-const tableApi = async (page: Page, searchData: any) => {
-  return searchPer<Array<registerPer>>(searchData.value, { isMessage: false })
+
+const tableApi = async (page: Page, searchData: Ref<any>) => {
+  return searchPer<Array<BasePer>>(searchData.value, { isMessage: false })
 }
-const [, loading, data, searchData, getData, , , key2id] = useTable<registerPer>(
+const [, loading, data, searchData, getData, , , key2id] = useTable<BasePer, SearchPer>(
   tableApi,
   { page: 1, pageSize: 10, desc: false },
   { menuId: 0 },

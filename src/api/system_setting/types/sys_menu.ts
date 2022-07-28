@@ -1,7 +1,9 @@
 import { Page } from '@/api/system_setting/types/sys_role'
 import { BasePer } from '@/api/system_setting/types/sys_permission'
 
-export type SearchMenu = Page & Pick<BaseMenu, 'name' | 'path' | 'title' | 'component'>
+export type SearchMenu = Pick<BaseMenu, 'name' | 'path' | 'title' | 'component'>
+
+export type SearchMenuWithPage = Page & SearchMenu
 
 export type MenuId = {
   id: number
@@ -24,7 +26,7 @@ export type PerMenu = MenuId & {
   sysRoleId: Array<number>
 }
 
-export type registerMenu = BaseMenu &
+export type registerMenu = Omit<BaseMenu, 'id'> &
   Partial<PerMenu> & {
     hiddenNumber: string
   }

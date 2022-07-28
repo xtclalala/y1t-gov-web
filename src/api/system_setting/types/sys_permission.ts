@@ -11,8 +11,9 @@ export type BasePer = Partial<PerId> & {
   menuId: number
 }
 
-export type SearchPer = Page &
-  Partial<Pick<BasePer, 'title' | 'menuId'> & Pick<PerPer, 'sysRoleId'>>
+export type SearchPer = Partial<Pick<BasePer, 'menuId'>>
+
+export type SearchPerWithPage = Page & SearchPer
 
 export type PerPer = Partial<PerId> & {
   sysRoleId: Array<number>

@@ -5,7 +5,9 @@ export type OrgId = {
   ids: number[]
 }
 
-export type SearchOrg = Page & Pick<BaseOrg, 'name' | 'code'>
+export type SearchOrg = Pick<BaseOrg, 'name'>
+
+export type SearchOrgWithPage = Page & SearchOrg
 
 export type BaseOrg = Partial<OrgId> & {
   name: string

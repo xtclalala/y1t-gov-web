@@ -12,8 +12,12 @@ import { PageResult } from '#axios'
 import { completeMerger } from '@/utils/helper/objectHelper'
 import { useTable } from '@/hooks/comHooks/useTable'
 import { deleteOrg, searchOrg, updateOrg, register } from '@/api/system_setting/sys_organize'
-import { BaseOrg, registerOrg, SearchOrg } from '@/api/system_setting/types/sys_organization'
-import { registerMenu } from '@/api/system_setting/types/sys_menu'
+import {
+  BaseOrg,
+  registerOrg,
+  SearchOrg,
+  SearchOrgWithPage,
+} from '@/api/system_setting/types/sys_organization'
 import { useModal } from '@/hooks/comHooks/useModal'
 
 const checkedRowKeys = ref([])
@@ -105,12 +109,17 @@ const sTmpData = {
   name: '',
 }
 const tableApi = async (page: Page, searchData: any) => {
-  return searchOrg<PageResult<Array<BaseOrg>>>(completeMerger<SearchOrg>(page, searchData.value), {
-    isMessage: false,
-  })
+  return searchOrg<PageResult<Array<BaseOrg>>>(
+    completeMerger<SearchOrgWithPage>(page, searchData.value),
+    {
+      isMessage: false,
+    }
+  )
 }
-const [pagination, loading, data, searchData, getData, doSearch, doReset, key2id] =
-  useTable<registerOrg>(tableApi, { page: 1, pageSize: 10, desc: false }, sTmpData, 'Organize')
+const [pagination, loading, data, searchData, getData, doSearch, doReset, key2id] = useTable<
+  registerOrg,
+  SearchOrg
+>(tableApi, { page: 1, pageSize: 10, desc: false }, sTmpData, 'Organize')
 
 const rules: FormRules = {
   name: {
@@ -150,7 +159,7 @@ const [
   openModal,
   cancelCallback,
   modalTitle,
-] = useModal<registerMenu>(
+] = useModal<registerOrg>(
   registerApi,
   updateApi,
   afterApi,

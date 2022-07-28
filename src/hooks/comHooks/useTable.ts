@@ -5,7 +5,7 @@ import { reactive, ref } from 'vue'
 const tableMap = {}
 const tableMapStates = {}
 
-export const useTable = <T>(dataApi: Function, page: Page, searchObj: any, key: string) => {
+export const useTable = <T, D>(dataApi: Function, page: Page, searchObj: D, key: string) => {
   // 创建分页对象
   const createTable = (page: Page, key: string) => {
     let pagination, loading, data, searchData
@@ -37,7 +37,7 @@ export const useTable = <T>(dataApi: Function, page: Page, searchObj: any, key: 
   }
 
   // 获取搜索数据
-  const getData = async (page: Page) => {
+  const getData = async (page: Page): Promise<void> => {
     const res = await dataApi(page, searchData)
     pagination.itemCount = res.total
     data.value = res.items
@@ -45,14 +45,14 @@ export const useTable = <T>(dataApi: Function, page: Page, searchObj: any, key: 
   }
 
   // 点击搜索按钮
-  const doSearch = () => {
+  const doSearch = (): void => {
     loading.value = true
     pagination.page = 1
     getData({ page: 1, pageSize: pagination.pageSize, desc: page.desc })
   }
 
   // 重置搜索条件
-  const doReset = () => {
+  const doReset = (): void => {
     searchData.value = { ...searchObj }
   }
 

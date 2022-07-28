@@ -1,6 +1,11 @@
 import { defHttp } from '@/service'
 import { RequestOptions, Result } from '#axios'
-import { BasePer, PerId, registerPer, SearchPer } from '@/api/system_setting/types/sys_permission'
+import {
+  BasePer,
+  PerId,
+  registerPer,
+  SearchPerWithPage,
+} from '@/api/system_setting/types/sys_permission'
 import { MenuId } from '@/api/system_setting/types/sys_menu'
 
 enum Api {
@@ -20,5 +25,5 @@ export const allPerByMenuId = <T = Result>(params: MenuId, options?: RequestOpti
 export const deletePer = <T = Result>(params: PerId, options?: RequestOptions) =>
   defHttp.delete<T>({ url: Api.per, params }, options)
 
-export const searchPer = <T = Result>(params: SearchPer, options?: RequestOptions) =>
+export const searchPer = <T = Result>(params: SearchPerWithPage, options?: RequestOptions) =>
   defHttp.get<T>({ url: Api.per, params }, options)

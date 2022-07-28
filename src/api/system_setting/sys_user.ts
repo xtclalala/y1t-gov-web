@@ -4,7 +4,7 @@ import {
   BaseUser,
   PerUser,
   registerUser,
-  SearchUser,
+  SearchUserWithPage,
   UserId,
   userPassword,
 } from '@/api/system_setting/types/sys_user'
@@ -25,7 +25,7 @@ export const updateUser = <T = Result>(params: BaseUser, options?: RequestOption
 export const updateUserPer = <T = Result>(params: PerUser, options?: RequestOptions) =>
   defHttp.put<T>({ url: Api.per, params }, options)
 
-export const searchUser = <T = Result>(params: SearchUser, options?: RequestOptions) =>
+export const searchUser = <T = Result>(params: SearchUserWithPage, options?: RequestOptions) =>
   defHttp.get<T>({ url: Api.user, params }, options)
 
 export const completeInfo = <T = Result>(params: Pick<UserId, 'id'>, options?: RequestOptions) =>

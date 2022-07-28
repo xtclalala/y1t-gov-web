@@ -6,7 +6,13 @@ export default {
 <script setup lang="ts">
 import { h, ref } from 'vue'
 import { FormRules, NButton, NDivider, NPopconfirm, NSpace } from 'naive-ui'
-import type { BaseRole, Page, registerRole, SearchRole } from '@/api/system_setting/types/sys_role'
+import type {
+  BaseRole,
+  Page,
+  registerRole,
+  SearchRole,
+  SearchRoleWithPage,
+} from '@/api/system_setting/types/sys_role'
 import { PageResult } from '#axios'
 import { completeMerger } from '@/utils/helper/objectHelper'
 import { useTable } from '@/hooks/comHooks/useTable'
@@ -19,7 +25,6 @@ import {
 } from '@/api/system_setting/sys_role'
 import { YIcon } from '@/components'
 import { useModal } from '@/hooks/comHooks/useModal'
-import { registerMenu } from '@/api/system_setting/types/sys_menu'
 import { BaseOrg } from '@/api/system_setting/types/sys_organization'
 import { selectOrg } from '@/api/system_setting/sys_organize'
 import { SetPermissions } from './components'
@@ -29,11 +34,7 @@ const currentRole = ref<number>(0)
 const defaultMenuData = ref<number[]>([])
 const defaultPerData = ref<number[]>([])
 const options = ref<Array<BaseOrg>>([])
-// @ts-ignore
-const handleUpdateValue = async (value: string | number, option) => {
-  roleModel.value.orgName = option.name
-  roleModel.value.orgId = option.id
-}
+
 const allOrganizations = async () => {
   options.value = await selectOrg<Array<BaseOrg>>({ name: '' }, { isMessage: false })
 }
@@ -87,9 +88,11 @@ const columns = [
                 {
                   onClick: () => {
                     isAdd.value = false
-                    roleModel.value = completeMerger(row)
+                    roleModel.value.name = row.name
+                    roleModel.value.code = row.code
+                    roleModel.value.id = row.id
+                    roleModel.value.sort = row.sort
                     roleModel.value.orgId = row.organize.id
-                    roleModel.value.orgName = row.organize.name
                     openModal()
                   },
                   text: true,
@@ -160,12 +163,14 @@ const sTmpData = {
 }
 const tableApi = async (page: Page, searchData: any) => {
   return searchRole<PageResult<Array<registerRole>>>(
-    completeMerger<SearchRole>(page, searchData.value),
+    completeMerger<SearchRoleWithPage>(page, searchData.value),
     { isMessage: false }
   )
 }
-const [pagination, loading, data, searchData, getData, doSearch, doReset, key2id] =
-  useTable<registerRole>(tableApi, { page: 1, pageSize: 10, desc: false }, sTmpData, 'Role')
+const [pagination, loading, data, searchData, getData, doSearch, doReset, key2id] = useTable<
+  registerRole,
+  SearchRole
+>(tableApi, { page: 1, pageSize: 10, desc: false }, sTmpData, 'Role')
 const checkedRowKeys = ref([])
 
 const rules: FormRules = {
@@ -185,7 +190,7 @@ const rules: FormRules = {
     trigger: ['blur', 'change'],
   },
 }
-const registerApi = async (params: registerRole) => {
+const registerApi = async (params: BaseRole) => {
   return register<string>(params, { isMessage: true })
 }
 const updateApi = async (params: BaseRole) => {
@@ -211,11 +216,11 @@ const [
   openModal,
   cancelCallback,
   modalTitle,
-] = useModal<registerMenu>(
+] = useModal<BaseRole>(
   registerApi,
   updateApi,
   afterApi,
-  { name: '', code: '', sort: 100, organize: { name: null }, orgId: null },
+  { name: '', code: '', sort: 100, orgId: null },
   {},
   'Organize'
 )
@@ -296,15 +301,14 @@ getData({ page: pagination.page, pageSize: pagination.pageSize, desc: false })
       <n-form-item label="排序" path="sort">
         <n-input-number v-model:value="roleModel.sort" placeholder="排序" />
       </n-form-item>
-      <n-form-item label="组织" path="orgName">
+      <n-form-item label="组织" path="orgId">
         <n-select
-          v-model:value="roleModel.orgName"
+          v-model:value="roleModel.orgId"
           value-field="id"
           label-field="name"
           filterable
           :options="options"
           clearable
-          @update:value="handleUpdateValue"
         />
       </n-form-item>
     </n-form>

@@ -7,7 +7,9 @@ export type Page = {
   desc: boolean
 }
 
-export type SearchRole = Page & Pick<BaseRole, 'name' | 'pid'>
+export type SearchRole = Pick<BaseRole, 'name' | 'pid'>
+
+export type SearchRoleWithPage = Page & SearchRole
 
 export type RoleId = {
   id: number
@@ -16,7 +18,7 @@ export type RoleId = {
 export type BaseRole = Partial<RoleId> & {
   name: string
   code: string
-  orgId: number
+  orgId: number | null
   sort: number
   pid?: number
 }
@@ -31,4 +33,4 @@ export type RolePer = Partial<RoleId> & {
   permissionIds?: Array<number>
 }
 
-export type registerRole = Omit<BaseRole & RolePer & RoleMenu, 'id'>
+export type registerRole = Omit<BaseRole & Partial<RolePer> & Partial<RoleMenu>, 'id'>

@@ -1,12 +1,11 @@
 import { defHttp } from '@/service'
 import { PageResult, RequestOptions, Result } from '#axios'
 import {
-  registerRole,
   BaseRole,
   RoleId,
-  SearchRole,
   RoleMenu,
   RolePer,
+  SearchRoleWithPage,
 } from '@/api/system_setting/types/sys_role'
 import { OrgId } from '@/api/system_setting/types/sys_organization'
 
@@ -19,7 +18,7 @@ enum Api {
   getRolesByOrg = '/role/roleByOrg',
 }
 
-export const register = <T = Result>(params: registerRole, options?: RequestOptions) =>
+export const register = <T = Result>(params: BaseRole, options?: RequestOptions) =>
   defHttp.post<T>({ url: Api.role, params }, options)
 
 export const updateRole = <T = Result>(params: BaseRole, options?: RequestOptions) =>
@@ -50,7 +49,7 @@ export const getCompleteInfo = <T = Result>(params: RoleId, options?: RequestOpt
 export const deleteRole = <T = Result>(params: RoleId, options?: RequestOptions) =>
   defHttp.delete<T>({ url: Api.role, params }, options)
 
-export const searchRole = <T = PageResult>(params: SearchRole, options?: RequestOptions) =>
+export const searchRole = <T = PageResult>(params: SearchRoleWithPage, options?: RequestOptions) =>
   defHttp.get<T>({ url: Api.role, params }, options)
 
 export const rolesByOrg = <T = Result>(params: Pick<OrgId, 'ids'>, options?: RequestOptions) =>

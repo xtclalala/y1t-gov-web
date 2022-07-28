@@ -7,7 +7,12 @@ export default {
 import { h, ref } from 'vue'
 import { deleteMenu, register, searchMenu, updateMenu } from '@/api/system_setting/sys_menu'
 import { PageResult } from '#axios'
-import { BaseMenu, registerMenu, SearchMenu } from '@/api/system_setting/types/sys_menu'
+import {
+  BaseMenu,
+  registerMenu,
+  SearchMenu,
+  SearchMenuWithPage,
+} from '@/api/system_setting/types/sys_menu'
 import { FormRules, NButton, NDivider, NPopconfirm, NSpace } from 'naive-ui'
 import { Page } from '@/api/system_setting/types/sys_role'
 import { completeMerger } from '@/utils/helper/objectHelper'
@@ -167,12 +172,14 @@ const sTmpData = {
 }
 const tableApi = async (page: Page, searchData: any) => {
   return searchMenu<PageResult<Array<registerMenu>>>(
-    completeMerger<SearchMenu>(page, searchData.value),
+    completeMerger<SearchMenuWithPage>(page, searchData.value),
     { isMessage: false }
   )
 }
-const [pagination, loading, data, searchData, getData, doSearch, doReset, key2id] =
-  useTable<registerMenu>(tableApi, { page: 1, pageSize: 10, desc: false }, sTmpData, 'Menu')
+const [pagination, loading, data, searchData, getData, doSearch, doReset, key2id] = useTable<
+  registerMenu,
+  SearchMenu
+>(tableApi, { page: 1, pageSize: 10, desc: false }, sTmpData, 'Menu')
 
 const rules: FormRules = {
   title: {
@@ -196,13 +203,13 @@ const rules: FormRules = {
     trigger: ['input', 'blur'],
   },
 }
-const registerApi = async (params: registerMenu) => {
+const registerApi = async (params: registerMenu): Promise<string> => {
   return register<string>(params, { isMessage: true })
 }
-const updateApi = async (params: BaseMenu) => {
+const updateApi = async (params: BaseMenu): Promise<string> => {
   return updateMenu<string>(params, { isMessage: true })
 }
-const afterApi = async () => {
+const afterApi = async (): Promise<void> => {
   loading.value = false
   await getData({
     page: pagination.page,
