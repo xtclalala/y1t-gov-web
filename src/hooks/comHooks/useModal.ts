@@ -1,24 +1,37 @@
-import { computed, ref } from 'vue'
+import { computed, ref, Ref } from 'vue'
 import { isEmpty, isNullOrUnDef } from '@/utils/is'
 import { FormInst } from 'naive-ui'
 
+/**
+ * 所有 modal 内容的存储点
+ */
 const modalMap = {}
+
+/**
+ * 所有 modal 是否被激活的存储点
+ */
 const modalMapStates = {}
 
 export const useModal = <T>(
   registerApi: Function,
   updateApi: Function,
   afterApi: Function,
-  modelObj: any,
-  modalStyle: any,
+  modelObj: T,
+  modalStyle: Object,
   key: string
-) => {
-  const createModal = () => {
+): useModalType<T> => {
+  /**
+   * 创建或者获取一个 modal 需要的相关字段
+   */
+  const createModal = (): ModalType<T> => {
     let isAdd, style, showModal, form, model
+    // 是否创建过该弹窗
     if (isNullOrUnDef(modalMapStates[key])) {
       showModal = ref<boolean>(false)
       style = computed(() => {
-        if (isEmpty(modalStyle)) return { width: '600px' }
+        if (isEmpty(modalStyle)) {
+          return { width: '600px' }
+        }
         return modalStyle
       })
       isAdd = ref<boolean>(true)
@@ -38,13 +51,20 @@ export const useModal = <T>(
     }
   }
 
-  const handleRegister = async () => {
+  /**
+   * 新增数据
+   */
+  const handleRegister = async (): Promise<void> => {
     isAdd.value = true
     clearModel()
     openModal()
   }
 
-  const submitCallback = async (e: MouseEvent) => {
+  /**
+   * 提交回调
+   * @param e 鼠标点击事件
+   */
+  const submitCallback = async (e: MouseEvent): Promise<void> => {
     e.preventDefault()
     form.value
       ?.validate(async (errors) => {
@@ -65,21 +85,33 @@ export const useModal = <T>(
       })
   }
 
-  const clearModel = () => {
+  /**
+   * 清空弹窗
+   */
+  const clearModel = (): void => {
     model.value = Object.assign({}, modelObj)
   }
 
-  const openModal = () => {
+  /**
+   * 打开弹窗
+   */
+  const openModal = (): void => {
     showModal.value = true
   }
 
-  const cancelCallback = () => {
+  /**
+   * 取消回调
+   */
+  const cancelCallback = (): void => {
     clearModel()
     showModal.value = false
     isAdd.value = false
   }
 
-  const modalTitle = () => {
+  /**
+   * 弹窗标题
+   */
+  const modalTitle = (): string => {
     return isAdd.value ? '新增' : '编辑'
   }
 
@@ -99,3 +131,61 @@ export const useModal = <T>(
     modalTitle,
   ]
 }
+
+/**
+ * 数据新增
+ */
+type HandlerRegisterFunc = () => void
+
+/**
+ * 点击提交
+ */
+type HandlerSubmitFunc = (e: MouseEvent) => void
+
+/**
+ * 点击取消
+ */
+type HandlerCancelFunc = () => void
+
+/**
+ * 打开弹窗
+ */
+type HandlerOpenFunc = () => void
+
+/**
+ * 清空弹窗
+ */
+type HandlerClearFunc = () => void
+
+/**
+ * 弹窗标题
+ */
+type TitleFunc = () => string
+
+/**
+ * 一个 modal 所需要的相关字段
+ */
+type ModalType<T> = {
+  isAdd: Ref<boolean>
+  showModal: Ref<boolean>
+  form: Ref<FormInst | null>
+  model: Ref<T>
+  style: Object
+}
+
+/**
+ * useModal 方法向外暴漏的问题
+ */
+type useModalType<T> = [
+  Ref<boolean>,
+  Ref<boolean>,
+  Ref<FormInst | null>,
+  Ref<T>,
+  Object,
+  HandlerRegisterFunc,
+  HandlerSubmitFunc,
+  HandlerClearFunc,
+  HandlerOpenFunc,
+  HandlerCancelFunc,
+  TitleFunc
+]

@@ -129,7 +129,7 @@ const [
   updateApi,
   afterApi,
   {
-    menuId: menuId,
+    menuId: menuId.value,
     title: '',
     code: '',
     sort: 100,
@@ -139,7 +139,7 @@ const [
 )
 
 const beforeRegister = () => {
-  perModel.menuId = menuId.value
+  perModel.value.menuId = menuId.value
   handleRegister()
 }
 // 更新 show
