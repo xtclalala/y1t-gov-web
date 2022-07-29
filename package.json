@@ -5,7 +5,6 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build --mode production",
-    "build:skip": " vite build --mode production",
     "preview": "vite preview",
     "lint": "eslint src --fix --ext .ts,.tsx,.vue,.js,.jsx",
     "prettier": "prettier --write ."

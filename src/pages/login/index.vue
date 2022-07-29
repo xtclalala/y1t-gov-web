@@ -11,7 +11,7 @@ import { usePagesAsyncComponent } from '@/hooks/comHooks/useAsyncComponent'
 const ChooseActiveRole = usePagesAsyncComponent('/login', 'ChooseActiveRole')
 
 const rules = {
-  username: {
+  loginName: {
     required: true,
     message: 'Username is required.',
     trigger: 'blur',
@@ -23,10 +23,12 @@ const rules = {
   },
 }
 const model = ref<LoginParams>({
-  username: 'admin11',
+  loginName: 'admin11',
   password: '123456',
 })
-const disabled = computed<boolean>(() => model.value.username === '' || model.value.password === '')
+const disabled = computed<boolean>(
+  () => model.value.loginName === '' || model.value.password === ''
+)
 const loading = ref<boolean>(false)
 const router = useRouter()
 const routeStore = useRouteStore()
@@ -63,8 +65,8 @@ const handleLogin = async (e: Event): Promise<void> => {
   <n-card size="large" style="--padding-bottom: 30px">
     <n-h2 style="--font-weight: 400">登录</n-h2>
     <n-form size="large" :rules="rules" :model="model">
-      <n-form-item-row label="Username" path="username">
-        <n-input v-model:value="model.username" placeholder="请输入用户名" />
+      <n-form-item-row label="Username" path="loginName">
+        <n-input v-model:value="model.loginName" placeholder="请输入用户名" />
       </n-form-item-row>
       <n-form-item-row label="Password" path="password">
         <n-input v-model:value="model.password" type="password" placeholder="请输入密码" />

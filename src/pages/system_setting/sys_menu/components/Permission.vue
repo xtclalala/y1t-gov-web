@@ -79,6 +79,7 @@ const columns = [
   },
 ]
 
+// @ts-ignore
 const tableApi = async (page: Page, searchData: Ref<any>) => {
   return searchPer<Array<BasePer>>(searchData.value, { isMessage: false })
 }

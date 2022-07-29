@@ -4,7 +4,7 @@ import { Menu } from '@r/types'
  * 登录接口参数
  */
 export interface LoginParams {
-  username: string
+  loginName: string
   password: string
 }
 

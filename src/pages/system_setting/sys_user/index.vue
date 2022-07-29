@@ -26,7 +26,6 @@ import {
   SearchUserWithPage,
 } from '@/api/system_setting/types/sys_user'
 import { useModal } from '@/hooks/comHooks/useModal'
-import { registerMenu } from '@/api/system_setting/types/sys_menu'
 import { selectOrg } from '@/api/system_setting/sys_organize'
 import { BaseOrg } from '@/api/system_setting/types/sys_organization'
 import { rolesByOrg } from '@/api/system_setting/sys_role'
