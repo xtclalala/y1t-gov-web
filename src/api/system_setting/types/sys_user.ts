@@ -25,7 +25,7 @@ export type PerUser = UserId & {
   orgIds: Array<number>
 }
 
-export type registerUser = BaseUser & Partial<PerUser>
+export type registerUser = Omit<BaseUser, 'id' | 'CreateTime' | 'UpdateTime'> & Partial<PerUser>
 
 export type userPassword = Pick<UserId, 'id'> & {
   oldPassword: string

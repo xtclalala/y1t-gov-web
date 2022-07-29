@@ -107,9 +107,9 @@ const columns = [
                       { ids: orgIds },
                       { isMessage: false }
                     )
-                    userModel.value.name = row.username
+                    userModel.value.username = row.username
                     userModel.value.id = row.id
-                    userModel.value.username = row.loginName
+                    userModel.value.loginName = row.loginName
                     userModel.value.orgIds = orgIds
                     userModel.value.roleIds = row.roles.flatMap((item) => item.id)
                     await openModal()
@@ -176,12 +176,12 @@ const [pagination, loading, data, searchData, getData, doSearch, doReset, key2id
 const checkedRowKeys = ref([])
 
 const rules: FormRules = {
-  name: {
+  username: {
     required: true,
     message: '请填写用户名！',
     trigger: ['input', 'blur'],
   },
-  username: {
+  loginName: {
     required: true,
     message: '请填写账号！',
     trigger: ['input', 'blur'],
@@ -226,7 +226,7 @@ const [
   openModal,
   cancelCallback,
   modalTitle,
-] = useModal<registerMenu>(
+] = useModal<registerUser>(
   registerApi,
   updateApi,
   afterApi,
@@ -323,11 +323,11 @@ getData({ page: pagination.page, pageSize: pagination.pageSize, desc: false })
       require-mark-placement="right-hanging"
       label-width="auto"
     >
-      <n-form-item label="用户名" path="name">
-        <n-input v-model:value="userModel.name" placeholder="用户名" />
+      <n-form-item label="用户名" path="username">
+        <n-input v-model:value="userModel.username" placeholder="用户名" />
       </n-form-item>
-      <n-form-item label="账号" path="username">
-        <n-input v-model:value="userModel.username" placeholder="账号" />
+      <n-form-item label="账号" path="loginName">
+        <n-input v-model:value="userModel.loginName" placeholder="账号" />
       </n-form-item>
       <n-form-item label="组织" path="orgIds">
         <n-select
