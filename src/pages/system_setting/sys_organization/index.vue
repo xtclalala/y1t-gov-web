@@ -209,7 +209,7 @@ getData({ page: pagination.page, pageSize: pagination.pageSize, desc: false })
       v-model:checked-row-keys="checkedRowKeys"
       :columns="columns"
       :data="data"
-      :scroll-x="1800"
+      :scroll-x="650"
       :max-height="750"
       :loading="loading"
       :row-key="key2id"
