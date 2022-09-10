@@ -5,25 +5,19 @@ export default {
 </script>
 <script setup lang="ts">
 import { h, ref } from 'vue'
-import { deleteMenu, register, searchMenu, updateMenu } from '@/api/system_setting/sys_menu'
+import { deleteMenu, register, searchMenu, updateMenu } from '@/api/system/menu'
 import { PageResult } from '#axios'
-import {
-  BaseMenu,
-  registerMenu,
-  SearchMenu,
-  SearchMenuWithPage,
-} from '@/api/system_setting/types/sys_menu'
+import { BaseMenu, registerMenu, SearchMenu, SearchMenuWithPage } from '@/api/system/menu/type'
 import { FormRules, NButton, NDivider, NPopconfirm, NSpace } from 'naive-ui'
-import { Page } from '@/api/system_setting/types/sys_role'
 import { completeMerger } from '@/utils/helper/objectHelper'
-import { useTable } from '@/hooks/comHooks/useTable'
-import { useModal } from '@/hooks/comHooks/useModal'
+import { useTable } from '@/hooks/useTable'
+import { useModel } from '@/hooks/useModal/useModel'
 import {
   useComponentsAsyncComponent,
   usePagesAsyncComponent,
-} from '@/hooks/comHooks/useAsyncComponent'
+} from '@/hooks/useAsyncComponent/useAsyncComponent'
 const YIcon = useComponentsAsyncComponent('YIcon')
-const YPermission = usePagesAsyncComponent('/system_setting/sys_menu', 'YPermission')
+const YPermission = usePagesAsyncComponent('/system/sys_menu', 'YPermission')
 
 const showPermissions = ref<boolean>(false)
 const currentMenuId = ref<number>(0)
@@ -176,7 +170,7 @@ const tableApi = async (page: Page, searchData: any) => {
     { isMessage: false }
   )
 }
-const [pagination, loading, data, searchData, getData, doSearch, doReset, key2id] = useTable<
+const [pagination, loading, data, searchData, getData, doSearch, doReset, key2id] = useModel<
   registerMenu,
   SearchMenu
 >(tableApi, { page: 1, pageSize: 10, desc: false }, sTmpData, 'Menu')
@@ -229,7 +223,7 @@ const [
   openModal,
   cancelCallback,
   modalTitle,
-] = useModal<registerMenu>(
+] = useModel<registerMenu>(
   registerApi,
   updateApi,
   afterApi,

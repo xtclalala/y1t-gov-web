@@ -12,7 +12,7 @@ const modalMap = {}
  */
 const modalMapStates = {}
 
-export const useModal = <T>(
+export const index = <T>(
   registerApi: Function,
   updateApi: Function,
   afterApi: Function,
@@ -174,7 +174,7 @@ type ModalType<T> = {
 }
 
 /**
- * useModal 方法向外暴漏的问题
+ * index 方法向外暴漏的问题
  */
 type useModalType<T> = [
   Ref<boolean>,

@@ -1,4 +1,4 @@
-<script setup lang="ts" name="ChooseActiveRole">
+<script setup lang="ts">
 import { ref } from 'vue'
 import { useUserStore } from '@/store/module/user'
 import { storeToRefs } from 'pinia'
@@ -27,7 +27,7 @@ const submitCallback = async () => {
   await router.push(PageEnum.BASE_HOME)
 }
 
-const open = () => {
+const open = async () => {
   show.value = true
 }
 const generate = async () => {
@@ -39,8 +39,8 @@ const generate = async () => {
   })
 }
 defineExpose({
-  generate,
   open,
+  generate,
 })
 </script>
 <template>

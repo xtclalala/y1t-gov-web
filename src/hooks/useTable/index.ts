@@ -1,16 +1,33 @@
-import { Page } from '@/api/system_setting/types/sys_role'
 import { isNullOrUnDef } from '@/utils/is'
 import { reactive, ref } from 'vue'
+import type { Page } from '@/api/type'
+import type {
+  Handle2,
+  HandleReset,
+  HandleSearch,
+  Pagination,
+  TableMapStates,
+  TableMap,
+  DataApiType,
+  HandleGetData,
+  PaginationInfo,
+  useTableType,
+} from '@/hooks/useTable/type'
 
-const tableMap = {}
-const tableMapStates = {}
+const tableMap: TableMap = {}
+const tableMapStates: TableMapStates = {}
 
-export const useTable = <T, D>(dataApi: Function, page: Page, searchObj: D, key: string) => {
+export const useTable = <T extends { id: string }, D>(
+  dataApi: DataApiType<D>,
+  page: Page,
+  searchObj: D,
+  key: string
+): useTableType<T, D> => {
   // 创建分页对象
-  const createTable = (page: Page, key: string) => {
+  const createTable = (page: Page, key: string): Pagination<T, D> => {
     let pagination, loading, data, searchData
     if (isNullOrUnDef(tableMapStates[key])) {
-      pagination = reactive({
+      pagination = reactive<PaginationInfo>({
         page: page.page,
         pageSize: page.pageSize,
         itemCount: 0,
@@ -37,26 +54,26 @@ export const useTable = <T, D>(dataApi: Function, page: Page, searchObj: D, key:
   }
 
   // 获取搜索数据
-  const getData = async (page: Page): Promise<void> => {
-    const res = await dataApi(page, searchData)
+  const getData: HandleGetData = async (page: Page): Promise<void> => {
+    const res = await dataApi(page, searchData.value)
     pagination.itemCount = res.total
     data.value = res.items
     loading.value = false
   }
 
   // 点击搜索按钮
-  const doSearch = (): void => {
+  const doSearch: HandleSearch = (): void => {
     loading.value = true
     pagination.page = 1
     getData({ page: 1, pageSize: pagination.pageSize, desc: page.desc })
   }
 
   // 重置搜索条件
-  const doReset = (): void => {
+  const doReset: HandleReset = (): void => {
     searchData.value = { ...searchObj }
   }
 
-  const key2id = (row) => row.id
+  const key2id: Handle2<T> = (row: T): string => row.id
 
   const { pagination, loading, data, searchData } = createTable(page, key)
   return [pagination, loading, data, searchData, getData, doSearch, doReset, key2id]
