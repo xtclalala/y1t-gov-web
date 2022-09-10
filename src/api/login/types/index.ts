@@ -1,9 +1,9 @@
-import { Menu } from '@r/types'
-
 /**
  * 登录接口参数
  */
-export interface LoginParams {
+import { Menu } from '@r/types'
+
+interface LoginParams {
   loginName: string
   password: string
 }
@@ -11,14 +11,14 @@ export interface LoginParams {
 /**
  * 获取登录用户接口的返回
  */
-export interface Information {
+interface Information {
   id: string
   username: string
   roles: IRole[]
   orgs: IOrg[]
 }
 
-export interface IRole {
+interface IRole {
   id: number
   name: string
   pid?: number
@@ -27,10 +27,12 @@ export interface IRole {
   menus: Menu[]
 }
 
-export interface IOrg {
+interface IOrg {
   ID: number
   name: string
   pid?: number
   sort?: number
   children?: IOrg[]
 }
+
+export type { LoginParams, Information, IRole, IOrg }

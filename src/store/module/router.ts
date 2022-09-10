@@ -8,12 +8,13 @@ import { store } from '@/store'
 import { AfterBusinessRoutes } from '@r/index'
 import { PermissionModeEnum } from '@/enums/appEnum'
 import { buildMenusTree, renderMenuIcon, router2menuDeep } from '@/utils/yMenu'
-import { AppRouteRecordRaw, Menu } from '@r/types'
+import { Menu } from '@r/types'
 import projectSetting from '@/settings/projectSetting'
 import { getAuthCache, setAuthCache } from '@/utils/auth'
 import { CACHELIST_CACHE_KEY, MENU_CACHE_KEY } from '@/enums/cacheEnum'
 import { useUserStore } from '@/store/module/user'
 import { buildRoute } from '@/utils/yRouter'
+import { AppRouteRecordRaw } from 'vue-router'
 
 export interface IAsyncRouteState {
   menus: Menu[] | undefined

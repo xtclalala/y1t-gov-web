@@ -1,20 +1,9 @@
-import type { RouteRecordRaw, RouteMeta } from 'vue-router'
 import { RoleEnum } from '@/enums/roleEnum'
 import { defineComponent, VNode } from 'vue'
 
-export type Component<T = any> = ReturnType<typeof defineComponent> | (() => Promise<T>)
+type Component<T = any> = ReturnType<typeof defineComponent> | (() => Promise<T>)
 
-// @ts-ignore
-export interface AppRouteRecordRaw extends Omit<RouteRecordRaw, 'meta'> {
-  name: string
-  meta: RouteMeta
-  component?: Component | string
-  children?: AppRouteRecordRaw[]
-  props?: Recordable
-  fullPath?: string
-}
-
-export interface Menu {
+interface Menu {
   id: number
 
   pid: number
@@ -46,3 +35,5 @@ export interface Menu {
 
   keepAlive: boolean
 }
+
+export type { Menu, Component }

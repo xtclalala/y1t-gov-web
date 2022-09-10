@@ -1,1 +1,1 @@
-export { default as ChooseActiveRole } from './chooseActiveRole.vue'
+export { default as ChooseActiveRole } from './index.vue'

@@ -12,15 +12,11 @@ import { RequestEnum, ContentTypeEnum, ResultEnum } from '@/enums/httpEnum'
 import { isString } from '@/utils/is'
 import { getToken } from '@/utils/auth'
 import { setObjToUrlParams, deepMerge } from '@/utils'
-import { useErrorLogStoreWithOut } from '@/store/module/errorLog'
 // import { useI18n } from 'vue-i18n'
 import { joinTimestamp, formatRequestDate } from './helper'
-// import { useUserStoreWithOut } from '@/store/modules/user'
 const globSetting = useGlobalSetting()
-const urlPrefix = globSetting.urlPrefix
+const { urlPrefix, authorization } = globSetting
 
-// todo 集成进全局设置
-const Authorization = 'y1t-gov'
 /**
  * @description: 数据处理，方便区分多种处理方式
  */
@@ -126,7 +122,7 @@ const transform: AxiosTransform = {
     const token = getToken()
     if (token && (config as Recordable)?.requestOptions?.withToken !== false) {
       // jwt token
-      ;(config as Recordable).headers[Authorization] = options.authenticationScheme
+      ;(config as Recordable).headers[authorization] = options.authenticationScheme
         ? `${options.authenticationScheme} ${token}`
         : token
     }
@@ -145,8 +141,6 @@ const transform: AxiosTransform = {
    */
   responseInterceptorsCatch: (error: any) => {
     // const { t } = useI18n()
-    const errorLogStore = useErrorLogStoreWithOut()
-    errorLogStore.addAjaxErrorInfo(error)
     const { response, code, message } = error || {}
     const msg: string = response?.data?.error?.message ?? ''
     const err: string = error?.toString?.() ?? ''

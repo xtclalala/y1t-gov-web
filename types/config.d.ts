@@ -144,14 +144,12 @@ export  interface ProjectInfo {
 export interface GlobConfig {
   // Site title
   title: string;
+  // request header
+  authorization: string
   // Service interface url
   domain?: string;
-  // Upload url
-  uploadUrl?: string;
   //  Service interface url prefix
   urlPrefix?: string;
-  // Project abbreviation
-  shortName?: string;
 }
 export interface GlobEnvConfig {
   // Site title
@@ -160,4 +158,6 @@ export interface GlobEnvConfig {
   VITE_GLOB_API_URL: string
   // uri prefix
   VITE_GLOB_API_URL_PREFIX: string
+  // request header
+  VITE_GLOB_APP_AUTH: string
 }

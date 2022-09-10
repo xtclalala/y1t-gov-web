@@ -4,8 +4,8 @@
  * @date 2022/7/26
  **/
 import { defineStore } from 'pinia'
-import { Information, IOrg, IRole, LoginParams } from '@/api/common/types/login'
-import { doLogin, getInformation } from '@/api/common/login'
+import { Information, IOrg, IRole, LoginParams } from '@/api/login/types'
+import { doLogin, getInformation } from '@/api/login'
 import { getAuthCache, setAuthCache } from '@/utils/auth'
 import {
   CURRENT_ROLE,

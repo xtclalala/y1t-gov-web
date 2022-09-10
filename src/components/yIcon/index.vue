@@ -1,4 +1,4 @@
-<script lang="ts" setup name="YIcon">
+<script lang="ts" setup>
 /**
  * @Description: 图标 根据 vicons/ionicons5 类型的图标名称
  * @author: y1t

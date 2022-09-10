@@ -17,8 +17,8 @@ import type {
 const tableMap: TableMap = {}
 const tableMapStates: TableMapStates = {}
 
-export const useTable = <T extends { id: string }, D>(
-  dataApi: DataApiType<D>,
+export const useTable = <T extends { id: string | number }, D>(
+  dataApi: DataApiType<T, D>,
   page: Page,
   searchObj: D,
   key: string
@@ -73,7 +73,7 @@ export const useTable = <T extends { id: string }, D>(
     searchData.value = { ...searchObj }
   }
 
-  const key2id: Handle2<T> = (row: T): string => row.id
+  const key2id: Handle2<T> = (row: T): string | number => row.id
 
   const { pagination, loading, data, searchData } = createTable(page, key)
   return [pagination, loading, data, searchData, getData, doSearch, doReset, key2id]

@@ -8,7 +8,6 @@ import { SideBarLogo } from './components'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useViewStore } from '@/store/module/views'
-import { Menu } from '@r/types'
 import { useRouteStore } from '@/store/module/router'
 
 const router = useRouter()
@@ -19,8 +18,7 @@ const options = routeStore.getMenus
 const expandedKeys = ref<string[]>([])
 
 // 菜单跳转
-const handleAlt = (key: string, item: Menu) => {
-  viewStore.routerPush(item)
+const handleAlt = (key: string) => {
   router.push({ name: key })
 }
 </script>

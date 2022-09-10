@@ -10,9 +10,6 @@ export enum rName {
 
   SYSTEM = 'SystemSetting',
   SYSTEM_MENU = 'Menu',
-  SYSTEM_ROLE = 'Role',
-  SYSTEM_USER = 'User',
-  SYSTEM_ORGAMIZE = 'Organize',
   ABOUT = 'About',
   CENTER = 'CenterUser',
 }

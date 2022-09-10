@@ -1,5 +1,5 @@
 import { defHttp } from '@/service'
-import { LoginParams } from '@/api/common/types/login'
+import { LoginParams } from '@/api/login/types'
 import { RequestOptions, Result } from '#axios'
 
 enum Api {

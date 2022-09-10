@@ -1,8 +1,7 @@
-import type { AppRouteRecordRaw } from '@r/types'
-
 import { LAYOUT } from '@r/constant'
 import { rPath } from '@/enums/rPath'
 import { rName } from '@/enums/rName'
+import type { AppRouteRecordRaw } from 'vue-router'
 // import { t } from '@/utils/i18n/useI18n'
 
 // 404

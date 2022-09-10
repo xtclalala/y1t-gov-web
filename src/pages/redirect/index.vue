@@ -1,6 +1,6 @@
 <script lang="ts">
 export default {
-  name: 'Y1tRedirect',
+  name: 'YRedirect',
 }
 </script>
 <script setup lang="ts">

@@ -10,6 +10,6 @@
  * @param target 根据哪个字段排序
  * @param defaultNumber  默认值
  */
-export const listSort = <T>(list: T[], target: string, defaultNumber: number) => {
+export const listSort = <T>(list: Array<T>, target: string, defaultNumber: number) => {
   list.sort((a, b) => (a[target] || defaultNumber) - (b[target] || defaultNumber))
 }

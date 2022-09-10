@@ -50,5 +50,7 @@ export interface UploadFileParams {
 
 export interface PageResult<T = any> {
   items: T,
-  total: number
+  total: number,
+  pageNo: number,
+  pageSize: number
 }

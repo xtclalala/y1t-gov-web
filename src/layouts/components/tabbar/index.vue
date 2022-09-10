@@ -10,8 +10,6 @@ import { useMessage } from 'naive-ui'
 import { nextTick, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { YIcon } from '@/components'
-import { AppRouteRecordRaw } from '@r/types'
-import { router2menu } from '@/utils/yMenu'
 
 const viewStore = useViewStore()
 const message = useMessage()
@@ -21,19 +19,6 @@ const route = useRoute()
 const scrollbar: any = ref(null)
 const leftArrowDisabled = ref<boolean>(false)
 const rightArrowDisabled = ref<boolean>(false)
-
-/**
- * 监听路由跳转时将视图添加进视图列表
- */
-watch(
-  route,
-  (n) => {
-    const r = router2menu(n as AppRouteRecordRaw)
-    router.push({ name: n.name as string })
-    viewStore.routerPush(r)
-  },
-  { immediate: true }
-)
 
 /**
  * 监听视图列表的长度是否超过显示长度，
@@ -151,7 +136,6 @@ const closeTab = async (name: string) => {
   if (index !== -1) {
     await viewStore.removeTab(index)
     if (currentView.value === name) {
-      currentView.value = viewStore.viewListLast.name
       await router.push({ name: currentView.value })
     }
   }
@@ -237,7 +221,6 @@ const closeTab = async (name: string) => {
       cursor: pointer
       .text-item
         //color: red
-      // todo 字体颜色
       .show-icon-item
         margin-top: 2px
         margin-left: 2px

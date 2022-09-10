@@ -1,12 +1,7 @@
 import { defHttp } from '@/service'
 import { RequestOptions, Result } from '#axios'
 
-import {
-  BaseMenu,
-  MenuId,
-  registerMenu,
-  SearchMenuWithPage,
-} from '@/api/system_setting/types/sys_menu'
+import type { BaseMenu, MenuId, registerMenu, SearchMenuWithPage } from '@/api/system/menu/type'
 
 enum Api {
   menu = '/menu/menu',

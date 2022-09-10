@@ -16,6 +16,7 @@ import {
   useComponentsAsyncComponent,
   usePagesAsyncComponent,
 } from '@/hooks/useAsyncComponent/useAsyncComponent'
+import { Page } from '@/api/type'
 const YIcon = useComponentsAsyncComponent('YIcon')
 const YPermission = usePagesAsyncComponent('/system/sys_menu', 'YPermission')
 
@@ -164,14 +165,17 @@ const sTmpData = {
   title: '',
   component: '',
 }
-const tableApi = async (page: Page, searchData: any) => {
-  return searchMenu<PageResult<Array<registerMenu>>>(
-    completeMerger<SearchMenuWithPage>(page, searchData.value),
+const tableApi = async (
+  page: Page,
+  searchData: SearchMenu
+): Promise<PageResult<Array<BaseMenu>>> => {
+  return searchMenu<PageResult<Array<BaseMenu>>>(
+    completeMerger<SearchMenuWithPage>(page, searchData),
     { isMessage: false }
   )
 }
-const [pagination, loading, data, searchData, getData, doSearch, doReset, key2id] = useModel<
-  registerMenu,
+const [pagination, loading, data, searchData, getData, doSearch, doReset, key2id] = useTable<
+  BaseMenu,
   SearchMenu
 >(tableApi, { page: 1, pageSize: 10, desc: false }, sTmpData, 'Menu')
 
@@ -223,7 +227,7 @@ const [
   openModal,
   cancelCallback,
   modalTitle,
-] = useModel<registerMenu>(
+] = useModel<registerMenu, BaseMenu>(
   registerApi,
   updateApi,
   afterApi,

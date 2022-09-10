@@ -3,10 +3,11 @@
  * @author: y1t
  * @date 2022/7/26
  **/
-import { AppRouteRecordRaw, Menu } from '@r/types'
+import type { Menu } from '@r/types'
 import { renderIcon } from '@/utils/render'
 import { list2Tree } from '@/utils/helper/treeHelper'
 import { listSort } from '@/utils/helper/listHelper'
+import type { AppRouteRecordRaw } from 'vue-router'
 
 /**
  * 把路由构建成菜单

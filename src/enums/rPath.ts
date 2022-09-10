@@ -10,9 +10,6 @@ export enum rPath {
 
   SYSTEM = '/system',
   SYSTEM_MENU = 'menu',
-  SYSTEM_ROLE = 'role',
-  SYSTEM_USER = 'user',
-  SYSTEM_ORGANIZE = 'organize',
   ABOUT = '/about',
   CENTER = '/center',
 }

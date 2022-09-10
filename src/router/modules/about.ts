@@ -1,6 +1,6 @@
-import { AppRouteRecordRaw } from '@r/types'
 import { rPath } from '@/enums/rPath'
 import { rName } from '@/enums/rName'
+import type { AppRouteRecordRaw } from 'vue-router'
 
 const routes: AppRouteRecordRaw = {
   path: rPath.ABOUT,

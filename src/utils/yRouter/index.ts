@@ -1,5 +1,6 @@
-import { AppRouteRecordRaw, Menu } from '@r/types'
+import type { Menu } from '@r/types'
 import { PAGE } from '@r/constant'
+import type { AppRouteRecordRaw } from 'vue-router'
 
 /**
  * 引入 pages 下的 sfc

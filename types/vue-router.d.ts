@@ -1,4 +1,6 @@
 import {RoleEnum} from "@/enums/roleEnum";
+import {RouteRecordRaw} from "vue-router";
+import {Component} from "@r/types";
 
 export {};
 
@@ -48,5 +50,14 @@ declare module 'vue-router' {
     keepAlive?: boolean;
     id?: numer;
     pid?: number;
+  }
+
+  export interface AppRouteRecordRaw extends Omit<RouteRecordRaw, 'meta'> {
+    name: string
+    meta: RouteMeta
+    component?: Component | string
+    children?: AppRouteRecordRaw[]
+    props?: Recordable
+    fullPath?: string
   }
 }

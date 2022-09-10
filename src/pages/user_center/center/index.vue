@@ -1,8 +1,6 @@
 <script setup lang="ts" name="UserCenter">
 import { FormItemRule, FormRules, useMessage } from 'naive-ui'
-import { useModal } from '@/hooks/comHooks/useModal'
-import { changePwd } from '@/api/system_setting/sys_user'
-import { userPassword } from '@/api/system_setting/types/sys_user'
+import { useModel } from '@/hooks/useModal/useModel'
 import { useUserStore } from '@/store/module/user'
 const message = useMessage()
 const userStore = useUserStore()
@@ -16,8 +14,13 @@ const changePassword = async () => {
   await openModal()
 }
 
-const updateApi = async (params: userPassword) => {
-  return changePwd<string>(params, { isMessage: true })
+// const updateApi = async (params: userPassword) => {
+//   return changePwd<string>(params, { isMessage: true })
+// }
+const updateApi = async (params: any): Promise<any> => {
+  return new Promise((resolve) => {
+    resolve(1)
+  })
 }
 
 const rules: FormRules = {
@@ -54,7 +57,7 @@ const [
   openModal,
   cancelCallback,
   modalTitle,
-] = useModal(
+] = useModel(
   () => {},
   updateApi,
   () => {},

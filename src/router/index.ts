@@ -1,5 +1,9 @@
-import type { AppRouteRecordRaw } from '@r/types'
-import type { RouteLocationNormalized, RouteRecordRaw, RouteRecordName } from 'vue-router'
+import type {
+  RouteLocationNormalized,
+  RouteRecordRaw,
+  RouteRecordName,
+  AppRouteRecordRaw,
+} from 'vue-router'
 import { createRouter, createWebHashHistory } from 'vue-router'
 import type { App } from 'vue'
 import { LOGIN_ROUTE, PAGE_NOT_FOUND_ROUTE, REDIRECT_ROUTE } from '@r/basic'
@@ -112,7 +116,7 @@ router.beforeEach(async (to, form, next) => {
         return
       }
       router.addRoute(pName, item as RouteRecordRaw)
-      router.push({ path: to.path })
+      next({ path: to.path })
     })
   }
   const userStore = useUserStore()

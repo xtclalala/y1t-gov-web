@@ -11,6 +11,25 @@ import { YRefresh } from './components'
 import { YGithub } from './components'
 import { YCenter } from './components'
 import { YTabBar } from '@/layouts/components/tabbar'
+import { watch } from 'vue'
+import { router2menu } from '@/utils/yMenu'
+import { AppRouteRecordRaw, useRoute, useRouter } from 'vue-router'
+import { useViewStore } from '@/store/module/views'
+
+const route = useRoute()
+const viewStore = useViewStore()
+const router = useRouter()
+/**
+ * 监听路由跳转时将视图添加进视图列表
+ */
+watch(
+  route,
+  (n) => {
+    const r = router2menu(n as AppRouteRecordRaw)
+    viewStore.routerPush(r)
+  },
+  { immediate: true }
+)
 </script>
 <template>
   <n-layout-header bordered style="padding: 0">

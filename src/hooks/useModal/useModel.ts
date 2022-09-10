@@ -1,21 +1,30 @@
-import { computed, ref, Ref } from 'vue'
+import { computed, ref } from 'vue'
 import { isEmpty, isNullOrUnDef } from '@/utils/is'
 import { FormInst } from 'naive-ui'
+import type {
+  AfterApiType,
+  ModalType,
+  RegisterApiType,
+  UpdateApiType,
+  useModalType,
+  ModalMapStates,
+  ModelMap,
+} from '@/hooks/useModal/type'
 
 /**
  * 所有 modal 内容的存储点
  */
-const modalMap = {}
+const modalMap: ModelMap = {}
 
 /**
  * 所有 modal 是否被激活的存储点
  */
-const modalMapStates = {}
+const modalMapStates: ModalMapStates = {}
 
-export const index = <T>(
-  registerApi: Function,
-  updateApi: Function,
-  afterApi: Function,
+export const useModel = <T, D>(
+  registerApi: RegisterApiType<T>,
+  updateApi: UpdateApiType<D>,
+  afterApi: AfterApiType,
   modelObj: T,
   modalStyle: Object,
   key: string
@@ -24,7 +33,7 @@ export const index = <T>(
    * 创建或者获取一个 modal 需要的相关字段
    */
   const createModal = (): ModalType<T> => {
-    let isAdd, style, showModal, form, model
+    let isAdd, style, showModal, form, registerModel
     // 是否创建过该弹窗
     if (isNullOrUnDef(modalMapStates[key])) {
       showModal = ref<boolean>(false)
@@ -36,18 +45,18 @@ export const index = <T>(
       })
       isAdd = ref<boolean>(true)
       form = ref<FormInst | null>(null)
-      model = ref<T>(Object.assign({}, modelObj))
+      registerModel = ref<T>(Object.assign({}, modelObj))
       modalMapStates[key] = true
-      modalMap[key] = { isAdd, style, showModal, form, model }
+      modalMap[key] = { isAdd, style, showModal, form, model: registerModel }
     } else {
-      ;({ isAdd, style, showModal, form, model } = modalMap[key])
+      ;({ isAdd, style, showModal, form, model: registerModel } = modalMap[key])
     }
     return {
       isAdd,
       style,
       showModal,
       form,
-      model,
+      model: registerModel,
     }
   }
 
@@ -72,9 +81,9 @@ export const index = <T>(
           return
         }
         if (isAdd.value) {
-          await registerApi(model.value, { isMessage: true })
+          await registerApi(model.value)
         } else {
-          await updateApi(model.value, { isMessage: true })
+          await updateApi(model.value as unknown as D)
         }
         await afterApi()
         showModal.value = false
@@ -131,61 +140,3 @@ export const index = <T>(
     modalTitle,
   ]
 }
-
-/**
- * 数据新增
- */
-type HandlerRegisterFunc = () => void
-
-/**
- * 点击提交
- */
-type HandlerSubmitFunc = (e: MouseEvent) => void
-
-/**
- * 点击取消
- */
-type HandlerCancelFunc = () => void
-
-/**
- * 打开弹窗
- */
-type HandlerOpenFunc = () => void
-
-/**
- * 清空弹窗
- */
-type HandlerClearFunc = () => void
-
-/**
- * 弹窗标题
- */
-type TitleFunc = () => string
-
-/**
- * 一个 modal 所需要的相关字段
- */
-type ModalType<T> = {
-  isAdd: Ref<boolean>
-  showModal: Ref<boolean>
-  form: Ref<FormInst | null>
-  model: Ref<T>
-  style: Object
-}
-
-/**
- * index 方法向外暴漏的问题
- */
-type useModalType<T> = [
-  Ref<boolean>,
-  Ref<boolean>,
-  Ref<FormInst | null>,
-  Ref<T>,
-  Object,
-  HandlerRegisterFunc,
-  HandlerSubmitFunc,
-  HandlerClearFunc,
-  HandlerOpenFunc,
-  HandlerCancelFunc,
-  TitleFunc
-]

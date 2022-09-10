@@ -4,27 +4,40 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import { YIcon } from '@/components'
+import { useComponentsAsyncComponent } from '@/hooks/useAsyncComponent/useAsyncComponent'
+import { ref } from 'vue'
+import { isEmpty } from '@/utils/is'
+
+const YIcon = useComponentsAsyncComponent('YIcon')
+
+const paneStyle = { width: '80px', height: '160px' }
+const notifyList = ref([])
+const msgList = ref([])
 </script>
 <template>
   <n-popover trigger="click" placement="bottom-end" :width="300">
     <template #trigger>
-      <!--          todo 可能要用tsx去加载-->
       <n-badge dot processing>
         <y-icon :size="22" icon-type="NotificationsCircle" :depth="2" />
       </n-badge>
     </template>
-    <n-tabs type="line" justify-content="space-evenly" style="--pane-padding: 0">
-      <!--            todo 没有消息时显示空数据 有数据时固定高度-->
-      <n-tab-pane name="notifications" tab="notifications（5）">
-        <n-list style="margin: 0">
+    <n-tabs
+      type="line"
+      justify-content="space-evenly"
+      style="--pane-padding: 0"
+      :pane-style="paneStyle"
+    >
+      <n-tab-pane name="notifications" tab="通知">
+        <n-list v-if="!isEmpty(notifyList)" style="margin: 0">
           <n-list-item v-for="i in 8" :key="i">No {{ i }}</n-list-item>
         </n-list>
+        <n-empty v-else description="暂无内容" />
       </n-tab-pane>
-      <n-tab-pane name="message" tab="messages（5）">
-        <n-list style="margin: 0">
-          <n-list-item v-for="i in 8" :key="i">msg {{ i }}</n-list-item>
+      <n-tab-pane name="message" tab="消息">
+        <n-list v-if="!isEmpty(msgList)" style="margin: 0">
+          <n-list-item v-for="i in 8" :key="i">No {{ i }}</n-list-item>
         </n-list>
+        <n-empty v-else description="暂无内容" />
       </n-tab-pane>
     </n-tabs>
   </n-popover>

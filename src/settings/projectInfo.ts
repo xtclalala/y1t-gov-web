@@ -5,4 +5,4 @@ const setting: ProjectInfo = {
   authorGithub: 'https://github.com/xtclalala',
 }
 
-export default setting
+export { setting }

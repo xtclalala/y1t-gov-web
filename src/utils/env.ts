@@ -14,18 +14,21 @@ export function getStorageShortName() {
 }
 
 export const useGlobalSetting = (): Readonly<GlobConfig> => {
-  const { VITE_GLOB_APP_TITLE, VITE_GLOB_API_URL, VITE_GLOB_API_URL_PREFIX } = getAppEnvConfig()
+  const { VITE_GLOB_APP_TITLE, VITE_GLOB_API_URL, VITE_GLOB_API_URL_PREFIX, VITE_GLOB_APP_AUTH } =
+    getAppEnvConfig()
   return {
     title: VITE_GLOB_APP_TITLE,
     domain: VITE_GLOB_API_URL,
     urlPrefix: VITE_GLOB_API_URL_PREFIX,
+    authorization: VITE_GLOB_APP_AUTH,
   }
 }
 
 export function getAppEnvConfig() {
   const ENV = import.meta.env as unknown as GlobEnvConfig
 
-  const { VITE_GLOB_APP_TITLE, VITE_GLOB_API_URL, VITE_GLOB_API_URL_PREFIX } = ENV
+  const { VITE_GLOB_APP_TITLE, VITE_GLOB_API_URL, VITE_GLOB_API_URL_PREFIX, VITE_GLOB_APP_AUTH } =
+    ENV
 
   if (!/^[a-zA-Z\_]*$/.test(VITE_GLOB_APP_TITLE)) {
     warn(
@@ -37,6 +40,7 @@ export function getAppEnvConfig() {
     VITE_GLOB_APP_TITLE,
     VITE_GLOB_API_URL,
     VITE_GLOB_API_URL_PREFIX,
+    VITE_GLOB_APP_AUTH,
   }
 }
 

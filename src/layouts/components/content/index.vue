@@ -14,11 +14,8 @@ const routeStore = useRouteStore()
     :native-scrollbar="false"
   >
     <router-view v-slot="{ Component, route }">
-      <!--      todo 添加缓存配置 使用的组件需要有 name属性-->
       <keep-alive :include="routeStore.getCacheList">
-        <n-card>
-          <component :is="Component" :key="route.name" />
-        </n-card>
+        <component :is="Component" :key="route.name" />
       </keep-alive>
     </router-view>
   </n-layout-content>

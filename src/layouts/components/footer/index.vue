@@ -4,8 +4,8 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import ProjectInfo from '@/settings/projectInfo'
-const { projectGithub, authorGithub } = ProjectInfo
+import { setting } from '@/settings/projectInfo'
+const { projectGithub, authorGithub } = setting
 </script>
 <template>
   <n-layout-footer>

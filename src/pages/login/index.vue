@@ -1,14 +1,19 @@
-<script setup lang="ts" name="Y1tLogin">
+<script lang="ts">
+export default {
+  name: 'YLogin',
+}
+</script>
+<script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useMessage } from 'naive-ui'
 import { useUserStore } from '@/store/module/user'
-import { LoginParams } from '@/api/common/types/login'
+import type { LoginParams } from '@/api/login/types'
 import { PageEnum } from '@/enums/pageEnum'
 import { useRouteStore } from '@/store/module/router'
-import { usePagesAsyncComponent } from '@/hooks/comHooks/useAsyncComponent'
+import { useComponentsAsyncComponent } from '@/hooks/useAsyncComponent/useAsyncComponent'
 
-const ChooseActiveRole = usePagesAsyncComponent('/login', 'ChooseActiveRole')
+const ChooseActiveRole = useComponentsAsyncComponent('ChooseActiveRole')
 
 const rules = {
   loginName: {
@@ -46,7 +51,7 @@ const handleLogin = async (e: Event): Promise<void> => {
       // 动态路由 需要选择身份
       if (routeStore.getIsDynamicAddedRoute) {
         // @ts-ignore
-        chooseRoleRef.value?.open()
+        await chooseRoleRef.value?.open()
       } else {
         // @ts-ignore
         await chooseRoleRef.value?.generate()

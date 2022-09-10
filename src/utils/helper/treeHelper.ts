@@ -20,10 +20,13 @@ const getConfig = (config: Partial<TreeHelperConfig>): TreeHelperConfig =>
   Object.assign({}, DEFAULT_CONFIG, config)
 
 // tree from list
-export function listToTree<T = any>(list: T[], config: Partial<TreeHelperConfig> = {}): T[] {
+export function listToTree<T = any>(
+  list: Array<T>,
+  config: Partial<TreeHelperConfig> = {}
+): Array<T> {
   const conf = getConfig(config)
   const nodeMap = new Map()
-  const result: T[] = []
+  const result: Array<T> = []
   const { id, children, pid } = conf
 
   for (const node of list) {
@@ -36,10 +39,13 @@ export function listToTree<T = any>(list: T[], config: Partial<TreeHelperConfig>
   return result
 }
 
-export function treeToList<T = any>(tree: any, config: Partial<TreeHelperConfig> = {}): T {
+export function treeToList<T = any>(
+  tree: Array<T>,
+  config: Partial<TreeHelperConfig> = {}
+): Array<T> {
   config = getConfig(config)
   const { children } = config
-  const result: any = [...tree]
+  const result: Array<T> = [...tree]
   for (let i = 0; i < result.length; i++) {
     if (!result[i][children!]) {
       continue
@@ -49,7 +55,7 @@ export function treeToList<T = any>(tree: any, config: Partial<TreeHelperConfig>
   return result
 }
 
-export const list2Tree = <T>(list: T[]): T[] => {
+export const list2Tree = <T>(list: Array<T>): Array<T> => {
   const cloneList = JSON.parse(JSON.stringify(list))
   return cloneList.filter((father) => {
     const bArray = cloneList.filter((child) => father.id === child.pid)
@@ -141,7 +147,7 @@ export function findPathAll(tree: any, func: Fn, config: Partial<TreeHelperConfi
 }
 
 export function filter<T = any>(
-  tree: T[],
+  tree: Array<T>,
   func: (n: T) => boolean,
   config: Partial<TreeHelperConfig> = {}
 ): T[] {

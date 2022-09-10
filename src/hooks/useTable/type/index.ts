@@ -1,92 +1,84 @@
 import { Ref } from 'vue'
-import { FormInst } from 'naive-ui'
-import { RequestOptions } from '#axios'
+import type { PageResult } from '#axios'
+import type { Page } from '@/api/type'
 
-// useModel 接收类型
-/**
- * 创建接口
- */
-type RegisterApiType<T = any> = (modal: T, options?: RequestOptions) => void
+type TableMap = {
+  [key: string]: Pagination<any, any>
+}
+type TableMapStates = {
+  [key: string]: boolean
+}
 
+// useTable 接收类型
 /**
- * 更新接口
+ * 获取数据接口
  */
-type UpdateApiType<T = any> = (modal: T, options?: RequestOptions) => void
-
-/**
- * 接口请求以后的操作方法
- */
-type AfterApiType = () => void
+type DataApiType<T = any, D = any> = (page: Page, searchData: D) => Promise<PageResult<Array<T>>>
 
 // useModel 返回类型
 /**
- * 数据新增
+ * 分页类型
  */
-type HandlerRegisterFunc = () => void
+type PaginationInfo = {
+  page: number
+  pageSize: number
+  itemCount: number
+  onChange: (pageNum: number) => void
+}
 
 /**
- * 点击提交
+ * 获取数据方法
  */
-type HandlerSubmitFunc = (e: MouseEvent) => void
+type HandleGetData = (page: Page) => Promise<void>
 
 /**
- * 点击取消
+ * 搜索方法
  */
-type HandlerCancelFunc = () => void
+type HandleSearch = () => void
 
 /**
- * 打开弹窗
+ * 重置方法
  */
-type HandlerOpenFunc = () => void
+type HandleReset = () => void
 
 /**
- * 清空弹窗
+ * key2id 方法
  */
-type HandlerClearFunc = () => void
-
-/**
- * 弹窗标题
- */
-type TitleFunc = () => string
+type Handle2<T> = (row: T) => string | number
 
 /**
  * 一个 modal 所需要的相关字段
  */
-type ModalType<T> = {
-  isAdd: Ref<boolean>
-  showModal: Ref<boolean>
-  form: Ref<FormInst | null>
-  model: Ref<T>
-  style: Object
+type Pagination<T, D> = {
+  pagination: PaginationInfo
+  loading: Ref<boolean>
+  data: Ref<Array<T>>
+  searchData: Ref<D>
 }
 
 /**
  * useModel 方法向外暴漏的问题
  */
-type useModalType<T> = [
+type useTableType<T, D> = [
+  PaginationInfo,
   Ref<boolean>,
-  Ref<boolean>,
-  Ref<FormInst | null>,
-  Ref<T>,
-  Object,
-  HandlerRegisterFunc,
-  HandlerSubmitFunc,
-  HandlerClearFunc,
-  HandlerOpenFunc,
-  HandlerCancelFunc,
-  TitleFunc
+  Ref<Array<T>>,
+  Ref<D>,
+  HandleGetData,
+  HandleSearch,
+  HandleReset,
+  Handle2<T>
 ]
 
 export type {
-  RegisterApiType,
-  UpdateApiType,
-  AfterApiType,
-  HandlerRegisterFunc,
-  HandlerSubmitFunc,
-  HandlerCancelFunc,
-  HandlerOpenFunc,
-  HandlerClearFunc,
-  TitleFunc,
-  ModalType,
-  useModalType,
+  DataApiType,
+  PaginationInfo,
+  useTableType,
+  Pagination,
+  HandleGetData,
+  HandleSearch,
+  HandleReset,
+  Handle2,
+  TableMapStates,
+  TableMap,
 }
