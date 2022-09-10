@@ -25,16 +25,15 @@ export default defineConfig({
     host: '0.0.0.0',
     proxy: {
       [config.VITE_GLOB_API_URL_PREFIX]: {
-        // target: 'http://127.0.0.1:4523',
         target: config.VITE_GLOB_SERVICE_URL,
         changeOrigin: true,
         rewrite: (path) => path.replace(new RegExp('^' + config.VITE_GLOB_API_URL_PREFIX), ''),
       },
-      '^/7lk': {
-        target: 'ws://127.0.0.1:8080',
-        ws: true,
-        rewrite: (path) => path.replace(/^\/7lk/, ''),
-      },
+      // '^/7lk': {
+      //   target: 'ws://127.0.0.1:8080',
+      //   ws: true,
+      //   rewrite: (path) => path.replace(/^\/7lk/, ''),
+      // },
     },
   },
   css: {
