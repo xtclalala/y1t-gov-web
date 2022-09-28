@@ -1,15 +1,15 @@
 import { computed, ref } from 'vue'
-import { isEmpty, isNullOrUnDef } from '@/utils/is'
+import { isEmpty, isFunction, isNullOrUnDef } from '@/utils/is'
 import { FormInst } from 'naive-ui'
 import type {
-  AfterApiType,
   ModalType,
-  RegisterApiType,
-  UpdateApiType,
   useModalType,
   ModalMapStates,
   ModelMap,
+  Options,
 } from '@/hooks/useModal/type'
+import { options } from './options'
+import { completeMerger } from '@/utils/helper/objectHelper'
 
 /**
  * 所有 modal 内容的存储点
@@ -21,52 +21,65 @@ const modalMap: ModelMap = {}
  */
 const modalMapStates: ModalMapStates = {}
 
-export const useModel = <T, D>(
-  registerApi: RegisterApiType<T>,
-  updateApi: UpdateApiType<D>,
-  afterApi: AfterApiType,
-  modelObj: T,
-  modalStyle: Object,
-  key: string
-): useModalType<T> => {
+export const useModel = <T = any, D = any>(value: Options<T, D>): useModalType<T> => {
   /**
    * 创建或者获取一个 modal 需要的相关字段
    */
-  const createModal = (): ModalType<T> => {
-    let isAdd, style, showModal, form, registerModel
+  const createModal = (option: Options<T, D>): ModalType<T, D> => {
+    const key = option.key
+    let isAdd, mStyle, showModal, form, model
+    option = completeMerger(options, option)
     // 是否创建过该弹窗
     if (isNullOrUnDef(modalMapStates[key])) {
       showModal = ref<boolean>(false)
-      style = computed(() => {
-        if (isEmpty(modalStyle)) {
-          return { width: '600px' }
-        }
-        return modalStyle
-      })
       isAdd = ref<boolean>(true)
       form = ref<FormInst | null>(null)
-      registerModel = ref<T>(Object.assign({}, modelObj))
+      const { style, modelObject } = option
+      mStyle = computed(() => {
+        if (isEmpty(style)) {
+          return { width: '600px' }
+        }
+        return style
+      })
+      model = ref<T>(Object.assign({}, modelObject))
       modalMapStates[key] = true
-      modalMap[key] = { isAdd, style, showModal, form, model: registerModel }
+      modalMap[key] = { isAdd, mStyle, showModal, form, model, option }
     } else {
-      ;({ isAdd, style, showModal, form, model: registerModel } = modalMap[key])
+      ;({ isAdd, mStyle, showModal, form, model, option } = modalMap[key])
     }
+
     return {
       isAdd,
-      style,
+      mStyle,
       showModal,
       form,
-      model: registerModel,
+      model,
+      option,
     }
+  }
+  const { isAdd, showModal, form, model, mStyle, option } = createModal(value)
+
+  /**
+   * 清空弹窗
+   */
+  const clearModel = async (): Promise<void> => {
+    model.value = Object.assign({}, option.modelObject)
   }
 
   /**
-   * 新增数据
+   * 打开弹窗
+   */
+  const openModal = async (): Promise<void> => {
+    showModal.value = true
+  }
+
+  /**
+   * 打开新增弹窗
    */
   const handleRegister = async (): Promise<void> => {
     isAdd.value = true
-    clearModel()
-    openModal()
+    await clearModel()
+    await openModal()
   }
 
   /**
@@ -81,13 +94,20 @@ export const useModel = <T, D>(
           return
         }
         if (isAdd.value) {
-          await registerApi(model.value)
+          const { fn, after } = option.register
+          await fn(model.value)
+          if (isFunction(after)) {
+            await after(showModal, model)
+          }
         } else {
-          await updateApi(model.value as unknown as D)
+          const { fn, after } = option.update
+          await fn(model.value as unknown as D)
+          if (isFunction(after)) {
+            await after(showModal, model)
+          }
         }
-        await afterApi()
         showModal.value = false
-        clearModel()
+        await clearModel()
       })
       .catch((e) => {
         console.log(e)
@@ -95,24 +115,10 @@ export const useModel = <T, D>(
   }
 
   /**
-   * 清空弹窗
-   */
-  const clearModel = (): void => {
-    model.value = Object.assign({}, modelObj)
-  }
-
-  /**
-   * 打开弹窗
-   */
-  const openModal = (): void => {
-    showModal.value = true
-  }
-
-  /**
    * 取消回调
    */
-  const cancelCallback = (): void => {
-    clearModel()
+  const cancelCallback = async (): Promise<void> => {
+    await clearModel()
     showModal.value = false
     isAdd.value = false
   }
@@ -124,14 +130,12 @@ export const useModel = <T, D>(
     return isAdd.value ? '新增' : '编辑'
   }
 
-  const { isAdd, showModal, form, model, style } = createModal()
-
   return [
     isAdd,
     showModal,
     form,
     model,
-    style,
+    mStyle,
     handleRegister,
     submitCallback,
     clearModel,

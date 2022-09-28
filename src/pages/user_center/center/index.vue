@@ -2,6 +2,7 @@
 import { FormItemRule, FormRules, useMessage } from 'naive-ui'
 import { useModel } from '@/hooks/useModal/useModel'
 import { useUserStore } from '@/store/module/user'
+import { Options, RegisterApiType, UpdateApiType } from '@/hooks/useModal/type'
 const message = useMessage()
 const userStore = useUserStore()
 const changeAvatar = async () => {
@@ -13,16 +14,6 @@ const changePassword = async () => {
   changePwdModel.value.id = userStore.getUserId
   await openModal()
 }
-
-// const updateApi = async (params: userPassword) => {
-//   return changePwd<string>(params, { isMessage: true })
-// }
-const updateApi = async (params: any): Promise<any> => {
-  return new Promise((resolve) => {
-    resolve(1)
-  })
-}
-
 const rules: FormRules = {
   oldPassword: [
     { required: true, message: '请填写老密码！', trigger: ['input', 'blur'] },
@@ -45,6 +36,26 @@ const rules: FormRules = {
   ],
 }
 
+const registerApi: RegisterApiType = async (_): Promise<void> => {}
+const updateApi: UpdateApiType = async (_): Promise<void> => {}
+
+const options: Options = {
+  key: 'ChangePwd',
+  register: {
+    fn: registerApi,
+  },
+  update: {
+    fn: updateApi,
+  },
+  modelObject: {
+    id: '',
+    oldPassword: '',
+    newPassword: '',
+    newPasswordAgain: '',
+  },
+  style: {},
+}
+
 const [
   isAdd,
   showModal,
@@ -57,19 +68,7 @@ const [
   openModal,
   cancelCallback,
   modalTitle,
-] = useModel(
-  () => {},
-  updateApi,
-  () => {},
-  {
-    id: '',
-    oldPassword: '',
-    newPassword: '',
-    newPasswordAgain: '',
-  },
-  {},
-  'ChangePwd'
-)
+] = useModel<any, any>(options)
 </script>
 
 <template>

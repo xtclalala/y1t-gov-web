@@ -2,7 +2,7 @@ import { Ref } from 'vue'
 import { FormInst } from 'naive-ui'
 
 type ModelMap = {
-  [key: string]: ModalType<any>
+  [key: string]: ModalType<any, any>
 }
 
 type ModalMapStates = {
@@ -13,7 +13,7 @@ type ModalMapStates = {
 /**
  * 创建接口
  */
-type RegisterApiType<T = any> = (modal: T) => void
+type RegisterApiType<T = any> = (modal: T) => Promise<void>
 
 /**
  * 更新接口
@@ -21,35 +21,40 @@ type RegisterApiType<T = any> = (modal: T) => void
 type UpdateApiType<D = any> = (modal: D) => Promise<any>
 
 /**
- * 接口请求以后的操作方法
+ * 创建接口请求以后的操作方法
  */
-type AfterApiType = () => void
+type AfterRegisterApiType<T = any> = (show: Ref<boolean>, modal: Ref<T>) => Promise<void>
+
+/**
+ * 更新接口请求以后的操作方法
+ */
+type AfterUpdateApiType<D = any> = (show: Ref<boolean>, modal: Ref<D>) => Promise<any>
 
 // useModel 返回类型
 /**
  * 数据新增
  */
-type HandleRegisterFunc = () => void
+type HandleRegisterFunc = () => Promise<void>
 
 /**
  * 点击提交
  */
-type HandleSubmitFunc = (e: MouseEvent) => void
+type HandleSubmitFunc = (e: MouseEvent) => Promise<void>
 
 /**
  * 点击取消
  */
-type HandleCancelFunc = () => void
+type HandleCancelFunc = () => Promise<void>
 
 /**
  * 打开弹窗
  */
-type HandleOpenFunc = () => void
+type HandleOpenFunc = () => Promise<void>
 
 /**
  * 清空弹窗
  */
-type HandleClearFunc = () => void
+type HandleClearFunc = () => Promise<void>
 
 /**
  * 弹窗标题
@@ -59,12 +64,13 @@ type HandleTitle = () => string
 /**
  * 一个 modal 所需要的相关字段
  */
-type ModalType<T> = {
+type ModalType<T, D> = {
   isAdd: Ref<boolean>
   showModal: Ref<boolean>
   form: Ref<FormInst | null>
   model: Ref<T>
-  style: Object
+  mStyle: Object
+  option: Options<T, D>
 }
 
 /**
@@ -84,10 +90,25 @@ type useModalType<T> = [
   HandleTitle
 ]
 
+type Options<T = any, D = any> = {
+  key: string
+  register: {
+    after?: AfterRegisterApiType
+    fn: RegisterApiType<T>
+  }
+  update: {
+    after?: AfterUpdateApiType
+    fn: UpdateApiType<D>
+  }
+  modelObject: T
+  style?: any
+}
+
 export type {
   RegisterApiType,
   UpdateApiType,
-  AfterApiType,
+  AfterRegisterApiType,
+  AfterUpdateApiType,
   HandleRegisterFunc,
   HandleSubmitFunc,
   HandleCancelFunc,
@@ -98,4 +119,5 @@ export type {
   useModalType,
   ModelMap,
   ModalMapStates,
+  Options,
 }

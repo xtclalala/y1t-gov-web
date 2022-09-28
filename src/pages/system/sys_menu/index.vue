@@ -12,11 +12,9 @@ import { FormRules, NButton, NDivider, NPopconfirm, NSpace } from 'naive-ui'
 import { completeMerger } from '@/utils/helper/objectHelper'
 import { useTable } from '@/hooks/useTable'
 import { useModel } from '@/hooks/useModal/useModel'
-import {
-  useComponentsAsyncComponent,
-  usePagesAsyncComponent,
-} from '@/hooks/useAsyncComponent/useAsyncComponent'
+import { useComponentsAsyncComponent } from '@/hooks/useAsyncComponent/useAsyncComponent'
 import { Page } from '@/api/type'
+import { Options, RegisterApiType, UpdateApiType } from '@/hooks/useModal/type'
 const YIcon = useComponentsAsyncComponent('YIcon')
 
 const currentMenuId = ref<number>(0)
@@ -198,11 +196,12 @@ const rules: FormRules = {
     trigger: ['input', 'blur'],
   },
 }
-const registerApi = async (params: registerMenu): Promise<string> => {
-  return register<string>(params, { isMessage: true })
+
+const registerApi: RegisterApiType<registerMenu> = async (params: registerMenu): Promise<void> => {
+  await register<string>(params, { isMessage: true })
 }
-const updateApi = async (params: BaseMenu): Promise<string> => {
-  return updateMenu<string>(params, { isMessage: true })
+const updateApi: UpdateApiType<BaseMenu> = async (params: BaseMenu): Promise<void> => {
+  await updateMenu<string>(params, { isMessage: true })
 }
 const afterApi = async (): Promise<void> => {
   loading.value = false
@@ -211,6 +210,30 @@ const afterApi = async (): Promise<void> => {
     pageSize: pagination.pageSize,
     desc: false,
   })
+}
+
+const options: Options = {
+  key: 'Menu',
+  register: {
+    fn: registerApi,
+    after: afterApi,
+  },
+  update: {
+    fn: updateApi,
+    after: afterApi,
+  },
+  modelObject: {
+    name: '',
+    title: '',
+    path: '',
+    hidden: false,
+    hiddenNumber: '',
+    component: '',
+    icon: 'Earth',
+    sort: 100,
+    pid: 0,
+  },
+  style: {},
 }
 const [
   isAdd,
@@ -224,24 +247,7 @@ const [
   openModal,
   cancelCallback,
   modalTitle,
-] = useModel<registerMenu, BaseMenu>(
-  registerApi,
-  updateApi,
-  afterApi,
-  {
-    name: '',
-    title: '',
-    path: '',
-    hidden: false,
-    hiddenNumber: '',
-    component: '',
-    icon: 'Earth',
-    sort: 100,
-    pid: 0,
-  },
-  {},
-  'Menu'
-)
+] = useModel<registerMenu, BaseMenu>(options)
 
 // 操作
 getData({ page: pagination.page, pageSize: pagination.pageSize, desc: false })
