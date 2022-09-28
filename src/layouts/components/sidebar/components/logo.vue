@@ -4,8 +4,8 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import ProjectInfo from '@/settings/projectInfo'
-const { projectGithub } = ProjectInfo
+import { setting } from '@/settings/projectInfo'
+const { projectGithub } = setting
 </script>
 <template>
   <router-link to="/" #="{ navigate }" custom>

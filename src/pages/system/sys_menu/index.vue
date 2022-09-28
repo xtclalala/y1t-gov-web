@@ -18,9 +18,7 @@ import {
 } from '@/hooks/useAsyncComponent/useAsyncComponent'
 import { Page } from '@/api/type'
 const YIcon = useComponentsAsyncComponent('YIcon')
-const YPermission = usePagesAsyncComponent('/system/sys_menu', 'YPermission')
 
-const showPermissions = ref<boolean>(false)
 const currentMenuId = ref<number>(0)
 const handleChangeHidden = async (e: Event) => {
   menuModel.value.hidden = !!(e.target as HTMLInputElement).value
@@ -125,7 +123,6 @@ const columns = [
                   {
                     onClick: () => {
                       currentMenuId.value = row.id
-                      showPermissions.value = true
                       // 获取页面按钮
                     },
                     text: true,
@@ -351,6 +348,5 @@ getData({ page: pagination.page, pageSize: pagination.pageSize, desc: false })
       </n-space>
     </template>
   </n-modal>
-  <y-permission v-model:show="showPermissions" :menu-id="currentMenuId"> </y-permission>
 </template>
 <style scoped></style>

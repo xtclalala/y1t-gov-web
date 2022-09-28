@@ -5,8 +5,8 @@ export default {
 </script>
 <script setup lang="ts">
 import { YIcon } from '@/components'
-import ProjectInfo from '@/settings/projectInfo'
-const { projectGithub } = ProjectInfo
+import { setting } from '@/settings/projectInfo'
+const { projectGithub } = setting
 </script>
 <template>
   <n-tooltip>

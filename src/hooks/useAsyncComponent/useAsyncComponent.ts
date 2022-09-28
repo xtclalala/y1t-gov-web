@@ -12,6 +12,8 @@ const modules = import.meta.glob('../../**/**/components/index.ts')
  * @param target 组件名
  */
 export const useAsyncComponent = (path: string, target: string) => {
+  console.log(path)
+  console.log(target)
   return defineAsyncComponent(async () => {
     const res = await modules[`../..${path}/index.ts`]()
     return res[target]
