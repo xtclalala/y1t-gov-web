@@ -10,11 +10,12 @@ import { PageResult } from '#axios'
 import { BaseMenu, registerMenu, SearchMenu, SearchMenuWithPage } from '@/api/system/menu/type'
 import { FormRules, NButton, NDivider, NPopconfirm, NSpace } from 'naive-ui'
 import { completeMerger } from '@/utils/helper/objectHelper'
-import { useTable } from '@/hooks/useTable'
+import { useTable } from '@/hooks/useTable/useTable'
 import { useModel } from '@/hooks/useModal/useModel'
 import { useComponentsAsyncComponent } from '@/hooks/useAsyncComponent/useAsyncComponent'
 import { Page } from '@/api/type'
 import { Options, RegisterApiType, UpdateApiType } from '@/hooks/useModal/type'
+import { Options as TableOptions } from '@/hooks/useTable/type'
 const YIcon = useComponentsAsyncComponent('YIcon')
 
 const currentMenuId = ref<number>(0)
@@ -169,10 +170,20 @@ const tableApi = async (
     { isMessage: false }
   )
 }
+const tableOptions: TableOptions<SearchMenu> = {
+  key: 'Menu',
+  page: { page: 1, pageSize: 10, desc: false },
+  search: {
+    dataMode: 'JOIN',
+    api: tableApi,
+    obj: sTmpData,
+  },
+}
+
 const [pagination, loading, data, searchData, getData, doSearch, doReset, key2id] = useTable<
   BaseMenu,
   SearchMenu
->(tableApi, { page: 1, pageSize: 10, desc: false }, sTmpData, 'Menu')
+>(tableOptions)
 
 const rules: FormRules = {
   title: {
